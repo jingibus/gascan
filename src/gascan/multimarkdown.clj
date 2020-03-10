@@ -26,6 +26,27 @@
         (.build)
         (.parse file-contents))))
 
+(defn parse-multimarkdown-directory
+  [filepath]
+  (let [directory-name (as-> filepath x
+                         (clojure.string/split x #"/")
+                         (filter #(> (count (clojure.string/trim %)) 0) x)
+                         (last x))
+        multimarkdown-source (clojure.string/join "/" [filepath directory-name])]
+    (printlnv filepath directory-name multimarkdown-source)
+    (parse-multimarkdown-flat multimarkdown-source)))
+
+(defn parse-multimarkdown
+  [filepath]
+  (let [file-obj (as-file filepath)]
+    (cond (.isDirectory file-obj)
+          (parse-multimarkdown-directory filepath)
+          (.isFile file-obj)
+          (parse-multimarkdown-flat filepath)
+          :else
+          nil)))
+
+
 (defn flatten-iterator
   [iterator]
   (let [iterator (if (instance? java.lang.Iterable iterator)
