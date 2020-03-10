@@ -6,7 +6,8 @@
   :dependencies [
                  [org.clojure/clojure "1.10.1"] 
                  [cli-matic "0.3.11"]
-                 [com.vladsch.flexmark/flexmark-all "0.60.2"]]
+                 [com.vladsch.flexmark/flexmark-all "0.60.2"]
+                 [org.clojure/tools.trace "0.7.10"]]
   :main ^:skip-aot gascan.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})

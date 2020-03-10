@@ -2,8 +2,20 @@
   (:refer-clojure)
   (:import [com.vladsch.flexmark.parser Parser ParserEmulationProfile]
            [com.vladsch.flexmark.util.data MutableDataSet])
-  ;(require clojure.reflect)
+  (:require [clojure.reflect :refer [reflect]]
+            [clojure.java.io :refer [as-file]])
   (:gen-class))
+
+(def ^:dynamic *verbose* false)
+
+(defmacro printlnv
+  [& args]
+  `(when *verbose*
+     (printf ~@args)))
+
+(defmacro with-verbose
+  [& body]
+  `(binding [*verbose* true] ~@body))
 
 (defn parse-multimarkdown-flat
   [filepath]
