@@ -14,6 +14,32 @@
         (.build)
         (.parse file-contents))))
 
+(defn flatten-iterator
+  [iterator]
+  (let [iterator (if (instance? java.lang.Iterable iterator)
+                   (.iterator iterator)
+                   iterator)]
+    (loop [values []]
+      (if (.hasNext iterator)
+        (recur (conj values (.next iterator)))
+        values))))
+
+(defn get-title
+  [document]
+  (let [child-iterator (-> document (.getChildren) (.iterator))
+        title-page (if (.hasNext child-iterator) (.next child-iterator))]
+    (if title-page
+      (let 
+          ;; Should extract something like "Title: Blog Project  \n"
+          [title-line (-> title-page
+                          (.getContentLines)
+                          first
+                          (.toString))
+           title-text (-> title-line
+                          (clojure.string/replace-first "Title:" "")
+                          clojure.string/trim)]
+        title-text))))
+
 (defn class-hierarchy
   ([class-instance]
    (class-hierarchy class-instance #{}))
@@ -37,3 +63,5 @@
          (filter :return-type)
          (map :name)
          sort)))
+
+
