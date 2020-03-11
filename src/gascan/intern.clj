@@ -2,8 +2,14 @@
 (ns gascan.intern
   (:refer-clojure)
   (:require 
+   [clojure.edn :refer [read]]
    [clojure.reflect :refer [reflect]]
-   [clojure.java.io :refer [as-file file make-parents copy resource]]
+   [clojure.java.io :refer [as-file 
+                            file 
+                            make-parents
+                            copy
+                            resource
+                            reader]]
    [clojure.string :refer [join split replace]])
   (:gen-class))
 
@@ -21,6 +27,9 @@
         ]
     intern-rel-filepath))
 
+(defn intern-abs-filepath
+  [intern-rel-filepath]
+  (join "/" [resources-folder intern-rel-filepath]))
 
 (defn intern-file!
   ([filepath folder-depth]
@@ -30,10 +39,19 @@
        (throw (new java.io.IOException "Cannot interna a non-file")))))
   ([filepath folder-depth contents]
    (let [intern-rel-filepath (interned-filepath filepath folder-depth)
-         intern-abs-filepath (join "/" [resources-folder intern-rel-filepath])
+         intern-abs-filepath (intern-abs-filepath intern-rel-filepath)
          intern-fileobj (as-file intern-abs-filepath)]
      (do 
        (make-parents intern-fileobj)
        (copy contents intern-fileobj)
        intern-rel-filepath))))
 
+(defn intern-edn!
+  [relpath structure]
+  (let [abspath (intern-abs-filepath relpath)
+        edn-repr (prn-str structure)]
+    (spit abspath edn-repr)))
+
+(defn read-edn
+  [relpath]
+  (read (java.io.PushbackReader. (reader (.openStream (resource relpath))))))
