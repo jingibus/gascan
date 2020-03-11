@@ -19,20 +19,23 @@
   `(binding [*verbose* true] ~@body))
 
 
-(defrecord RemotePost [
-                       title
-                       timestamp
-                       parsed-markdown
-                       markdown-abs-path 
-                       extra-resources
-                       ])
+(defrecord RemotePost 
+    [
+     title
+     timestamp
+     parsed-markdown
+     markdown-abs-path 
+     extra-resources
+     ])
 
-(defrecord InternedPost [
-                         title
-                         timestamp
-                         parsed-markdown
-                         markdown-rel-path
-                         extra-resources-rel])
+(defrecord InternedPost 
+    [
+     title
+     timestamp
+     parsed-markdown
+     markdown-rel-path
+     extra-resources-rel
+     ])
 
 (def flexmark-options 
   (-> (new MutableDataSet)
@@ -155,7 +158,7 @@
         total-reflection (apply merge-with 
                                 clojure.set/union 
                                 (map reflect all-classes))] 
-    (->> total-reflection 
+    (->> total-reflection
          :members
          (filter :return-type)
          (map :name)
