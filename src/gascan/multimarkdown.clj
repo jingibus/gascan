@@ -25,6 +25,13 @@
                        extra-resources
                        ])
 
+(defrecord InternedPost [
+                         title
+                         timestamp
+                         parsed-markdown
+                         markdown-rel-path
+                         extra-resources-rel])
+
 (defn parse-multimarkdown-flat
   [filepath]
   (let [file-contents (slurp filepath)
