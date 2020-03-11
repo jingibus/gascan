@@ -1,7 +1,8 @@
 (ns gascan.multimarkdown
   (:refer-clojure)
   (:import [com.vladsch.flexmark.parser Parser ParserEmulationProfile]
-           [com.vladsch.flexmark.util.data MutableDataSet])
+           [com.vladsch.flexmark.util.data MutableDataSet]
+           [com.vladsch.flexmark.formatter Formatter])
   (:require [clojure.reflect :refer [reflect]]
             [clojure.java.io :refer [as-file]])
   (:gen-class))
@@ -21,6 +22,7 @@
 (defrecord RemotePost [
                        title
                        timestamp
+                       parsed-markdown
                        markdown-abs-path 
                        extra-resources
                        ])
@@ -32,11 +34,14 @@
                          markdown-rel-path
                          extra-resources-rel])
 
+(def flexmark-options 
+  (-> (new MutableDataSet)
+      (.setFrom ParserEmulationProfile/MULTI_MARKDOWN)))
+
 (defn parse-multimarkdown-flat
   [filepath]
   (let [file-contents (slurp filepath)
-        options (-> (new MutableDataSet)
-                    (.setFrom ParserEmulationProfile/MULTI_MARKDOWN))]
+        options flexmark-options]
     (-> (Parser/builder options)
         (.build)
         (.parse file-contents))))
@@ -63,6 +68,22 @@
           :else
           nil)))
 
+(defn get-title
+  [document]
+  (let [child-iterator (-> document (.getChildren) (.iterator))
+        title-page (if (.hasNext child-iterator) (.next child-iterator))]
+    (if title-page
+      (let 
+          ;; Should extract something like "Title: Blog Project  \n"
+          [title-line (-> title-page
+                          (.getContentLines)
+                          first
+                          (.toString))
+           title-text (-> title-line
+                          (clojure.string/replace-first "Title:" "")
+                          clojure.string/trim)]
+        title-text))))
+
 (defn record-from-mm-dir
   [dirpath]
   (let [file-obj (as-file dirpath)
@@ -75,14 +96,17 @@
     (map->RemotePost {:markdown-abs-path (.getAbsolutePath (as-file md-filepath))
                       :title (get-title parsed-markdown)
                       :timestamp (System/currentTimeMillis)
-                      :extra-resources extra-resources})))
+                      :extra-resources extra-resources
+                      :parsed-markdown parsed-markdown})))
 
 (defn record-from-mm-flat
   [filepath]
-  (map->RemotePost {:markdown-abs-path (.getAbsolutePath (as-file filepath))
-                    :title (get-title (parse-multimarkdown-flat filepath))
-                    :timestamp (System/currentTimeMillis)
-                    :extra-resources []}))
+  (let [parsed-markdown (parse-multimarkdown-flat filepath)]
+    (map->RemotePost {:markdown-abs-path (.getAbsolutePath (as-file filepath))
+                      :title (get-title parsed-markdown)
+                      :timestamp (System/currentTimeMillis)
+                      :extra-resources []
+                      :parsed-markdown parsed-markdown})))
 
 (defn read-remote-post
   [filepath]
@@ -102,21 +126,16 @@
         (recur (conj values (.next iterator)))
         values))))
 
-(defn get-title
+(defn strip-title-section!
   [document]
-  (let [child-iterator (-> document (.getChildren) (.iterator))
-        title-page (if (.hasNext child-iterator) (.next child-iterator))]
-    (if title-page
-      (let 
-          ;; Should extract something like "Title: Blog Project  \n"
-          [title-line (-> title-page
-                          (.getContentLines)
-                          first
-                          (.toString))
-           title-text (-> title-line
-                          (clojure.string/replace-first "Title:" "")
-                          clojure.string/trim)]
-        title-text))))
+  (let [iterator (-> document (.getChildren) (.iterator))]
+    (.next iterator)
+    (.remove iterator)))
+
+(defn render
+  [document]
+  (let [renderer (-> (Formatter/builder flexmark-options) (.build))]
+    (.render renderer document)))
 
 (defn class-hierarchy
   ([class-instance]
