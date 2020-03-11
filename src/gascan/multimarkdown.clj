@@ -5,18 +5,8 @@
            [com.vladsch.flexmark.formatter Formatter])
   (:require [clojure.reflect :refer [reflect]]
             [clojure.java.io :refer [as-file]])
+  (:use [gascan.debug])
   (:gen-class))
-
-(def ^:dynamic *verbose* false)
-
-(defmacro printlnv
-  [& args]
-  `(when *verbose*
-     (printf ~@args)))
-
-(defmacro with-verbose
-  [& body]
-  `(binding [*verbose* true] ~@body))
 
 
 (defrecord RemotePost 
@@ -120,7 +110,10 @@
     (cond (.isDirectory file-obj)
           (record-from-mm-dir filepath)
           (.isFile file-obj)
-          (record-from-mm-flat filepath))))
+          (record-from-mm-flat filepath)
+          :else
+          (throw (new java.io.IOException (str "Unknown file type: " 
+                                               filepath "::" file-obj))))))
 
 (defn flatten-iterator
   [iterator]
