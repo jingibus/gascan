@@ -17,6 +17,14 @@
   [& body]
   `(binding [*verbose* true] ~@body))
 
+
+(defrecord RemotePost [
+                       title
+                       timestamp
+                       markdown-abs-path 
+                       extra-resources
+                       ])
+
 (defn parse-multimarkdown-flat
   [filepath]
   (let [file-contents (slurp filepath)
@@ -26,15 +34,17 @@
         (.build)
         (.parse file-contents))))
 
+(defn md-filepath-from-dir
+  [dirpath]
+  (as-> dirpath x
+    (clojure.string/split x #"/")
+    (filter #(> (count (clojure.string/trim %)) 0) x)
+    (last x)
+    (clojure.string/join "/" [dirpath x])))
+
 (defn parse-multimarkdown-directory
   [filepath]
-  (let [directory-name (as-> filepath x
-                         (clojure.string/split x #"/")
-                         (filter #(> (count (clojure.string/trim %)) 0) x)
-                         (last x))
-        multimarkdown-source (clojure.string/join "/" [filepath directory-name])]
-    (printlnv filepath directory-name multimarkdown-source)
-    (parse-multimarkdown-flat multimarkdown-source)))
+  (parse-multimarkdown-flat (md-filepath-from-dir filepath)))
 
 (defn parse-multimarkdown
   [filepath]
@@ -46,6 +56,34 @@
           :else
           nil)))
 
+(defn record-from-mm-dir
+  [dirpath]
+  (let [file-obj (as-file dirpath)
+        md-filepath (md-filepath-from-dir dirpath)
+        md-file-obj (as-file md-filepath)
+        parsed-markdown (parse-multimarkdown-flat md-filepath)
+        extra-resources (->> (as-file dirpath)
+                             (.listFiles)
+                             (filter #(not (.equals md-file-obj %))))]
+    (map->RemotePost {:markdown-abs-path (.getAbsolutePath (as-file md-filepath))
+                      :title (get-title parsed-markdown)
+                      :timestamp (System/currentTimeMillis)
+                      :extra-resources extra-resources})))
+
+(defn record-from-mm-flat
+  [filepath]
+  (map->RemotePost {:markdown-abs-path (.getAbsolutePath (as-file filepath))
+                    :title (get-title (parse-multimarkdown-flat filepath))
+                    :timestamp (System/currentTimeMillis)
+                    :extra-resources []}))
+
+(defn read-remote-post
+  [filepath]
+  (let [file-obj (as-file filepath)]
+    (cond (.isDirectory file-obj)
+          (record-from-mm-dir filepath)
+          (.isFile file-obj)
+          (record-from-mm-flat filepath))))
 
 (defn flatten-iterator
   [iterator]
