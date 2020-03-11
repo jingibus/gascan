@@ -26,6 +26,7 @@
      parsed-markdown
      markdown-abs-path 
      extra-resources
+     dir-depth
      ])
 
 (defrecord InternedPost 
@@ -100,6 +101,7 @@
                       :title (get-title parsed-markdown)
                       :timestamp (System/currentTimeMillis)
                       :extra-resources extra-resources
+                      :dir-depth 1
                       :parsed-markdown parsed-markdown})))
 
 (defn record-from-mm-flat
@@ -109,6 +111,7 @@
                       :title (get-title parsed-markdown)
                       :timestamp (System/currentTimeMillis)
                       :extra-resources []
+                      :dir-depth 0
                       :parsed-markdown parsed-markdown})))
 
 (defn read-remote-post
