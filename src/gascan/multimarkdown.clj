@@ -26,6 +26,7 @@
      parsed-markdown
      markdown-rel-path
      extra-resources-rel
+     id
      ])
 
 (def flexmark-options 
