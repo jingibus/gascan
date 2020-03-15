@@ -14,7 +14,7 @@
       import-post!
       ((fn [post] 
          (let [posts (fetch-posts)]
-           (println "initial posts: " posts "\n new post: " post)
+           (printlnv "initial posts: " posts "\n new post: " post)
            (conj posts post))))
       ((fn [posts] 
          (println "posts:" posts)
