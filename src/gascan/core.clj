@@ -1,10 +1,16 @@
 (ns gascan.core
   (:require [cli-matic.core :refer [run-cmd]]
-            [gascan.posts :refer [fetch-posts put-posts! import-post!]]
-            [gascan.multimarkdown :refer [read-remote-post]]
+            [clojure.tools.trace :refer [trace]]
             [gascan.debug :refer [printlnv]]
-            [clojure.tools.trace :refer [trace]])
+            [gascan.multimarkdown :refer [read-remote-post]]
+            [gascan.posts :refer [fetch-posts 
+                                  put-posts! 
+                                  import-post! 
+                                  as-parsed]]
+            ;;[hiccup.core :refer [html]]
+            )
   (:require [gascan.debug])
+  (:import [com.vladsch.flexmark.html HtmlRenderer])
   (:gen-class))
 
 (defn import-remote-post-by-path!
@@ -20,9 +26,25 @@
          (println "posts:" posts)
          (put-posts! posts)))))
 
-(defn new-post
+(defn new-post-command
   [{:keys [file]}]
   (import-remote-post-by-path! file))
+
+(defn html
+  [args]
+  args)
+
+(defn render-post
+  [interned-parsed-post]
+  (let [parsed-markdown {:parsed-markdown interned-parsed-post}
+        html-renderer (-> (HtmlRenderer/builder) (.build))
+        rendered-html (.render html-renderer parsed-markdown)]
+    (html rendered-html)))
+
+(defn render-post-command
+  [args]
+  (let [post (as-parsed (first (fetch-posts)))]
+    (render-post post)))
 
 (def CONFIGURATION
   {:app         {:command        "gascan"
@@ -32,7 +54,11 @@
                   :opts          [{:option "file" :as "MultiMarkdown File" 
                                    :type :string
                                    :default :present}]
-                  :runs          new-post}]})
+                  :runs          new-post-command}
+                 {:command       "render"
+                  :description   "Render a post."
+                  :opts          []
+                  :runs          render-post-command}]})
 
 (defn -main
   [& args]
