@@ -1,5 +1,6 @@
 (ns gascan.core
   (:require [cli-matic.core :refer [run-cmd]]
+            [clojure.pprint :refer [pprint]]
             [clojure.tools.trace :refer [trace]]
             [gascan.debug :refer [printlnv]]
             [gascan.multimarkdown :refer [read-remote-post]]
@@ -16,19 +17,17 @@
 (defn import-remote-post-by-path!
   "Imports a remote post and saves it to the posts store."
   [filepath]
-  (-> (read-remote-post filepath)
-      import-post!
-      ((fn [post] 
-         (let [posts (fetch-posts)]
-           (printlnv "initial posts: " posts "\n new post: " post)
-           (conj posts post))))
-      ((fn [posts] 
-         (println "posts:" posts)
-         (put-posts! posts)))))
+  (let [remote-post (-> (read-remote-post filepath) import-post!)
+        posts (fetch-posts)]
+    (printlnv "initial posts: " posts "\n new post: " remote-post)
+    (->> remote-post 
+        (conj posts)
+        (put-posts!))
+    remote-post))
 
 (defn new-post-command
   [{:keys [file]}]
-  (import-remote-post-by-path! file))
+  (pprint (import-remote-post-by-path! file)))
 
 (defn html
   [args]
