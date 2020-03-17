@@ -1,14 +1,25 @@
 (ns gascan.posts
   (:require
    [gascan.intern :refer [intern-edn! read-edn intern-file!]]
-   [gascan.multimarkdown :refer [map->InternedPost strip-title-section! render]]
+   [gascan.multimarkdown :refer [parse-multimarkdown-flat
+                                 strip-title-section! 
+                                 render]]
    [java-time :refer [local-date-time instant]])
-  (:import [gascan.multimarkdown RemotePost InternedPost]))
+  (:import [gascan.multimarkdown RemotePost]))
 
 (def toplevel-post-contents-folder "posts")
 (def post-metadata-edn "metadata.edn")
 
-(def edn-readers {'gascan.multimarkdown.InternedPost map->InternedPost})
+(defrecord InternedPost 
+    [
+     title
+     timestamp
+     markdown-rel-path
+     extra-resources-rel
+     id
+     ])
+
+(def edn-readers {'gascan.posts.InternedPost map->InternedPost})
 
 (defn fetch-posts
   []
@@ -57,3 +68,12 @@
       :id (java.util.UUID/randomUUID)
       })
     ))
+
+(defn as-parsed
+  "Yields an interned record with parsed markdown."
+  [interned-record]
+  (if (:parsed-markdown interned-record)
+    interned-record
+    (assoc interned-record 
+           :parsed-markdown (parse-multimarkdown-flat (:markdown-rel-path)))))
+

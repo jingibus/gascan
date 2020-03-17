@@ -19,23 +19,14 @@
      dir-depth
      ])
 
-(defrecord InternedPost 
-    [
-     title
-     timestamp
-     parsed-markdown
-     markdown-rel-path
-     extra-resources-rel
-     id
-     ])
-
 (def flexmark-options 
   (-> (new MutableDataSet)
       (.setFrom ParserEmulationProfile/MULTI_MARKDOWN)))
 
 (defn parse-multimarkdown-flat
-  [filepath]
-  (let [file-contents (slurp filepath)
+  "Parses a valid input to reader into a parsed flexmark object"
+  [readable]
+  (let [file-contents (slurp readable)
         options flexmark-options]
     (-> (Parser/builder options)
         (.build)
@@ -54,6 +45,7 @@
   (parse-multimarkdown-flat (md-filepath-from-dir filepath)))
 
 (defn parse-multimarkdown
+  "Yields a parsed flexmark Document instance."
   [filepath]
   (let [file-obj (as-file filepath)]
     (cond (.isDirectory file-obj)
