@@ -26,18 +26,23 @@
 
 (defn parse-multimarkdown-flat
   "Parses a valid input to reader into a parsed flexmark object"
-  [readable]
-  (let [file-contents (slurp readable)
-        options flexmark-options]
-    (-> (Parser/builder options)
-        (.build)
-        (.parse file-contents))))
+  ([readable]
+   (parse-multimarkdown-flat flexmark-options readable))
+  ([options readable]
+   (let [file-contents (slurp readable)]
+     (-> (Parser/builder options)
+         (.build)
+         (.parse file-contents)))))
 
 (defn render-multimarkdown
-  [flexmark-document]
-  (-> (HtmlRenderer/builder)
-      (.build)
-      (.render flexmark-document)))
+  ([options flexmark-document]
+   (-> (HtmlRenderer/builder options)
+       (.build)
+       (.render flexmark-document)))
+  ([flexmark-document]
+   (-> (HtmlRenderer/builder)
+       (.build)
+       (.render flexmark-document))))
 
 (defn md-filepath-from-dir
   [dirpath]
@@ -159,5 +164,4 @@
          (filter :return-type)
          (map :name)
          sort)))
-
 
