@@ -5,8 +5,22 @@
 (defmacro printlnv
   [& args]
   `(when *verbose*
-     (printf ~@args)))
+     (println ~@args)))
 
+(defn monitorv->
+  ([arg]
+   (monitorv-> "" arg))
+  ([arg name]
+   (do
+     (printlnv name "\"" (str arg) "\"")
+     arg)))
+
+(defn monitorv->>
+  ([arg]
+   (monitorv-> arg))
+  ([name arg]
+   (monitorv-> arg name)))
+  
 (defmacro with-verbose
   [& body]
   `(binding [*verbose* true] ~@body))

@@ -1,6 +1,6 @@
 (ns gascan.posts
   (:require
-   [gascan.intern :refer [intern-edn! read-edn intern-file!]]
+   [gascan.intern :refer [intern-edn! read-edn intern-file! readable-file]]
    [gascan.multimarkdown :refer [parse-multimarkdown-flat
                                  strip-title-section! 
                                  render]]
@@ -73,6 +73,8 @@
   [interned-record]
   (if (:parsed-markdown interned-record)
     interned-record
-    (assoc interned-record 
-           :parsed-markdown (parse-multimarkdown-flat (:markdown-rel-path)))))
+    (let [relpath (:markdown-rel-path interned-record)
+          readable-markdown (readable-file relpath)]
+      (assoc interned-record 
+             :parsed-markdown (parse-multimarkdown-flat readable-markdown)))))
 

@@ -62,3 +62,11 @@
    reader
    (java.io.PushbackReader.)
    (read opts)))
+
+(defn readable-file
+  "Creates a readable file at relative filepath."
+  [relpath]
+  (some->>
+   relpath
+   resource
+   (.openStream)))

@@ -1,10 +1,11 @@
 (ns gascan.multimarkdown
   (:refer-clojure)
-  (:import [com.vladsch.flexmark.parser Parser ParserEmulationProfile]
-           [com.vladsch.flexmark.util.data MutableDataSet]
-           [com.vladsch.flexmark.formatter Formatter])
-  (:require [clojure.reflect :refer [reflect]]
-            [clojure.java.io :refer [as-file]])
+  (:import [com.vladsch.flexmark.formatter Formatter]
+           [com.vladsch.flexmark.html HtmlRenderer]
+           [com.vladsch.flexmark.parser Parser ParserEmulationProfile]
+           [com.vladsch.flexmark.util.data MutableDataSet])
+  (:require [clojure.java.io :refer [as-file]]
+            [clojure.reflect :refer [reflect]])
   (:use [gascan.debug])
   (:gen-class))
 
@@ -31,6 +32,12 @@
     (-> (Parser/builder options)
         (.build)
         (.parse file-contents))))
+
+(defn render-multimarkdown
+  [flexmark-document]
+  (-> (HtmlRenderer/builder)
+      (.build)
+      (.render flexmark-document)))
 
 (defn md-filepath-from-dir
   [dirpath]
