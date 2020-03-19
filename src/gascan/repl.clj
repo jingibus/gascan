@@ -7,7 +7,8 @@
   (:require [clojure.java.io :refer [as-file]]
             [clojure.reflect :refer [reflect]]
             [clojure.string :refer [join]]
-            [gascan.multimarkdown :refer [parse-multimarkdown-flat]])
+            [gascan.multimarkdown :refer [parse-multimarkdown-flat]]
+            [clojure.tools.trace :refer [trace-ns untrace-ns]])
   (:use [gascan.debug])
   (:gen-class))
 
@@ -24,7 +25,26 @@
   (let [absolute-path (sample-path relpath)
         parsed-contents (parse-multimarkdown-flat absolute-path)]
     {:path absolute-path
-     :contents parsed-contents}))
+     :contents parsed-contents
+     :raw-contents (clojure.string/split (slurp absolute-path) #"\n")}))
 
 (def test-case-basic (test-case "Basic Test.md"))
 (def test-case-image (test-case "Image Test.md/Image Test.md"))
+
+(defn getNodeChildren
+  [nodeable]
+  (when (instance? com.vladsch.flexmark.util.ast.Node nodeable)
+    (loop [iterator (-> nodeable (.getChildren) (.iterator))
+           children []]
+      (if (.hasNext iterator)
+        (recur iterator (conj children (.next iterator))
+               )
+        children))))
+
+(defn decrapinate-flexmark
+  [nodeable]
+  (let [children (getNodeChildren nodeable)
+        simple-name (some-> nodeable class (.getSimpleName))]
+    (if (or (nil? children) (empty? children))
+      (str nodeable)
+      (vec (cons simple-name (map decrapinate-flexmark children))))))
