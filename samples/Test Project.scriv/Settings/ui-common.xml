@@ -8,7 +8,7 @@
             <ItemID>AC5C88A6-63FC-435A-9FC0-5E0CB466D245</ItemID>
         </ExpandedItems>
         <Selection>
-            <ItemID>04F1976F-A885-4F28-8436-7BB0A15946B6</ItemID>
+            <ItemID>6F15E33D-3A99-4879-AB82-008EA803A1F3</ItemID>
         </Selection>
         <SearchResultsSort Titles="Ascending" Dates="Ascending">None</SearchResultsSort>
     </Binder>
@@ -62,12 +62,13 @@
                 <CurrentViewMode>Single</CurrentViewMode>
                 <SelectionAffects>None</SelectionAffects>
                 <Content>
-                    <ItemID>04F1976F-A885-4F28-8436-7BB0A15946B6</ItemID>
+                    <ItemID>6F15E33D-3A99-4879-AB82-008EA803A1F3</ItemID>
                 </Content>
-                <NavigationHistory CurrentIndex="2">
+                <NavigationHistory CurrentIndex="3">
                     <HistoryItem Type="BinderItems" ViewMode="Single">04F1976F-A885-4F28-8436-7BB0A15946B6</HistoryItem>
                     <HistoryItem Type="BinderItems" ViewMode="Single">6F15E33D-3A99-4879-AB82-008EA803A1F3</HistoryItem>
                     <HistoryItem Type="BinderItems" ViewMode="Single">04F1976F-A885-4F28-8436-7BB0A15946B6</HistoryItem>
+                    <HistoryItem Type="BinderItems" ViewMode="Single">6F15E33D-3A99-4879-AB82-008EA803A1F3</HistoryItem>
                 </NavigationHistory>
             </View>
             <Text>
