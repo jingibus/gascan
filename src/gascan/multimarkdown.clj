@@ -20,8 +20,18 @@
      dir-depth
      ])
 
+
+(defn make-options
+  [& options-list]
+  (let [options (new MutableDataSet)]
+    (loop [[key value & options-list] options-list]
+      (.set options key value)
+      (if options-list
+        (recur options-list)
+        options))))
+
 (def flexmark-options 
-  (-> (new MutableDataSet)
+  (-> (make-options Parser/HEADING_NO_ATX_SPACE true)
       (.setFrom ParserEmulationProfile/MULTI_MARKDOWN)))
 
 (defn parse-multimarkdown-flat

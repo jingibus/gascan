@@ -7,7 +7,7 @@
   (:require [clojure.java.io :refer [as-file]]
             [clojure.reflect :refer [reflect]]
             [clojure.string :refer [join]]
-            [gascan.multimarkdown :refer [parse-multimarkdown-flat]]
+            [gascan.multimarkdown :refer [parse-multimarkdown-flat flexmark-options make-options]]
             [clojure.tools.trace :refer [trace-ns untrace-ns]])
   (:use [gascan.debug])
   (:gen-class))
@@ -30,6 +30,7 @@
 
 (def test-case-basic (test-case "Basic Test.md"))
 (def test-case-image (test-case "Image Test.md/Image Test.md"))
+(def test-case-no-header-space (test-case "Basic Test No Header Space.md"))
 
 (defn getNodeChildren
   [nodeable]
@@ -48,3 +49,10 @@
     (if (or (nil? children) (empty? children))
       (str nodeable)
       (vec (cons simple-name (map decrapinate-flexmark children))))))
+
+
+(defn test-parse-with-options
+  [options test-case]
+  (let [path (:path test-case)
+        new-contents (parse-multimarkdown-flat options path)]
+    (decrapinate-flexmark new-contents)))
