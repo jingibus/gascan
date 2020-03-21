@@ -9,10 +9,12 @@
 
 (defn monitorv->
   ([arg]
-   (monitorv-> "" arg))
+   (monitorv-> arg ""))
   ([arg name]
+   (monitorv-> arg name identity))
+  ([arg name txform]
    (do
-     (printlnv name "\"" (str arg) "\"")
+     (printlnv name (str "\"" (-> arg txform str) "\""))
      arg)))
 
 (defn monitorv->>
