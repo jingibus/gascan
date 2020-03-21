@@ -31,6 +31,7 @@
 (def test-case-basic (test-case "Basic Test.md"))
 (def test-case-image (test-case "Image Test.md/Image Test.md"))
 (def test-case-no-header-space (test-case "Basic Test No Header Space.md"))
+(def test-case-image-inline (test-case "Image Test Inline.md/Image Test Inline.md"))
 
 (defn getNodeChildren
   [nodeable]
