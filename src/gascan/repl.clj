@@ -44,12 +44,12 @@
                )
         children))))
 
-(defn enstructure-flexmark
+(defn build-scaffold-ast
   [nodeable]
   (let [children (getNodeChildren nodeable)]
     (if (or (nil? children) (empty? children))
       nodeable
-      (vec (cons nodeable (map enstructure-flexmark children))))))
+      (vec (cons nodeable (map build-scaffold-ast children))))))
 
 (defn deep-map-vec
   ([f all-items]
@@ -65,8 +65,8 @@
            (vec (cons mapped-item (deep-map-vec f items)))))))
 
 (defn stringify
-  [enstructured-flexmark]
-  (deep-map-vec str enstructured-flexmark))
+  [scaffold-ast]
+  (deep-map-vec str scaffold-ast))
 
 (defn decrapinate-flexmark
   [nodeable]
@@ -79,7 +79,7 @@
                            (map stringify children))))
               (str structured-node)))]
     (-> nodeable
-        enstructure-flexmark
+        build-scaffold-ast
         stringify)))
 
 (defn test-parse-with-options
@@ -97,9 +97,8 @@
            :contents new-contents)))
 
 (defn split-line-breaks
-  "Given a Flexmark AST that has been translated into a tree of vectors, 
-  this splits all paragraphs with line breaks into separate paragraphs."
-  [enstructured-node]
+  "Modifies scaffold so that all line breaks split into paragraphs"
+  [scaffold-node]
   (letfn [(is-line-break?
             [node] 
             (or (instance? com.vladsch.flexmark.ast.SoftLineBreak node) 
@@ -127,7 +126,7 @@
              ;(->> node z/lefts (map str) list) " :" 
                  (stringify (z/node node)) 
                  ": " (-> node z/rights stringify)))]
-    (loop [loc (z/vector-zip enstructured-node)]
+    (loop [loc (z/vector-zip scaffold-node)]
       (cond (z/end? loc)
             ;; If we've finished walking the tree, yield the edited tree
             (z/root loc)
@@ -152,3 +151,30 @@
               (recur (z/next edited)))
             :else
             (recur (z/next loc))))))
+
+(defn restitch-scaffold-ast
+  [scaffold-ast]
+  (letfn [(leaf? [node] (not (vector? node)))
+          (node-value [node]
+            (if (leaf? node)
+              node
+              (first node)))
+          (node-and-children-values [node]
+            (vec (if (leaf? node)
+                   [node]
+                   (map node-value node))))
+          (restitch [node]
+            (when (not (leaf? node))
+              (let [[value & children-values] 
+                    (node-and-children-values node)]
+                (do
+                  (run! restitch (rest node))
+                  (printlnv "Restitching node" [value] "\n\tchildren:" children-values)
+                  (run! #(do (printlnv "Append child" % "to" value) 
+                            (.appendChild value %)) 
+                       children-values))
+                )))]
+    (deep-map-vec #(do (printlnv "unlinking" %) 
+                       (when % (.unlink %)) %) scaffold-ast)
+    (restitch scaffold-ast)
+    (node-value scaffold-ast)))
