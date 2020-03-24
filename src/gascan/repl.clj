@@ -73,7 +73,6 @@
               (if (or (nil? children) (empty? children))
                 nodeable
                 (vec (cons nodeable (map build-scaffold-ast children)))))]
-      (unlink-ast! scaffold-ast)
       scaffold-ast)))
 
 (defn stringify
@@ -178,8 +177,10 @@
           (restitch [node]
             (when (not (leaf? node))
               (let [[value & children-values] 
-                    (node-and-children-values node)]
+                    (node-and-children-values node)
+                    flexmark-children (getNodeChildren value)]
                 (do
+                  (run! #(.unlink %) flexmark-children)
                   (run! restitch (rest node))
                   (printlnv "Restitching node" [value] 
                             "\n\tchildren:" (map str children-values)
