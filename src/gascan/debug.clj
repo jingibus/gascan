@@ -1,4 +1,6 @@
-(ns gascan.debug (:gen-class))
+(ns gascan.debug
+  (:require [clojure.pprint :refer [pprint *print-right-margin*]])
+ (:gen-class))
 
 (def ^:dynamic *verbose* false)
 
@@ -7,6 +9,23 @@
   `(when *verbose*
      (println ~@args)))
 
+(defn pprint-if-necessary 
+  [value]
+  (if (coll? value)
+    (binding [*print-right-margin* 80]
+      (with-out-str (pprint value)))
+    (str value)))
+
+(defn monitor->
+  ([arg]
+   (monitor-> arg ""))
+  ([arg name]
+   (monitor-> arg name identity))
+  ([arg name txform]
+   (do
+     (println name (pprint-if-necessary (-> arg txform)))
+     arg)))
+
 (defn monitorv->
   ([arg]
    (monitorv-> arg ""))
@@ -14,7 +33,7 @@
    (monitorv-> arg name identity))
   ([arg name txform]
    (do
-     (printlnv name (str "\"" (-> arg txform str) "\""))
+     (printlnv name (pprint-if-necessary (-> arg txform)))
      arg)))
 
 (defn monitorv->>
