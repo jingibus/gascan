@@ -44,13 +44,6 @@
                )
         children))))
 
-(defn build-scaffold-ast
-  [nodeable]
-  (let [children (getNodeChildren nodeable)]
-    (if (or (nil? children) (empty? children))
-      nodeable
-      (vec (cons nodeable (map build-scaffold-ast children))))))
-
 (defn deep-map-vec
   ([f all-items]
    (cond (not (coll? all-items))
@@ -63,6 +56,25 @@
                              (deep-map-vec f item)
                              (f item))]
            (vec (cons mapped-item (deep-map-vec f items)))))))
+
+(defn build-scaffold-ast
+  [nodeable]
+  (letfn [(unlink-ast! [scaffold-ast] 
+            (deep-map-vec 
+             #(when % 
+                (printlnv "unlinking" %) 
+                (.unlink %) 
+                %) 
+             scaffold-ast))
+          (build [nodeable]
+            )]
+    (let [scaffold-ast 
+          (let [children (getNodeChildren nodeable)]
+              (if (or (nil? children) (empty? children))
+                nodeable
+                (vec (cons nodeable (map build-scaffold-ast children)))))]
+      (unlink-ast! scaffold-ast)
+      scaffold-ast)))
 
 (defn stringify
   [scaffold-ast]
@@ -169,12 +181,12 @@
                     (node-and-children-values node)]
                 (do
                   (run! restitch (rest node))
-                  (printlnv "Restitching node" [value] "\n\tchildren:" children-values)
-                  (run! #(do (printlnv "Append child" % "to" value) 
+                  (printlnv "Restitching node" [value] 
+                            "\n\tchildren:" (map str children-values)
+                            "\n\tflexmark children: " (map str (getNodeChildren value)))
+                  (run! #(do (printlnv "\tAppend child" (str %) "to" (str value)) 
                             (.appendChild value %)) 
                        children-values))
                 )))]
-    (deep-map-vec #(do (printlnv "unlinking" %) 
-                       (when % (.unlink %)) %) scaffold-ast)
     (restitch scaffold-ast)
     (node-value scaffold-ast)))
