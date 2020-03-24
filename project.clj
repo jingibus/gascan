@@ -13,4 +13,5 @@
                  ]
   :main ^:skip-aot gascan.core
   :target-path "target/%s"
-  :profiles {:uberjar {:aot :all}})
+  :profiles {:uberjar {:aot :all}
+             :dev {}})
