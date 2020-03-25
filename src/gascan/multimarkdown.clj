@@ -34,15 +34,21 @@
   (-> (make-options Parser/HEADING_NO_ATX_SPACE true)
       (.setFrom ParserEmulationProfile/MULTI_MARKDOWN)))
 
+(defn parse-multimarkdown-str
+  "Parses a string into a parsed flexmark object"
+  ([file-contents]
+   (parse-multimarkdown-str flexmark-options file-contents))
+  ([options file-contents]
+   (-> (Parser/builder options)
+         (.build)
+         (.parse file-contents))))
+
 (defn parse-multimarkdown-flat
   "Parses a valid input to reader into a parsed flexmark object"
   ([readable]
-   (parse-multimarkdown-flat flexmark-options readable))
+   (parse-multimarkdown-str flexmark-options (slurp readable)))
   ([options readable]
-   (let [file-contents (slurp readable)]
-     (-> (Parser/builder options)
-         (.build)
-         (.parse file-contents)))))
+   (parse-multimarkdown-str options(slurp readable))))
 
 (defn render-multimarkdown
   ([options flexmark-document]
