@@ -3,7 +3,8 @@
             [clojure.pprint :refer [pprint]]
             [clojure.tools.trace :refer [trace]]
             [gascan.debug :refer [printlnv monitorv->]]
-            [gascan.multimarkdown :refer [read-remote-post render-multimarkdown]]
+            [gascan.multimarkdown :refer [render-multimarkdown]]
+            [gascan.remote-posts :refer [read-remote-post]]
             [gascan.posts :refer [fetch-posts 
                                   put-posts! 
                                   import-post! 
