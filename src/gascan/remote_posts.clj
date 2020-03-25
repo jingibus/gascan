@@ -1,7 +1,8 @@
 (ns gascan.remote-posts
   (:require [clojure.java.io :refer [as-file]]
+            [clojure.zip :as z]
             [gascan.ast :as ast]
-            [gascan.multimarkdown :refer [parse-multimarkdown-flat md-filepath-from-dir]]))
+            [gascan.multimarkdown :as mm :refer [parse-multimarkdown-flat md-filepath-from-dir]]))
 
 (defrecord RemotePost 
     [
@@ -15,19 +16,13 @@
 
 (defn get-title
   [document]
-  (let [child-iterator (-> document (.getChildren) (.iterator))
-        title-page (if (.hasNext child-iterator) (.next child-iterator))]
-    (if title-page
-      (let 
-          ;; Should extract something like "Title: Blog Project  \n"
-          [title-line (-> title-page
-                          (.getContentLines)
-                          first
-                          (.toString))
-           title-text (-> title-line
-                          (clojure.string/replace-first "Title:" "")
-                          clojure.string/trim)]
-        title-text))))
+  (let [scaffold-ast (ast/build-scaffold-ast document)
+        ;; [Document [Paragraph ...] ...]
+        title-text (-> scaffold-ast z/vector-zip z/down z/right z/down z/right z/node)]
+    (some-> title-text
+            (.getChars)
+            (clojure.string/replace-first "Title:" "")
+            clojure.string/trim)))
 
 (defn record-from-mm-dir
   [dirpath]
