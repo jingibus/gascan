@@ -10,7 +10,8 @@
                  [hiccup "1.0.5"]
                  [org.clojure/clojure "1.10.1"] 
                  [org.clojure/tools.trace "0.7.10"]
-                 ]
+                 [ring/ring-core "1.6.3"]
+                 [ring/ring-jetty-adapter "1.6.3"]]
   :main ^:skip-aot gascan.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}
