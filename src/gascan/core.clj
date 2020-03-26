@@ -9,6 +9,7 @@
                                   put-posts! 
                                   import-post! 
                                   as-parsed]]
+            [gascan.server :as svr]
             ;;[hiccup.core :refer [html]]
             )
   (:require [gascan.debug])
@@ -48,6 +49,10 @@
   (let [post (as-parsed (last (sort #(apply compare (map :timestamp [%1 %2])) (fetch-posts))))]
     (render-post post)))
 
+(defn run-command
+  [{:keys [port dev]}]
+  (svr/run :port port :repl? dev))
+
 (def CONFIGURATION
   {:app         {:command        "gascan"
                  :description    "A small blog content tool."}
@@ -60,7 +65,16 @@
                  {:command       "render"
                   :description   "Render a post."
                   :opts          []
-                  :runs          render-post-command}]})
+                  :runs          render-post-command}
+                 {:command       "run"
+                  :description   "Serves content."
+                  :opts          [{:option "port"
+                                   :type :int
+                                   :default 3000}
+                                  {:option "dev" :as "Development with REPL port 9000"
+                                   :type :with-flag
+                                   :default false}]
+                  :runs          run-command}]})
 
 (defn -main
   [& args]

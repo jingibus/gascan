@@ -14,6 +14,7 @@
                                           flexmark-options 
                                           make-options
                                           render-multimarkdown]]
+            [gascan.server :as svr]
             [clojure.tools.trace :refer [trace-ns untrace-ns trace-forms]])
   (:use [gascan.debug] [gascan.test-tools])
   (:gen-class))
