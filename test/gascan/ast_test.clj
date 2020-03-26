@@ -1,7 +1,8 @@
 (ns gascan.ast-test
   (:require [clojure.zip :as z]
             [gascan.ast :as sut]
-            [gascan.multimarkdown :as mm])
+            [gascan.multimarkdown :as mm]
+            [gascan.ast :as ast])
   (:use [clojure.test] [gascan.test-tools]))
 
 (deftest scaffold-editing
@@ -13,18 +14,20 @@
             restitched (sut/restitch-scaffold-ast original-scaffold)
             new-scaffold (sut/build-scaffold-ast restitched)]
         (is (= original-scaffold new-scaffold))))
-    (testing "The scaffold of an edited scaffold is identical to "
-      (let [original-scaffold (-> testpath
+    (testing "The scaffold of an edited scaffold is identical to the edited scaffold"
+      (let [testpath (:path test-case-basic)
+            original-scaffold (-> testpath
                                   mm/parse-multimarkdown-flat
                                   sut/build-scaffold-ast)
             edited-scaffold (-> original-scaffold
+                                z/vector-zip
                                 z/down
                                 z/right
                                 z/remove
                                 z/root)
             restitched (sut/restitch-scaffold-ast edited-scaffold)
             new-scaffold (sut/build-scaffold-ast restitched)]
-        (is (= original-scaffold new-scaffold))))
+        (is (= (ast/stringify edited-scaffold) (ast/stringify new-scaffold)))))
     (testing "Split line breaks yields all paras, no line breaks"
       (let [example-markdown 
             "
@@ -43,4 +46,4 @@ Markdown: markdown `code_span`
               "Text{text=Markdown: markdown }" 
               ["Code{}" "Text{text=code_span}"]] 
              ["Paragraph{}" "Text{text=code}"]]]
-        (is (= (-> edited-scaffold sut/stringify)))))))
+        (is (= (-> edited-scaffold sut/stringify) expected-scaffold-stringified))))))

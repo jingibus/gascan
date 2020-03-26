@@ -86,12 +86,6 @@
         (recur (conj values (.next iterator)))
         values))))
 
-(defn strip-title-section!
-  [document]
-  (let [iterator (-> document (.getChildren) (.iterator))]
-    (.next iterator)
-    (.remove iterator)))
-
 (defn render
   [document]
   (let [renderer (-> (Formatter/builder flexmark-options) (.build))]

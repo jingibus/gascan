@@ -1,11 +1,12 @@
 (ns gascan.posts
   (:require
    [gascan.intern :refer [intern-edn! read-edn intern-file! readable-file]]
-   [gascan.multimarkdown :refer [parse-multimarkdown-flat
-                                 strip-title-section! 
-                                 render]]
-   [java-time :refer [local-date-time instant]])
-  (:import [gascan.multimarkdown RemotePost]))
+   [gascan.multimarkdown :as mm :refer [parse-multimarkdown-flat
+                                        render]]
+   [java-time :refer [local-date-time instant]]
+   [gascan.ast :as ast]
+   [clojure.zip :as z])
+  (:use [gascan.debug]))
 
 (def toplevel-post-contents-folder "posts")
 (def post-metadata-edn "metadata.edn")
@@ -37,6 +38,16 @@
         month (.getMonthValue date-time)
         year (.getYear date-time)]
     (format "%04d/%02d/%02d/%04d" year month day-of-month minute)))
+
+(defn strip-title-section!
+  [document]
+  (-> document 
+      ast/build-scaffold-ast 
+      z/vector-zip
+      z/down z/right 
+      z/remove
+      z/root
+      ast/restitch-scaffold-ast))
 
 (defn import-post!
   "Imports a RemotePost into an InternedPost. Note that this mutates the parsed Markdown in the RemotePost."
