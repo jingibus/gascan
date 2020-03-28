@@ -2,7 +2,6 @@
   (:require [ring.adapter.jetty :as jty]
             [hiccup.core :as hc]))
 
-
 (defn render-template
   [inner-html]
   (hc/html 
@@ -31,15 +30,19 @@
 (defn run
       [& {:keys [port join? repl?]
           :or {port 3000
-               join? false
-               repl? false}
+               join? false}
           :as params}]
-  (let [repl-params (if repl?
-                      {:nrepl {:start? true :port 9000 :host "localhost"}}
-                      {})
-        ring-params (merge {:port port :join? join?}
-                           repl-params)]
+  (let [ring-params {:port port :join? join?}]
     (println "Starting jetty:" ring-params)
     (jty/run-jetty handler ring-params)))
 
+(def lazy-server (lazy-seq (list (run))))
 
+(defn server [] (first lazy-server))
+
+(defn url-prefix [] 
+  (let [port (-> (server) .getConnectors (get 0) .getPort)]
+    (str "http://localhost:" port)))
+
+(comment
+  )
