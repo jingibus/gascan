@@ -64,7 +64,7 @@
    (read opts)))
 
 (defn readable-file
-  "Creates a readable file at relative filepath."
+  "Yields a readable file at relative filepath."
   [relpath]
   (some->>
    relpath
