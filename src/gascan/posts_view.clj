@@ -70,8 +70,6 @@
     (is (nil? (route-post {:title "not-there"}))))
   nil)
 
-(println (str (symbol route-post)))
-
 (comment
   (route-post {:title "blog-project"})
   (find-post {:title "blog-project"})

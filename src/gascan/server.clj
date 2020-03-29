@@ -1,14 +1,54 @@
 (ns gascan.server
-  (:require [compojure.core :require :all]
-            [compojure.route :as route]
+  (:require [compojure.route :as route]
+            [gascan.posts-view :as posts-view]
             [ring.adapter.jetty :as jty]
-            [hiccup.core :as hc]))
+            [hiccup.core :as hc])
+  (:use compojure.core))
 
-(defroutes routes
-  (GET "posts/title/:title" [title]
-       (posts-view/route-post {:title title}))
-  (GET "posts/id/:id" [id]
-       (posts-view/route-post {:id id})))
+(def content-not-found-page
+  (hc/html 
+   [:html 
+    [:head 
+     [:title "The Gas Can - The Unknown"]]
+    [:body
+     [:h1 "The Content Was Not Found"]
+     (map (fn [x] [:p x])
+          ["It all started one day when I wanted to look at a page on The Gas Can."
+           "I navigated to the page, and it was not there."
+           "I was so disconsolate that I hung my head in despair."
+           "My vision came to rest upon my right tennis shoe, which I had taken off earlier."
+           "There was something peeking out of it."
+           "What was it?"
+           "It was a $404 bill."
+           "Solent."])
+     ]
+    ]))
+
+(defn route-post
+  [locator]
+  (let [view (posts-view/route-post locator)]
+    (if view
+      {:status 200
+       :headers {"Content-Type" "text/html"}
+       :body view}
+      {:status 404
+           :headers {"Content-Type" "text/html"}
+           :body content-not-found-page})))
+
+(comment
+  (do
+    (route-post {:id 5000})
+    (require '[gascan.browser :as browser])
+    (browser/look-at "posts/id/5000")
+    (browser/look-at "posts/title/blog-project")))
+
+(defroutes all-routes
+  (GET "/posts/title/:title" [title]
+       (route-post {:title title}))
+  (GET "/posts/id/:id" [id]
+       (route-post {:id id})))
+
+
 
 (defn render-template
   [inner-html]
@@ -31,9 +71,7 @@
   (render-template "Hello World"))
 
 (defn handler [request]
-      {:status 200
-       :headers {"Content-Type" "text/html"}
-       :body (render-success request)})
+      (all-routes request))
 
 (defn run
       [& {:keys [port join? repl?]
@@ -47,6 +85,9 @@
 (def lazy-server (lazy-seq (list (run))))
 
 (defn server [] (first lazy-server))
+
+(comment
+  (.stop (server)))
 
 (defn url-prefix [] 
   (let [port (-> (server) .getConnectors (get 0) .getPort)]

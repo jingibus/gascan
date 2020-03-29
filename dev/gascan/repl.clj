@@ -14,10 +14,12 @@
                                           flexmark-options 
                                           make-options
                                           render-multimarkdown]]
+            [gascan.posts-view :as posts-view]
             [gascan.server :as svr]
             [clojure.tools.trace :refer [trace-ns untrace-ns trace-forms]])
-  (:use [gascan.debug] [gascan.test-tools])
+  (:use [gascan.debug] [gascan.test-tools] [gascan.browser])
   (:gen-class))
+
 
 
 (defn decrapinate-flexmark
