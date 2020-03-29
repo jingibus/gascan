@@ -7,6 +7,7 @@
                  [cli-matic "0.3.11"]
                  [clojure.java-time "0.3.2"]
                  [com.vladsch.flexmark/flexmark-all "0.60.2"]
+                 [compojure "1.6.1"]
                  [etaoin "0.3.6"]
                  [hiccup "1.0.5"]
                  [org.clojure/clojure "1.10.1"] 
