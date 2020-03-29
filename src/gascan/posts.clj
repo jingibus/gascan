@@ -26,6 +26,12 @@
   []
   (or (read-edn {:readers edn-readers} post-metadata-edn) []))
 
+(def posts-lazy (lazy-seq (list (fetch-posts))))
+
+(defn posts
+  []
+  (first posts-lazy))
+
 (defn put-posts!
   [posts]
   (intern-edn! post-metadata-edn posts))

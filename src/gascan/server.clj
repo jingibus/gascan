@@ -1,6 +1,14 @@
 (ns gascan.server
-  (:require [ring.adapter.jetty :as jty]
+  (:require [compojure.core :require :all]
+            [compojure.route :as route]
+            [ring.adapter.jetty :as jty]
             [hiccup.core :as hc]))
+
+(defroutes routes
+  (GET "posts/title/:title" [title]
+       (posts-view/route-post {:title title}))
+  (GET "posts/id/:id" [id]
+       (posts-view/route-post {:id id})))
 
 (defn render-template
   [inner-html]
@@ -12,7 +20,7 @@
      [:h1 "The Blog Project"]
      (map (fn [x] [:p x])
           ["It all started one day when I wanted to write."
-           "I wrote and I wrote and I wrote."
+           "I wrote and I wrote and I wrote. Aaaaaand I wrote."
            "\"What shall I do with all this writing?\" I asked myself."
            "And so I decided to create a blog."])
      ]
@@ -44,5 +52,3 @@
   (let [port (-> (server) .getConnectors (get 0) .getPort)]
     (str "http://localhost:" port)))
 
-(comment
-  )
