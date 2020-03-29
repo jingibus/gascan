@@ -26,6 +26,14 @@
      (println name (pprint-if-necessary (-> arg txform)))
      arg)))
 
+(defn monitor->>
+  ([arg]
+   (monitor-> arg ""))
+  ([name arg]
+   (monitor-> arg name identity))
+  ([name txform arg]
+   (monitor-> arg name txform)))
+
 (defn monitorv->
   ([arg]
    (monitorv-> arg ""))
