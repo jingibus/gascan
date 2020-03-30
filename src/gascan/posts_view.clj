@@ -5,7 +5,8 @@
             [gascan.intern :as intern]
             [gascan.multimarkdown :as mm]
             [gascan.multimarkdown :as mm]
-            [gascan.posts :as posts])
+            [gascan.posts :as posts]
+            [gascan.template :as tmpl])
   (:use [gascan.debug]))
 
 (defn to-kebab-case
@@ -53,7 +54,8 @@
          path              :markdown-rel-path} 
         (find-post non-null-args)
         ]
-    (render-markdown path)))
+    (tmpl/enframe title (render-markdown path))))
+
 (comment
   (do
     (use '[clojure.test])

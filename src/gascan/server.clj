@@ -1,28 +1,26 @@
 (ns gascan.server
   (:require [compojure.route :as route]
             [gascan.posts-view :as posts-view]
+            [gascan.template :as tmpl]
             [ring.adapter.jetty :as jty]
             [hiccup.core :as hc])
-  (:use compojure.core))
+  (:use compojure.core gascan.debug))
+
+
 
 (def content-not-found-page
-  (hc/html 
-   [:html 
-    [:head 
-     [:title "The Gas Can - The Unknown"]]
-    [:body
-     [:h1 "The Content Was Not Found"]
-     (map (fn [x] [:p x])
-          ["It all started one day when I wanted to look at a page on The Gas Can."
-           "I navigated to the page, and it was not there."
-           "I was so disconsolate that I hung my head in despair."
-           "My vision came to rest upon my right tennis shoe, which I had taken off earlier."
-           "There was something peeking out of it."
-           "What was it?"
-           "It was a $404 bill."
-           "Solent."])
-     ]
-    ]))
+  (tmpl/enframe 
+   "The Gas Can - The Unknown"
+   (cons [:h1 "The Content Was Not Found"]
+         (map (fn [x] [:p x])
+              ["It all started one day when I wanted to look at a page on The Gas Can."
+               "I navigated to the page, and it was not there."
+               "I was so disconsolate that I hung my head in despair."
+               "My vision came to rest upon my right tennis shoe, which I had taken off earlier."
+               "There was something peeking out of it."
+               "What was it?"
+               "It was a $404 bill."
+               "Solent."]))))
 
 (defn route-post
   [locator]
@@ -32,8 +30,8 @@
        :headers {"Content-Type" "text/html"}
        :body view}
       {:status 404
-           :headers {"Content-Type" "text/html"}
-           :body content-not-found-page})))
+       :headers {"Content-Type" "text/html"}
+       :body content-not-found-page})))
 
 (comment
   (do
@@ -44,11 +42,11 @@
 
 (defroutes all-routes
   (GET "/posts/title/:title" [title]
+       (println "route by title")
        (route-post {:title title}))
   (GET "/posts/id/:id" [id]
+       (println "route by id")
        (route-post {:id id})))
-
-
 
 (defn render-template
   [inner-html]
@@ -71,7 +69,7 @@
   (render-template "Hello World"))
 
 (defn handler [request]
-      (all-routes request))
+  (all-routes request))
 
 (defn run
       [& {:keys [port join? repl?]
