@@ -26,7 +26,7 @@
 
 (defn route-post
   [locator]
-  (let [view (posts-view/route-post locator)]
+  (let [view (posts-view/view-post locator)]
     (if view
       {:status 200
        :headers {"Content-Type" "text/html"}

@@ -2,7 +2,7 @@
 (ns gascan.intern
   (:refer-clojure)
   (:require 
-   [clojure.edn :refer [read]]
+   [clojure.edn :as edn]
    [clojure.reflect :refer [reflect]]
    [clojure.java.io :refer [as-file 
                             file 
@@ -10,26 +10,26 @@
                             copy
                             resource
                             reader]]
-   [clojure.string :refer [join split replace]])
+   [clojure.string :as string])
   (:gen-class))
 
 (def project-folder (System/getProperty "user.dir"))
 
-(def resources-folder (join "/" [project-folder "resources"]))
+(def resources-folder (string/join "/" [project-folder "resources"]))
 
 (defn interned-filepath
   [filepath reldest folder-depth]
   (let [fileobj (as-file filepath)
-        trimmed-filepath (replace filepath #"/*$" "")
-        components (split trimmed-filepath #"/")
+        trimmed-filepath (string/replace filepath #"/*$" "")
+        components (string/split trimmed-filepath #"/")
         intern-components (concat (list reldest) (take-last (+ folder-depth 1) components))
-        intern-rel-filepath (join "/" intern-components)
+        intern-rel-filepath (string/join "/" intern-components)
         ]
     intern-rel-filepath))
 
 (defn intern-abs-filepath
   [intern-rel-filepath]
-  (join "/" [resources-folder intern-rel-filepath]))
+  (string/join "/" [resources-folder intern-rel-filepath]))
 
 (defn intern-file!
   ([filepath reldest folder-depth]
@@ -61,7 +61,7 @@
    (.openStream)
    reader
    (java.io.PushbackReader.)
-   (read opts)))
+   (edn/read opts)))
 
 (defn readable-file
   "Yields a readable file at relative filepath."

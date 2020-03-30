@@ -18,7 +18,7 @@
       (string/join "-" pieces))))
 
 (defn find-post
-  [search-map]
+  [locator]
   (letfn [(route-entitled [post]
             (update-in post [:title] to-kebab-case))
           (normalized-id [post]
@@ -27,8 +27,8 @@
               post))
           (matches [post]
             (let [matching-post (normalized-id (route-entitled post))]
-              (= (select-keys matching-post (keys search-map))
-                 (normalized-id search-map))))]
+              (= (select-keys matching-post (keys locator))
+                 (normalized-id locator))))]
     (first  
      (->> (posts/posts)
           (filter matches)))))
@@ -45,7 +45,7 @@
     (when md-contents
       (mm/render-multimarkdown massaged-mm))))
 
-(defn route-post
+(defn view-post
   [{:keys [id title] :as all}]
   (let [non-null-args (into {} (filter #(second %) all))
         {title             :title
@@ -54,24 +54,25 @@
         (find-post non-null-args)
         ]
     (render-markdown path)))
-(do
-  (use '[clojure.test])
+(comment
+  (do
+    (use '[clojure.test])
 
-  (defn example
-    [desc f & args]
-    (println desc "args:" args "\n\tresult: " (apply f args)))
+    (defn example
+      [desc f & args]
+      (println desc "args:" args "\n\tresult: " (apply f args)))
 
-  (testing "valid post yields some sort of HTML filled with <p>s"
-    (let [number-of-paras (some-> (route-post {:title "blog-project"}) 
-                                  (string/split #"<p>")
-                                  count)]
-      (is (> number-of-paras 5))))
-  (testing "invalid post yields nil"
-    (is (nil? (route-post {:title "not-there"}))))
-  nil)
+    (testing "valid post yields some sort of HTML filled with <p>s"
+      (let [number-of-paras (some-> (view-post {:title "blog-project"}) 
+                                    (string/split #"<p>")
+                                    count)]
+        (is (> number-of-paras 5))))
+    (testing "invalid post yields nil"
+      (is (nil? (view-post {:title "not-there"}))))
+    nil))
 
 (comment
-  (route-post {:title "blog-project"})
+  (view-post {:title "blog-project"})
   (find-post {:title "blog-project"})
   (flatten (seq) {1 2})
   (posts/posts)
