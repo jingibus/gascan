@@ -16,6 +16,7 @@
                                           render-multimarkdown]]
             [gascan.posts-view :as posts-view]
             [gascan.server :as svr]
+            [gascan.browser :as browser]
             [clojure.tools.trace :refer [trace-ns untrace-ns trace-forms]])
   (:use [gascan.debug] [gascan.test-tools] [gascan.browser])
   (:gen-class))
@@ -49,5 +50,8 @@
     (assoc test-case 
            :path path 
            :contents new-contents)))
+
+(comment
+  )
 
 

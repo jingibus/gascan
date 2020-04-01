@@ -7,4 +7,7 @@
    [:html
     [:head
      [:title title]]
-    [:body body]]))
+    [:body 
+     [:div {:style "padding: 100px; margin 50px; background-color: #dddddd;"}
+      [:h1 title]
+      body]]]))
