@@ -11,7 +11,7 @@
 (def content-not-found-page
   (tmpl/enframe 
    "The Gas Can - The Unknown"
-   (cons [:h1 "The Content Was Not Found"]
+   (cons [:h2 "The Content Was Not Found"]
          (map (fn [x] [:p x])
               ["It all started one day when I wanted to look at a page on The Gas Can."
                "I navigated to the page, and it was not there."
@@ -38,6 +38,9 @@
     (route-post {:id 5000})
     (require '[gascan.browser :as browser])
     (browser/look-at "posts/id/5000")
+    (route-post {:id "5000"})
+    (posts-view/view-post {:id "5000"})
+    content-not-found-page
     (browser/look-at "posts/title/blog-project")))
 
 (defroutes all-routes
