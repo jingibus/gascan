@@ -53,8 +53,10 @@
          timestamp         :timestamp
          path              :markdown-rel-path} 
         (find-post non-null-args)
+        rendered (render-markdown path)
         ]
-    (tmpl/enframe title (render-markdown path))))
+    (when rendered
+      (tmpl/enframe title rendered))))
 
 (comment
   (do
