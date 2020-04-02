@@ -1,12 +1,11 @@
 (ns gascan.server
   (:require [compojure.route :as route]
             [gascan.posts-view :as posts-view]
+            [gascan.nav-view :as nav-view]
             [gascan.template :as tmpl]
             [ring.adapter.jetty :as jty]
             [hiccup.core :as hc])
   (:use compojure.core gascan.debug))
-
-
 
 (def content-not-found-page
   (tmpl/enframe 
@@ -49,7 +48,10 @@
        (route-post {:title title}))
   (GET "/posts/id/:id" [id]
        (println "route by id")
-       (route-post {:id id})))
+       (route-post {:id id}))
+  (GET "/posts" []
+       (println "route to all posts")
+       (nav-view/index-view-by-date (java-time/zone-id) nil)))
 
 (defn render-template
   [inner-html]

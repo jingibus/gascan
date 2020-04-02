@@ -1,35 +1,68 @@
 (ns gascan.nav-view
   (:require [hiccup.core :as hc]
-            [gascan.posts :as posts])
+            [gascan.posts :as posts]
+            [gascan.template :as template]
+            [gascan.browser :as browser])
   (:use gascan.debug))
 
 (def sorting-formatter (java-time/formatter "YYYY/MM/dd"))
 
 (defn day-key
-  [post zone]
-  (let [as-date (-> post
-                    :timestamp
+  [timestamp zone]
+  (let [as-date (-> timestamp
                     java-time/instant
                     (java-time/local-date zone))]
     (java-time/format sorting-formatter as-date)))
 
+(defn sort-and-group-by-key
+  "(sort-and-group-by-key
+     :a
+     [{:a 1 :b 10} {:a 1 :b 7} {:a -1 :b 6}])
+   => {-1 ({:a -1 :b 6})), 1 ({:a 1 :b 10} {:a 1 :b 7})}"
+  [kfn xs]
+  (let [annotated-xs (map (fn [x] (list (kfn x) x)) xs)]
+    (->> annotated-xs
+         (sort-by first)
+         (reduce (fn [coll [k v]]
+                   (update coll k #(conj (or % []) v)))
+                 {}))))
+
+(defn post-to-link
+  [post]
+  (vec [:a {:href (str "/posts/id/" (:id post))}
+        (:title post)]))
+
 (defn index-view-by-date
   [zone criteria]
-  (let [sorted-posts (sort 
-                      (fn [a b] (apply compare (map :timestamp [b a])))
-                      (posts/posts))
-        posts-by-day (->> sorted-posts
-                          (map #(vec [(day-key % zone) %]))
-                          (reduce (fn [coll [k v]] 
-                                    (update coll k #(cons v %)))
-                                  {}))]
-    posts-by-day)
-  )
+  (let [posts-by-day (->> (posts/posts)
+                          (sort-by :timestamp)
+                          (sort-and-group-by-key #(day-key (:timestamp %) zone))
+                          (sort-by first #(- (compare %1 %2)))
+                          (monitor->> "Template input"))]
+    (template/enframe
+     "The Gas Can"
+     (hc/html
+      (map (fn [[a b]] 
+             (list 
+              [:h3 a] 
+              (map 
+               #(vec [:p (post-to-link %)]) b)))
+           posts-by-day)))))
 
 (comment
   (def some-post (first (posts/posts)))
   (java-time/instant (:timestamp some-post))
   (-> some-post :timestamp java-time/instant (java-time/local-date (java-time/zone-id)) (.getClass) (.getMethods) vec)
-  (day-key some-post (java-time/zone-id))
+  (day-key (:timestamp some-post) (java-time/zone-id))
   (clojure.pprint/pprint (index-view-by-date (java-time/zone-id) nil))
+
+  (clojure.pprint/pprint (sort-and-group-by-key :a [{:a 1 :b 10} {:a 1 :b 7} {:a -1 :b 6}]))
+  (testing "sort and group preserves order in sublists"
+      (is (= (sort-and-group-by-key :a [{:a 1 :b 10} {:a 1 :b 7} {:a -1 :b 6}])
+             {-1 [{:a -1, :b 6}], 1 [{:a 1, :b 10} {:a 1, :b 7}]}))
+    )
+  (use 'clojure.test)
+  (require '[gascan.browser :as browser])
+  (browser/look-at "posts")
+  
   )
