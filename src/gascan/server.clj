@@ -38,10 +38,10 @@
 ;; Compojure routing
 (defroutes all-routes
   (GET "/posts/title/:title" [title]
-       (println "route by title")
+       (println "route by title:" title)
        (route-post {:title title}))
   (GET "/posts/id/:id" [id]
-       (println "route by id")
+       (println "route by id:" id)
        (route-post {:id id}))
   (GET "/posts" []
        (println "route to all posts")

@@ -9,9 +9,14 @@
 (defn look-at [path]
   (let [url (do
               ;; Lazy load the server; we don't want to have a dependency loop when
-              ;; we use this in view modules.
+              ;; we use this in view modules. 
+              ;;
+              ;; This dependency structure is super ugly, but it's the only
+              ;; way to build look-at such that it's useful, since we have
+              ;; to be able to use it from within a view or any other place
+              ;; in the code.
               (require '[gascan.server])
-              (str (gascan.server/url-prefix) "/" path))]
+              (str ((resolve 'gascan.server/url-prefix)) "/" path))]
     (etaoin/go (browser) url)
     path))
 
