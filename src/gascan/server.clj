@@ -42,6 +42,7 @@
     content-not-found-page
     (browser/look-at "posts/title/blog-project")))
 
+;; Compojure routing
 (defroutes all-routes
   (GET "/posts/title/:title" [title]
        (println "route by title")
