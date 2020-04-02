@@ -46,8 +46,8 @@
   (GET "/posts" []
        (println "route to all posts")
        (posts-view/index-view-by-date (java-time/zone-id) nil))
-  (GET [":unknown-route", :unknown-route #".*"] []
-       (println "Unknown path:" :unknown-route)
+  (GET [":unknown-route", :unknown-route #".*"] [unknown-route]
+       (println "Unknown path:" unknown-route)
        {:status 404
        :headers {"Content-Type" "text/html"}
        :body content-not-found-page}))
