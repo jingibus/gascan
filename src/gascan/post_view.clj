@@ -18,6 +18,10 @@
     (when pieces 
       (string/join "-" pieces))))
 
+(defn post->title-path
+  [post]
+  (str "/posts/title/" (to-kebab-case (:title post))))
+
 (defn find-post
   [locator]
   (letfn [(route-entitled [post]
@@ -80,4 +84,5 @@
   (find-post {:title "blog-project"})
   (flatten (seq) {1 2})
   (posts/posts)
+  (post->title-path (first (posts/posts)))
   (update-in {:title "blog-project"} [:id] identity))

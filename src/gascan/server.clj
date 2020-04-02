@@ -39,6 +39,7 @@
 ;; Compojure routing
 (defroutes all-routes
   (GET "/posts/title/:title" [title]
+       "See gascan.post-view/link-by-title for reverse route"
        (println "route by title:" title)
        (route-post {:title title}))
   (GET "/posts/id/:id" [id]

@@ -1,8 +1,9 @@
 (ns gascan.posts-view
-  (:require [hiccup.core :as hc]
+  (:require [gascan.browser :as browser]
+            [gascan.post-view :as post-view]
             [gascan.posts :as posts]
             [gascan.template :as template]
-            [gascan.browser :as browser])
+            [hiccup.core :as hc])
   (:use gascan.debug))
 
 (def sorting-formatter (java-time/formatter "YYYY/MM/dd"))
@@ -17,7 +18,7 @@
 (defn sort-and-group-by-key
   "(sort-and-group-by-key
      :a
-     [{:a 1 :b 10} {:a 1 :b 7} {:a -1 :b 6}])
+     [{:a 1 :b 10} {:a 1 :b7} {:a -1 :b 6}])
    => {-1 ({:a -1 :b 6})), 1 ({:a 1 :b 10} {:a 1 :b 7})}"
   [kfn xs]
   (let [annotated-xs (map (fn [x] (list (kfn x) x)) xs)]
@@ -27,9 +28,9 @@
                    (update coll k #(conj (or % []) v)))
                  {}))))
 
-(defn post-to-link
+(defn post->link
   [post]
-  (vec [:a {:href (str "/posts/id/" (:id post))}
+  (vec [:a {:href (post-view/post->title-path post)}
         (:title post)]))
 
 (defn index-view-by-date
@@ -46,7 +47,7 @@
              (list 
               [:h3 a] 
               (map 
-               #(vec [:p (post-to-link %)]) b)))
+               #(vec [:p (post->link %)]) b)))
            posts-by-day)))))
 
 (comment
