@@ -4,7 +4,8 @@
             [gascan.posts-view :as posts-view]
             [gascan.template :as tmpl]
             [hiccup.core :as hc]
-            [ring.adapter.jetty :as jty])
+            [ring.adapter.jetty :as jty]
+            [gascan.browser :as browser])
   (:use compojure.core gascan.debug))
 
 (def content-not-found-page
@@ -46,6 +47,11 @@
   (GET "/posts" []
        (println "route to all posts")
        (posts-view/index-view-by-date (java-time/zone-id) nil))
+  (GET "/favicon.ico" []
+       (println "it's that favicon")
+       {:status 200
+        :headers {"Content-Type" "image/png"}
+        :body (gascan.intern/readable-file "favicon.png")})
   (GET [":unknown-route", :unknown-route #".*"] [unknown-route]
        (println "Unknown path:" unknown-route)
        {:status 404
@@ -89,7 +95,10 @@
 (defn server [] (first lazy-server))
 
 (comment
-  (.stop (server)))
+  (.stop (server))
+  (require '[gascan.browser :as browser])
+  (browser/look-at "favicon.ico")
+  (browser/look-at "posts"))
 
 (defn url-prefix [] 
   (let [port (-> (server) .getConnectors (get 0) .getPort)]
