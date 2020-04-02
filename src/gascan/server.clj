@@ -23,14 +23,7 @@
 
 (defn route-post
   [locator]
-  (let [view (posts-view/view-post locator)]
-    (if view
-      {:status 200
-       :headers {"Content-Type" "text/html"}
-       :body view}
-      {:status 404
-       :headers {"Content-Type" "text/html"}
-       :body content-not-found-page})))
+  (posts-view/view-post locator))
 
 (comment
   (do
@@ -52,7 +45,12 @@
        (route-post {:id id}))
   (GET "/posts" []
        (println "route to all posts")
-       (nav-view/index-view-by-date (java-time/zone-id) nil)))
+       (nav-view/index-view-by-date (java-time/zone-id) nil))
+  (GET [":unknown-route", :unknown-route #".*"] []
+       (println "Unknown path:" :unknown-route)
+       {:status 404
+       :headers {"Content-Type" "text/html"}
+       :body content-not-found-page}))
 
 (defn render-template
   [inner-html]
