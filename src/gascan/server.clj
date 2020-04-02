@@ -1,10 +1,10 @@
 (ns gascan.server
   (:require [compojure.route :as route]
+            [gascan.post-view :as post-view]
             [gascan.posts-view :as posts-view]
-            [gascan.nav-view :as nav-view]
             [gascan.template :as tmpl]
-            [ring.adapter.jetty :as jty]
-            [hiccup.core :as hc])
+            [hiccup.core :as hc]
+            [ring.adapter.jetty :as jty])
   (:use compojure.core gascan.debug))
 
 (def content-not-found-page
@@ -23,7 +23,7 @@
 
 (defn route-post
   [locator]
-  (posts-view/view-post locator))
+  (post-view/view-post locator))
 
 (comment
   (do
@@ -31,7 +31,7 @@
     (require '[gascan.browser :as browser])
     (browser/look-at "posts/id/5000")
     (route-post {:id "5000"})
-    (posts-view/view-post {:id "5000"})
+    (post-view/view-post {:id "5000"})
     content-not-found-page
     (browser/look-at "posts/title/blog-project")))
 
@@ -45,7 +45,7 @@
        (route-post {:id id}))
   (GET "/posts" []
        (println "route to all posts")
-       (nav-view/index-view-by-date (java-time/zone-id) nil))
+       (posts-view/index-view-by-date (java-time/zone-id) nil))
   (GET [":unknown-route", :unknown-route #".*"] []
        (println "Unknown path:" :unknown-route)
        {:status 404

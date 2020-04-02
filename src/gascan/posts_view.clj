@@ -1,83 +1,68 @@
 (ns gascan.posts-view
-  (:require [clojure.string :as string]
-            [gascan.ast :as ast]
-            [gascan.ast :as ast]
-            [gascan.intern :as intern]
-            [gascan.multimarkdown :as mm]
-            [gascan.multimarkdown :as mm]
+  (:require [hiccup.core :as hc]
             [gascan.posts :as posts]
-            [gascan.template :as tmpl])
-  (:use [gascan.debug]))
+            [gascan.template :as template]
+            [gascan.browser :as browser])
+  (:use gascan.debug))
 
-(defn to-kebab-case
-  [s]
-  (let [pieces (some-> s
-                       string/lower-case
-                       string/trim
-                       (string/split #" +"))]
-    (when pieces 
-      (string/join "-" pieces))))
+(def sorting-formatter (java-time/formatter "YYYY/MM/dd"))
 
-(defn find-post
-  [locator]
-  (letfn [(route-entitled [post]
-            (update-in post [:title] to-kebab-case))
-          (normalized-id [post]
-            (if (:id post)
-              (update-in post [:id] #(when % (string/lower-case %)))
-              post))
-          (matches [post]
-            (let [matching-post (normalized-id (route-entitled post))]
-              (= (select-keys matching-post (keys locator))
-                 (normalized-id locator))))]
-    (first  
-     (->> (posts/posts)
-          (filter matches)))))
+(defn day-key
+  [timestamp zone]
+  (let [as-date (-> timestamp
+                    java-time/instant
+                    (java-time/local-date zone))]
+    (java-time/format sorting-formatter as-date)))
 
-(defn render-markdown
-  [relpath]
-  (let [md-contents (some-> (intern/readable-file relpath) slurp)
-        massaged-mm (some-> md-contents
-                            mm/parse-multimarkdown-str
-                            ast/build-scaffold-ast
-                            ast/split-line-breaks
-                            ast/restitch-scaffold-ast)]
-    (println "massaged-mm" massaged-mm "md-contents" md-contents)
-    (when md-contents
-      (mm/render-multimarkdown massaged-mm))))
+(defn sort-and-group-by-key
+  "(sort-and-group-by-key
+     :a
+     [{:a 1 :b 10} {:a 1 :b 7} {:a -1 :b 6}])
+   => {-1 ({:a -1 :b 6})), 1 ({:a 1 :b 10} {:a 1 :b 7})}"
+  [kfn xs]
+  (let [annotated-xs (map (fn [x] (list (kfn x) x)) xs)]
+    (->> annotated-xs
+         (sort-by first)
+         (reduce (fn [coll [k v]]
+                   (update coll k #(conj (or % []) v)))
+                 {}))))
 
-(defn view-post
-  [{:keys [id title] :as all}]
-  (let [non-null-args (into {} (filter #(second %) all))
-        {title             :title
-         timestamp         :timestamp
-         path              :markdown-rel-path} 
-        (find-post non-null-args)
-        rendered (render-markdown path)
-        ]
-    (when rendered
-      (tmpl/enframe title rendered))))
+(defn post-to-link
+  [post]
+  (vec [:a {:href (str "/posts/id/" (:id post))}
+        (:title post)]))
+
+(defn index-view-by-date
+  [zone criteria]
+  (let [posts-by-day (->> (posts/posts)
+                          (sort-by :timestamp)
+                          (sort-and-group-by-key #(day-key (:timestamp %) zone))
+                          (sort-by first #(- (compare %1 %2)))
+                          (monitor->> "Template input"))]
+    (template/enframe
+     "The Gas Can"
+     (hc/html
+      (map (fn [[a b]] 
+             (list 
+              [:h3 a] 
+              (map 
+               #(vec [:p (post-to-link %)]) b)))
+           posts-by-day)))))
 
 (comment
-  (do
-    (use '[clojure.test])
+  (def some-post (first (posts/posts)))
+  (java-time/instant (:timestamp some-post))
+  (-> some-post :timestamp java-time/instant (java-time/local-date (java-time/zone-id)) (.getClass) (.getMethods) vec)
+  (day-key (:timestamp some-post) (java-time/zone-id))
+  (clojure.pprint/pprint (index-view-by-date (java-time/zone-id) nil))
 
-    (defn example
-      [desc f & args]
-      (println desc "args:" args "\n\tresult: " (apply f args)))
-
-    (testing "valid post yields some sort of HTML filled with <p>s"
-      (let [number-of-paras (some-> (view-post {:title "blog-project"}) 
-                                    (string/split #"<p>")
-                                    count)]
-        (is (> number-of-paras 5))))
-    (testing "invalid post yields nil"
-      (is (nil? (view-post {:title "not-there"}))))
-    nil))
-
-(comment
-  (view-post {:title "blog-project"})
-  (find-post {:title "blog-project"})
-  (flatten (seq) {1 2})
-  (posts/posts)
-  (update-in {:title "blog-project"} [:id] identity))
+  (clojure.pprint/pprint (sort-and-group-by-key :a [{:a 1 :b 10} {:a 1 :b 7} {:a -1 :b 6}]))
+  (testing "sort and group preserves order in sublists"
+      (is (= (sort-and-group-by-key :a [{:a 1 :b 10} {:a 1 :b 7} {:a -1 :b 6}])
+             {-1 [{:a -1, :b 6}], 1 [{:a 1, :b 10} {:a 1, :b 7}]}))
+    )
+  (use 'clojure.test)
+  (require '[gascan.browser :as browser])
+  (browser/look-at "posts")
+  
+  )

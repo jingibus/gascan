@@ -14,7 +14,7 @@
                                           flexmark-options 
                                           make-options
                                           render-multimarkdown]]
-            [gascan.posts-view :as posts-view]
+            [gascan.post-view :as post-view]
             [gascan.server :as svr]
             [gascan.browser :as browser]
             [clojure.tools.trace :refer [trace-ns untrace-ns trace-forms]])
