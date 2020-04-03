@@ -23,34 +23,27 @@
                "It was a $404 bill."
                "Solent."]))))
 
-(defn route-post
-  [locator]
-  (post-view/view-post locator))
-
 (comment
   (do
-    (route-post {:id 5000})
     (require '[gascan.browser :as browser])
     (browser/look-at "posts/id/5000")
-    (route-post {:id "5000"})
     (post-view/view-post {:id "5000"})
     content-not-found-page
     (browser/look-at "posts/title/blog-project")))
 
 ;; Compojure routing
 (defroutes all-routes
-  (GET "/index.html" []
-       ())
-  (GET "/posts/title/:title" [title]
-       "See gascan.post-view/link-by-title for reverse route"
+  (GET "/:path{|index.htm|index.html}" [path]
+       (index-view/index-view))
+  (GET (post-view/post-by-title-path ":title") [title]
        (println "route by title:" title)
-       (route-post {:title title}))
-  (GET "/posts/id/:id" [id]
+       (post-view/post-view {:title title}))
+  (GET (post-view/post-by-id ":id") [id]
        (println "route by id:" id)
-       (route-post {:id id}))
-  (GET "/posts" []
+       (post-view/post-view {:id id}))
+  (GET (posts-view/posts-by-date-path nil) []
        (println "route to all posts")
-       (posts-view/index-view-by-date (java-time/zone-id) nil))
+       (posts-view/posts-by-date-view (java-time/zone-id) nil))
   (GET "/favicon.ico" []
        (println "it's that favicon")
        {:status 200
@@ -59,8 +52,8 @@
   (GET [":unknown-route", :unknown-route #".*"] [unknown-route]
        (println "Unknown path:" unknown-route)
        {:status 404
-       :headers {"Content-Type" "text/html"}
-       :body content-not-found-page}))
+        :headers {"Content-Type" "text/html"}
+        :body content-not-found-page}))
 
 (defn render-template
   [inner-html]
@@ -102,7 +95,10 @@
   (.stop (server))
   (require '[gascan.browser :as browser])
   (browser/look-at "favicon.ico")
-  (browser/look-at "posts"))
+  (browser/look-at "posts")
+  (browser/look-at "/index.html")
+  (browser/look-at "/posts/title/blog-project")
+)
 
 (defn url-prefix [] 
   (let [port (-> (server) .getConnectors (get 0) .getPort)]

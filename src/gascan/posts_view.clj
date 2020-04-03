@@ -15,14 +15,6 @@
                     (java-time/local-date zone))]
     (java-time/format sorting-formatter as-date)))
 
-(defn all-by-date-path
-  []
-  "/posts")
-
-(defn all-by-date-view
-  []
-  (index-view-by-date (java-time/zone-id) nil))
-
 (defn sort-and-group-by-key
   "(sort-and-group-by-key
      :a
@@ -41,29 +33,36 @@
   (vec [:a {:href (post-view/post->title-path post)}
         (:title post)]))
 
-(defn index-view-by-date
-  [zone criteria]
-  (let [posts-by-day (->> (posts/posts)
-                          (sort-by :timestamp)
-                          (sort-and-group-by-key #(day-key (:timestamp %) zone))
-                          (sort-by first #(- (compare %1 %2)))
-                          (monitor->> "Template input"))]
-    (template/enframe
-     "The Gas Can"
-     (hc/html
-      (map (fn [[a b]] 
-             (list 
-              [:h3 a] 
-              (map 
-               #(vec [:p (post->link %)]) b)))
-           posts-by-day)))))
+(defn posts-by-date-path
+  ([]
+   (posts-by-date-path nil))
+  ([criteria]
+   "/posts"))
+
+(defn posts-by-date-view
+  ([]
+   (posts-by-date-view (java-time/zone-id) nil))
+  ([zone criteria]
+   (let [posts-by-day (->> (posts/posts)
+                           (sort-by :timestamp)
+                           (sort-and-group-by-key #(day-key (:timestamp %) zone))
+                           (sort-by first #(- (compare %1 %2))))]
+     (template/enframe
+      "The Gas Can"
+      (hc/html
+       (map (fn [[a b]] 
+              (list 
+               [:h3 a] 
+               (map 
+                #(vec [:p (post->link %)]) b)))
+            posts-by-day))))))
 
 (comment
   (def some-post (first (posts/posts)))
   (java-time/instant (:timestamp some-post))
   (-> some-post :timestamp java-time/instant (java-time/local-date (java-time/zone-id)) (.getClass) (.getMethods) vec)
   (day-key (:timestamp some-post) (java-time/zone-id))
-  (clojure.pprint/pprint (index-view-by-date (java-time/zone-id) nil))
+  (clojure.pprint/pprint (posts-by-date-view (java-time/zone-id) nil))
 
   (clojure.pprint/pprint (sort-and-group-by-key :a [{:a 1 :b 10} {:a 1 :b 7} {:a -1 :b 6}]))
   (testing "sort and group preserves order in sublists"

@@ -18,10 +18,6 @@
     (when pieces 
       (string/join "-" pieces))))
 
-(defn post->title-path
-  [post]
-  (str "/posts/title/" (to-kebab-case (:title post))))
-
 (defn find-post
   [locator]
   (letfn [(route-entitled [post]
@@ -49,7 +45,19 @@
     (when md-contents
       (mm/render-multimarkdown massaged-mm))))
 
-(defn view-post
+(defn post->title-path
+  [post]
+  (str "/posts/title/" (to-kebab-case (:title post))))
+
+(defn post-by-title-path
+  [title]
+  (str "/posts/title/" title))
+
+(defn post-by-id
+  [id]
+  (str "/posts/id/" id))
+
+(defn post-view
   [{:keys [id title] :as all}]
   (let [non-null-args (into {} (filter #(second %) all))
         {title             :title
