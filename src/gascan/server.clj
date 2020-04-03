@@ -1,5 +1,6 @@
 (ns gascan.server
   (:require [compojure.route :as route]
+            [gascan.index-view :as index-view]
             [gascan.post-view :as post-view]
             [gascan.posts-view :as posts-view]
             [gascan.template :as tmpl]
@@ -38,6 +39,8 @@
 
 ;; Compojure routing
 (defroutes all-routes
+  (GET "/index.html" []
+       ())
   (GET "/posts/title/:title" [title]
        "See gascan.post-view/link-by-title for reverse route"
        (println "route by title:" title)

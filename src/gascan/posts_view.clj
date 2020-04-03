@@ -15,6 +15,14 @@
                     (java-time/local-date zone))]
     (java-time/format sorting-formatter as-date)))
 
+(defn all-by-date-path
+  []
+  "/posts")
+
+(defn all-by-date-view
+  []
+  (index-view-by-date (java-time/zone-id) nil))
+
 (defn sort-and-group-by-key
   "(sort-and-group-by-key
      :a
