@@ -7,7 +7,9 @@
 (defn browser [] (first lazy-browser))
 
 (defn look-at [path]
-  (let [url (do
+  (let [;; to handle with or without a preceding / in the path
+        path (clojure.string/replace path #"^/" "")
+        url (do
               ;; Lazy load the server; we don't want to have a dependency loop when
               ;; we use this in view modules. 
               ;;

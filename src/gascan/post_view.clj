@@ -46,7 +46,6 @@
                             ast/build-scaffold-ast
                             ast/split-line-breaks
                             ast/restitch-scaffold-ast)]
-    (println "massaged-mm" massaged-mm "md-contents" md-contents)
     (when md-contents
       (mm/render-multimarkdown massaged-mm))))
 
@@ -85,4 +84,6 @@
   (flatten (seq) {1 2})
   (posts/posts)
   (post->title-path (first (posts/posts)))
-  (update-in {:title "blog-project"} [:id] identity))
+  (update-in {:title "blog-project"} [:id] identity)
+  (gascan.browser/look-at (post->title-path (first (posts/posts))))
+  )
