@@ -15,19 +15,6 @@
                     (java-time/local-date zone))]
     (java-time/format sorting-formatter as-date)))
 
-(defn sort-and-group-by-key
-  "(sort-and-group-by-key
-     :a
-     [{:a 1 :b 10} {:a 1 :b7} {:a -1 :b 6}])
-   => {-1 ({:a -1 :b 6})), 1 ({:a 1 :b 10} {:a 1 :b 7})}"
-  [kfn xs]
-  (let [annotated-xs (map (fn [x] (list (kfn x) x)) xs)]
-    (->> annotated-xs
-         (sort-by first)
-         (reduce (fn [coll [k v]]
-                   (update coll k #(conj (or % []) v)))
-                 {}))))
-
 (defn post->link
   [post]
   (vec [:a {:href (post-view/post->title-path post)}
@@ -43,10 +30,13 @@
   ([]
    (posts-by-date-view (java-time/zone-id) nil))
   ([zone criteria]
-   (let [posts-by-day (->> (posts/posts)
-                           (sort-by :timestamp)
-                           (sort-and-group-by-key #(day-key (:timestamp %) zone))
-                           (sort-by first #(- (compare %1 %2))))]
+   (let [key-fn #(day-key (:timestamp %) zone)
+         ;; Create a list of ("YYYY/MM/dd" (posts...)) pairs 
+         ;; ordered by day descending.
+         posts-by-day (->> (posts/posts)
+                           (sort-by #(- (:timestamp %)))
+                           (partition-by key-fn)
+                           (map (juxt #(key-fn (first %)) identity)))]
      (template/enframe
       "The Gas Can"
       (hc/html
@@ -65,10 +55,6 @@
   (clojure.pprint/pprint (posts-by-date-view (java-time/zone-id) nil))
 
   (clojure.pprint/pprint (sort-and-group-by-key :a [{:a 1 :b 10} {:a 1 :b 7} {:a -1 :b 6}]))
-  (testing "sort and group preserves order in sublists"
-      (is (= (sort-and-group-by-key :a [{:a 1 :b 10} {:a 1 :b 7} {:a -1 :b 6}])
-             {-1 [{:a -1, :b 6}], 1 [{:a 1, :b 10} {:a 1, :b 7}]}))
-    )
   (use 'clojure.test)
   (require '[gascan.browser :as browser])
   (browser/look-at "posts")
