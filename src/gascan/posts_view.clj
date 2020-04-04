@@ -22,30 +22,47 @@
 
 (defn posts-by-date-path
   ([]
-   (posts-by-date-path nil))
+   "/posts")
   ([criteria]
-   "/posts"))
+   (let [criteria (if (string? criteria) #{(keyword criteria)} criteria)
+         criteria-kebab (clojure.string/join "-" (map name criteria))]
+     (str "/posts/criteria/" criteria-kebab))))
 
 (defn posts-by-date-view
+  "Yields a view of posts by date, possibly with criteria.
+
+  (posts-by-date-view #{:meta :programming}) is equivalent to
+  (posts-by-date-view \"meta-programming\").
+"
   ([]
-   (posts-by-date-view (java-time/zone-id) nil))
-  ([zone criteria]
-   (let [key-fn #(day-key (:timestamp %) zone)
+   (posts-by-date-view #{}))
+  ([criteria]
+   (let [zone (java-time/zone-id "America/Los_Angeles")
+         criteria (if (string? criteria)
+                    (map keyword (clojure.string/split criteria #"-"))
+                    criteria)
+         key-fn #(day-key (:timestamp %) zone)
+         matches-criteria #(or (empty? criteria)
+                               (seq (clojure.set/intersection
+                                     criteria
+                                     (:filter %))))
          ;; Create a list of ("YYYY/MM/dd" (posts...)) pairs 
          ;; ordered by day descending.
          posts-by-day (->> (posts/posts)
+                           (filter matches-criteria)
                            (sort-by #(- (:timestamp %)))
                            (partition-by key-fn)
                            (map (juxt #(key-fn (first %)) identity)))]
-     (template/enframe
-      "The Gas Can"
-      (hc/html
-       (map (fn [[a b]] 
-              (list 
-               [:h3 a] 
-               (map 
-                #(vec [:p (post->link %)]) b)))
-            posts-by-day))))))
+     (when (seq posts-by-day)
+       (template/enframe
+        "The Gas Can"
+        (hc/html
+         (map (fn [[a b]] 
+                (list 
+                 [:h3 a] 
+                 (map 
+                  #(vec [:p (post->link %)]) b)))
+              posts-by-day)))))))
 
 (comment
   (def some-post (first (posts/posts)))

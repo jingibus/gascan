@@ -1,5 +1,7 @@
 (ns gascan.post-spec
-  (:require [clojure.spec.alpha :as s]))
+  (:require [clojure.spec.alpha :as s]
+            [java-time])
+  )
 
 (def cst (java-time/zone-id "America/Chicago"))
 
@@ -53,6 +55,8 @@
         (java.util.UUID/fromString v)
         (catch Exception e false))))
 
+(s/def ::filter (s/every #{:meta :technical :clojure :spiritual :music}))
+(s/def ::status #{:draft :published})
 (s/def ::id valid-uuid?)
 (s/def ::title string?)
 (s/def ::timestamp 

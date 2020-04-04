@@ -41,9 +41,12 @@
   (GET (post-view/post-by-id ":id") [id]
        (println "route by id:" id)
        (post-view/post-view {:id id}))
-  (GET (posts-view/posts-by-date-path nil) []
+  (GET (posts-view/posts-by-date-path ":criteria") [criteria]
+       (println "route to posts matching criteria " criteria)
+       (posts-view/posts-by-date-view criteria))
+  (GET (posts-view/posts-by-date-path) []
        (println "route to all posts")
-       (posts-view/posts-by-date-view (java-time/zone-id) nil))
+       (posts-view/posts-by-date-view))
   (GET "/favicon.ico" []
        (println "it's that favicon")
        {:status 200
@@ -98,6 +101,7 @@
   (browser/look-at "posts")
   (browser/look-at "/index.html")
   (browser/look-at "/posts/title/blog-project")
+  (browser/look-at "/posts/criteria/")
 )
 
 (defn url-prefix [] 
