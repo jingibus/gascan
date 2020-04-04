@@ -1,11 +1,13 @@
 (ns gascan.posts
   (:require
+   [clojure.spec.alpha :as s]
+   [clojure.zip :as z]
+   [gascan.ast :as ast]
    [gascan.intern :refer [intern-edn! read-edn intern-file! readable-file]]
    [gascan.multimarkdown :as mm :refer [parse-multimarkdown-flat
                                         render]]
-   [java-time :refer [local-date-time instant]]
-   [gascan.ast :as ast]
-   [clojure.zip :as z])
+   [gascan.post-spec :as post-spec]
+   [java-time :refer [local-date-time instant]])
   (:use [gascan.debug]))
 
 (def toplevel-post-contents-folder "posts")
@@ -24,6 +26,7 @@
 
 (defn fetch-posts
   []
+  {:post [(every? #(s/assert post-spec/intern-post %) %)]}
   (or (read-edn {:readers edn-readers} post-metadata-edn) []))
 
 (def posts-lazy (lazy-seq (list (fetch-posts))))
@@ -58,6 +61,8 @@
 (defn import-post!
   "Imports a RemotePost into an InternedPost. Note that this mutates the parsed Markdown in the RemotePost."
   [remote-post]
+  {:pre [(s/valid? post-spec/remote-post remote-post)]
+   :post [(s/valid? post-spec/intern-post %)]}
   (let [{title :title 
          timestamp :timestamp
          parsed-markdown :parsed-markdown
