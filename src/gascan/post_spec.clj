@@ -70,7 +70,8 @@
                    ::title 
                    ::timestamp 
                    ::markdown-rel-path 
-                   ::extra-resources-rel])) 
+                   ::extra-resources-rel]
+          :opt-un [::parsed-markdown])) 
 
 (s/def ::parsed-markdown flexmark-document?)
 (s/def ::markdown-abs-path valid-file?)
