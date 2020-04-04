@@ -51,7 +51,7 @@
   (or (instance? java.util.UUID v)
       (try
         (java.util.UUID/fromString v)
-        (catch IllegalArgumentException e false))))
+        (catch Exception e false))))
 
 (s/def ::id valid-uuid?)
 (s/def ::title string?)

@@ -18,6 +18,9 @@
   {:post [(every? #(s/assert post-spec/intern-post %) %)]}
   (or (read-edn {} post-metadata-edn) []))
 
+(s/fdef fetch-posts
+  :ret (s/every post-spec/intern-post))
+
 (def posts-lazy (lazy-seq (list (fetch-posts))))
 
 (defn posts
@@ -28,6 +31,9 @@
   [posts]
   {:pre [(every? #(s/assert post-spec/intern-post %) posts)]}
   (intern-edn! post-metadata-edn posts))
+
+(s/fdef put-posts!
+  :args (s/cat :posts (s/every post-spec/intern-post)))
 
 (defn to-yyyy-mm-dd-mmmm
   [timestamp]
@@ -51,8 +57,6 @@
 (defn import-post!
   "Imports a remote-post into an intern-post. Note that this mutates the parsed Markdown in the remote-post."
   [remote-post]
-  {:pre [(s/valid? post-spec/remote-post remote-post)]
-   :post [(s/valid? post-spec/intern-post %)]}
   (let [{title :title 
          timestamp :timestamp
          parsed-markdown :parsed-markdown
@@ -78,6 +82,10 @@
      :id (java.util.UUID/randomUUID)
      }
     ))
+
+(s/fdef import-post!
+  :args #(post-spec/remote-post (:remote-post %))
+  :ret  #(post-spec/intern-post %))
 
 (defn as-parsed
   "Yields an interned record with parsed markdown."

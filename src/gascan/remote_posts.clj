@@ -18,7 +18,6 @@
 
 (defn record-from-mm-dir
   [dirpath]
-  {:post [(s/valid? post-spec/remote-post %)]}
   (let [file-obj (as-file dirpath)
         md-filepath (md-filepath-from-dir dirpath)
         md-file-obj (as-file md-filepath)
@@ -33,9 +32,11 @@
      :dir-depth 1
      :parsed-markdown parsed-markdown}))
 
+(s/fdef record-from-mm-dir
+  :ret post-spec/remote-post)
+
 (defn record-from-mm-flat
   [filepath]
-  {:post [(s/valid? post-spec/remote-post %)]}
   (let [parsed-markdown (parse-multimarkdown-flat filepath)]
     {:markdown-abs-path (.getAbsolutePath (as-file filepath))
      :title (get-title parsed-markdown)
@@ -43,6 +44,9 @@
      :extra-resources []
      :dir-depth 0
      :parsed-markdown parsed-markdown}))
+
+(s/fdef record-from-mm-flat
+  :ret post-spec/remote-post)
 
 (defn read-remote-post
   [filepath]
@@ -54,3 +58,6 @@
           :else
           (throw (new java.io.IOException (str "Unknown file type: " 
                                                filepath "::" file-obj))))))
+
+(s/fdef read-remote-post
+  :ret post-spec/remote-post)
