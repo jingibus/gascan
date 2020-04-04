@@ -13,21 +13,10 @@
 (def toplevel-post-contents-folder "posts")
 (def post-metadata-edn "metadata.edn")
 
-(defrecord InternedPost 
-    [
-     title
-     timestamp
-     markdown-rel-path
-     extra-resources-rel
-     id
-     ])
-
-(def edn-readers {'gascan.posts.InternedPost map->InternedPost})
-
 (defn fetch-posts
   []
   {:post [(every? #(s/assert post-spec/intern-post %) %)]}
-  (or (read-edn {:readers edn-readers} post-metadata-edn) []))
+  (or (read-edn {} post-metadata-edn) []))
 
 (def posts-lazy (lazy-seq (list (fetch-posts))))
 
@@ -37,6 +26,7 @@
 
 (defn put-posts!
   [posts]
+  {:pre [(every? #(s/assert post-spec/intern-post %) posts)]}
   (intern-edn! post-metadata-edn posts))
 
 (defn to-yyyy-mm-dd-mmmm
@@ -59,7 +49,7 @@
       ast/restitch-scaffold-ast))
 
 (defn import-post!
-  "Imports a RemotePost into an InternedPost. Note that this mutates the parsed Markdown in the RemotePost."
+  "Imports a remote-post into an intern-post. Note that this mutates the parsed Markdown in the remote-post."
   [remote-post]
   {:pre [(s/valid? post-spec/remote-post remote-post)]
    :post [(s/valid? post-spec/intern-post %)]}
@@ -80,14 +70,13 @@
                                         post-contents-folder 
                                         dir-depth 
                                         rendered-markdown)]
-    (map->InternedPost 
-     {
-      :title title
-      :timestamp timestamp
-      :markdown-rel-path interned-markdown-path
-      :extra-resources-rel interned-resources
-      :id (java.util.UUID/randomUUID)
-      })
+    {
+     :title title
+     :timestamp timestamp
+     :markdown-rel-path interned-markdown-path
+     :extra-resources-rel interned-resources
+     :id (java.util.UUID/randomUUID)
+     }
     ))
 
 (defn as-parsed

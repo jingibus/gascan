@@ -1,18 +1,10 @@
 (ns gascan.remote-posts
   (:require [clojure.java.io :refer [as-file]]
+            [clojure.spec.alpha :as s]
             [clojure.zip :as z]
             [gascan.ast :as ast]
-            [gascan.multimarkdown :as mm :refer [parse-multimarkdown-flat md-filepath-from-dir]]))
-
-(defrecord RemotePost 
-    [
-     title
-     timestamp
-     parsed-markdown
-     markdown-abs-path 
-     extra-resources
-     dir-depth
-     ])
+            [gascan.multimarkdown :as mm :refer [parse-multimarkdown-flat md-filepath-from-dir]]
+            [gascan.post-spec :as post-spec]))
 
 (defn get-title
   [document]
@@ -26,6 +18,7 @@
 
 (defn record-from-mm-dir
   [dirpath]
+  {:post [(s/valid? post-spec/remote-post %)]}
   (let [file-obj (as-file dirpath)
         md-filepath (md-filepath-from-dir dirpath)
         md-file-obj (as-file md-filepath)
@@ -33,22 +26,23 @@
         extra-resources (->> (as-file dirpath)
                              (.listFiles)
                              (filter #(not (.equals md-file-obj %))))]
-    (map->RemotePost {:markdown-abs-path (.getAbsolutePath (as-file md-filepath))
-                      :title (get-title parsed-markdown)
-                      :timestamp (System/currentTimeMillis)
-                      :extra-resources extra-resources
-                      :dir-depth 1
-                      :parsed-markdown parsed-markdown})))
+    {:markdown-abs-path (.getAbsolutePath (as-file md-filepath))
+     :title (get-title parsed-markdown)
+     :timestamp (System/currentTimeMillis)
+     :extra-resources extra-resources
+     :dir-depth 1
+     :parsed-markdown parsed-markdown}))
 
 (defn record-from-mm-flat
   [filepath]
+  {:post [(s/valid? post-spec/remote-post %)]}
   (let [parsed-markdown (parse-multimarkdown-flat filepath)]
-    (map->RemotePost {:markdown-abs-path (.getAbsolutePath (as-file filepath))
-                      :title (get-title parsed-markdown)
-                      :timestamp (System/currentTimeMillis)
-                      :extra-resources []
-                      :dir-depth 0
-                      :parsed-markdown parsed-markdown})))
+    {:markdown-abs-path (.getAbsolutePath (as-file filepath))
+     :title (get-title parsed-markdown)
+     :timestamp (System/currentTimeMillis)
+     :extra-resources []
+     :dir-depth 0
+     :parsed-markdown parsed-markdown}))
 
 (defn read-remote-post
   [filepath]
