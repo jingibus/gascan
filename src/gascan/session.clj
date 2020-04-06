@@ -14,3 +14,5 @@
     :ret session-spec)
 
 (def private-session (make-session :public false))
+(def public-session (make-session :public true))
+

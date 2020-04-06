@@ -6,6 +6,7 @@
             [gascan.multimarkdown :as mm]
             [gascan.multimarkdown :as mm]
             [gascan.posts :as posts]
+            [gascan.session :as session]
             [gascan.template :as tmpl])
   (:use [gascan.debug]))
 
@@ -58,7 +59,7 @@
   (str "/posts/id/" id))
 
 (defn post-view
-  [{:keys [id title] :as all}]
+  [sess {:keys [id title] :as all}]
   (let [non-null-args (into {} (filter #(second %) all))
         {title             :title
          timestamp         :timestamp
@@ -78,7 +79,7 @@
       (println desc "args:" args "\n\tresult: " (apply f args)))
 
     (testing "valid post yields some sort of HTML filled with <p>s"
-      (let [number-of-paras (some-> (view-post {:title "blog-project"}) 
+      (let [number-of-paras (some-> (post-view session/private-session {:title "blog-project"}) 
                                     (string/split #"<p>")
                                     count)]
         (is (> number-of-paras 5))))

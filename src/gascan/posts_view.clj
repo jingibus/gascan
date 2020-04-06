@@ -2,6 +2,7 @@
   (:require [gascan.browser :as browser]
             [gascan.post-view :as post-view]
             [gascan.posts :as posts]
+            [gascan.session :as session]
             [gascan.template :as template]
             [hiccup.core :as hc])
   (:use gascan.debug))
@@ -69,7 +70,7 @@
   (java-time/instant (:timestamp some-post))
   (-> some-post :timestamp java-time/instant (java-time/local-date (java-time/zone-id)) (.getClass) (.getMethods) vec)
   (day-key (:timestamp some-post) (java-time/zone-id))
-  (clojure.pprint/pprint (posts-by-date-view (java-time/zone-id) nil))
+  (clojure.pprint/pprint (posts-by-date-view session/private-session nil))
 
   (clojure.pprint/pprint (sort-and-group-by-key :a [{:a 1 :b 10} {:a 1 :b 7} {:a -1 :b 6}]))
   (use 'clojure.test)

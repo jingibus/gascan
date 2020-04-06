@@ -14,23 +14,28 @@
    ["the firehose" #{}]])
 
 (defn index-view
-  []
-  (letfn [(post-filter-para [[title post-filter]]
-            (let [post-matches #(or (empty? post-filter)
-                                    (seq (clojure.set/intersection 
-                                          post-filter (:filter %))))
-                  first-post (->> (posts/posts)
-                                  (filter post-matches)
-                                  (sort-by (comp - :timestamp))
-                                  first)]
-              (when first-post
-                [:p 
-                 title " - \""
-                 [:a {:href (post-view/post->title-path first-post)}
-                  (:title first-post) ]
-                 "\""
-                 " -[" [:a {:href (posts-view/posts-by-date-path post-filter)}
-                        "index"] "]-"])))]
+  [sess]
+  (let [post-visible-in-session (partial posts/visible-to-session? sess)
+        post-filter-para 
+        (fn
+          [[title post-filter]]
+          (let [post-matches-filter #(or (empty? post-filter)
+                                         (seq (clojure.set/intersection 
+                                               post-filter (:filter %)))) 
+                first-post (->> (posts/posts)
+                                (filter (every-pred
+                                         post-visible-in-session
+                                         post-matches-filter))
+                                (sort-by (comp - :timestamp))
+                                first)]
+            (when first-post
+              [:p 
+               title " - \""
+               [:a {:href (post-view/post->title-path first-post)}
+                (:title first-post) ]
+               "\""
+               " -[" [:a {:href (posts-view/posts-by-date-path post-filter)}
+                      "index"] "]-"])))]
     (template/enframe
      "The Gas Can"
      (filter identity (map post-filter-para post-filters)))))

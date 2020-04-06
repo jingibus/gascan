@@ -54,6 +54,12 @@
       z/root
       ast/restitch-scaffold-ast))
 
+(defn visible-to-session?
+  [session post]
+  (if (:public session)
+    (#{:published} (:status post))
+    true))
+
 (defn import-post!
   "Imports a remote-post into an intern-post. Note that this mutates the parsed Markdown in the remote-post."
   [remote-post]
