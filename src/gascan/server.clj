@@ -31,32 +31,73 @@
     content-not-found-page
     (browser/look-at "posts/title/blog-project")))
 
+((GET "/:test1/route?parameter1=:param&parameter2=:param2" [test1 param param2]
+       (println test1 param param2))
+ {:request-method :get 
+  :uri  "/abbleton/route?parameter2=fluff&parameter1=ernutterer"
+  :scheme :http
+  :server-name "localhost"})
+
 ;; Compojure routing
-(defroutes all-routes
-  (GET "/:path{|index.htm|index.html}" [path]
-       (index-view/index-view))
-  (GET (post-view/post-by-title-path ":title") [title]
-       (println "route by title:" title)
-       (post-view/post-view {:title title}))
-  (GET (post-view/post-by-id ":id") [id]
-       (println "route by id:" id)
-       (post-view/post-view {:id id}))
-  (GET (posts-view/posts-by-date-path ":criteria") [criteria]
-       (println "route to posts matching criteria " criteria)
-       (posts-view/posts-by-date-view criteria))
-  (GET (posts-view/posts-by-date-path) []
-       (println "route to all posts")
-       (posts-view/posts-by-date-view))
-  (GET "/favicon.ico" []
-       (println "it's that favicon")
-       {:status 200
-        :headers {"Content-Type" "image/png"}
-        :body (gascan.intern/readable-file "favicon.png")})
-  (GET [":unknown-route", :unknown-route #".*"] [unknown-route]
-       (println "Unknown path:" unknown-route)
-       {:status 404
-        :headers {"Content-Type" "text/html"}
-        :body content-not-found-page}))
+(defn all-routes
+  [sess]
+  (routes
+   (GET "/:path{|index.htm|index.html}" [path]
+        (index-view/index-view sess))
+   (GET (post-view/post-by-title-path ":title") [title]
+        (println "route by title:" title)
+        (post-view/post-view sess {:title title}))
+   (GET (post-view/post-by-id ":id") [id]
+        (println "route by id:" id)
+        (post-view/post-view sess {:id id}))
+   (GET (posts-view/posts-by-date-path ":criteria") [criteria]
+        (println "route to posts matching criteria " criteria)
+        (posts-view/posts-by-date-view sess criteria))
+   (GET (posts-view/posts-by-date-path) []
+        (println "route to all posts")
+        (posts-view/posts-by-date-view sess))
+   (GET (posts-view/posts-by-date-path "") []
+        (println "route to all posts")
+        (posts-view/posts-by-date-view sess))
+   (GET "/favicon.ico" []
+        (println "it's that favicon")
+        {:status 200
+         :headers {"Content-Type" "image/png"}
+         :body (gascan.intern/readable-file "favicon.png")})
+   (GET [":unknown-route", :unknown-route #".*"] [unknown-route]
+        (println "Unknown path:" unknown-route)
+        {:status 404
+         :headers {"Content-Type" "text/html"}
+         :body content-not-found-page})))
+(comment
+  (defroutes all-routes
+    (GET "/:path{|index.htm|index.html}" [path]
+         (index-view/index-view))
+    (GET (post-view/post-by-title-path ":title") [title]
+         (println "route by title:" title)
+         (post-view/post-view {:title title}))
+    (GET (post-view/post-by-id ":id") [id]
+         (println "route by id:" id)
+         (post-view/post-view {:id id}))
+    (GET (posts-view/posts-by-date-path ":criteria") [criteria]
+         (println "route to posts matching criteria " criteria)
+         (posts-view/posts-by-date-view criteria))
+    (GET (posts-view/posts-by-date-path) []
+         (println "route to all posts")
+         (posts-view/posts-by-date-view))
+    (GET (posts-view/posts-by-date-path "") []
+         (println "route to all posts")
+         (posts-view/posts-by-date-view))
+    (GET "/favicon.ico" []
+         (println "it's that favicon")
+         {:status 200
+          :headers {"Content-Type" "image/png"}
+          :body (gascan.intern/readable-file "favicon.png")})
+    (GET [":unknown-route", :unknown-route #".*"] [unknown-route]
+         (println "Unknown path:" unknown-route)
+         {:status 404
+          :headers {"Content-Type" "text/html"}
+          :body content-not-found-page})))
 
 (defn render-template
   [inner-html]
@@ -78,8 +119,9 @@
   [request]
   (render-template "Hello World"))
 
-(defn handler [request]
-  (all-routes request))
+(defn handler 
+  []
+  (all-routes (gascan.session/make-session :public false)))
 
 (defn run
       [& {:keys [port join? repl?]
@@ -88,9 +130,12 @@
           :as params}]
   (let [ring-params {:port port :join? join?}]
     (println "Starting jetty:" ring-params)
-    (jty/run-jetty handler ring-params)))
+    (jty/run-jetty (handler) ring-params)))
 
-(def lazy-server (lazy-seq (list (run))))
+(defonce lazy-server (lazy-seq (list (run))))
+(comment
+  (def lazy-server (lazy-seq (list (run))))
+  )
 
 (defn server [] (first lazy-server))
 
@@ -98,7 +143,7 @@
   (.stop (server))
   (require '[gascan.browser :as browser])
   (browser/look-at "favicon.ico")
-  (browser/look-at "posts")
+  (browser/look-at "/posts")
   (browser/look-at "/index.html")
   (browser/look-at "/posts/title/blog-project")
   (browser/look-at "/posts/criteria/")
