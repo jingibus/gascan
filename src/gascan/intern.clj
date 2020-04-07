@@ -35,7 +35,11 @@
   ([filepath reldest folder-depth]
    (let [fileobj (as-file filepath)]
      (if (.isFile fileobj)
-       (intern-file! filepath reldest folder-depth (slurp fileobj))
+       (intern-file! 
+        filepath
+        reldest
+        folder-depth
+        (clojure.java.io/input-stream fileobj))
        (throw (new java.io.IOException "Cannot interna a non-file")))))
   ([filepath reldest folder-depth contents]
    (let [intern-rel-filepath (interned-filepath filepath reldest folder-depth)
