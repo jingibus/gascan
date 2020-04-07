@@ -29,6 +29,13 @@
   [scaffold-ast]
   (deep-map-vec str scaffold-ast))
 
+(defn scaffold->tagged-scaffold
+  [scaffold-ast]
+  [{} scaffold-ast])
+
+(defn tagged-scaffold->scaffold
+  [[tags scaffold-ast]]
+  scaffold-ast)
 
 (defn build-scaffold-ast
   [nodeable]
