@@ -12,32 +12,6 @@
             [clojure.zip :as z])
   (:use [gascan.debug]))
 
-(defn to-kebab-case
-  [s]
-  (let [pieces (some-> s
-                       string/lower-case
-                       string/trim
-                       (string/split #" +"))]
-    (when pieces 
-      (string/join "-" pieces))))
-
-(defn find-post
-  [locator]
-  (let [locator (into {} (filter #(second %) all))]
-    (letfn [(route-entitled [post]
-              (update-in post [:title] to-kebab-case))
-            (normalized-id [post]
-              (if (:id post)
-                (update-in post [:id] #(when % (string/lower-case %)))
-                post))
-            (matches [post]
-              (let [matching-post (normalized-id (route-entitled post))]
-                (= (select-keys matching-post (keys locator))
-                   (normalized-id locator))))]
-      (first  
-       (->> (posts/posts)
-            (filter matches))))))
-
 (defn link-entry
   [loc]
   (let [paragraph? (partial instance? com.vladsch.flexmark.ast.Paragraph)
@@ -186,7 +160,7 @@
 
 (defn post->title-path
   [post]
-  (str "/posts/title/" (to-kebab-case (:title post))))
+  (str "/posts/title/" (posts/to-kebab-case (:title post))))
 
 (defn post-by-title-path
   [title]
@@ -207,7 +181,7 @@
 (defn post-resources-view
   [sess {:keys [id title] :as locator} res-name]
   (let [{resources :extra-resources-rel
-         :as post} (find-post locator)]
+         :as post} (posts/find-post locator)]
     (when post
       (some->> resources
                (filter #(= res-name (last (clojure.string/split % #"/"))))
@@ -221,7 +195,7 @@
          timestamp         :timestamp
          path              :markdown-rel-path
          :as post} 
-        (find-post locator)
+        (posts/find-post locator)
         visible? (posts/visible-to-session? sess post) 
         rendered (and visible? (render-markdown path))
         ]
@@ -248,7 +222,7 @@
 (comment
   (post-view session/private-session {:title "blog-project"})
   (clojure.pprint/pprint (post-view session/private-session {:title "image-test"}))
-  (find-post {:title "blog-project"})
+  (posts/find-post {:title "blog-project"})
   (flatten (seq) {1 2})
   (posts/posts)
   (post->title-path (first (posts/posts)))

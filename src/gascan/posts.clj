@@ -7,7 +7,8 @@
    [gascan.multimarkdown :as mm :refer [parse-multimarkdown-flat
                                         render]]
    [gascan.post-spec :as post-spec]
-   [java-time :refer [local-date-time instant]])
+   [java-time :refer [local-date-time instant]]
+   [clojure.string :as string])
   (:use [gascan.debug]))
 
 (def toplevel-post-contents-folder "posts")
@@ -99,6 +100,41 @@
 (s/fdef import-post!
   :args #(post-spec/remote-post (:remote-post %))
   :ret  #(post-spec/intern-post %))
+
+(defn to-kebab-case
+  [s]
+  (let [pieces (some-> s
+                       string/lower-case
+                       string/trim
+                       (string/split #" +"))]
+    (when pieces 
+      (string/join "-" pieces))))
+
+(defn find-post
+  "
+Finds a post matching a locator.
+
+A locator is a map of post values. If the locator matches all the values, then
+the post matches that locator.
+
+:title is treated especially: since URL slugs use kebab case, all title matching is 
+done on the basis of kebab casing.
+"
+  [locator]
+  (let [locator (into {} (filter #(second %) locator))]
+    (letfn [(route-entitled [post]
+              (update-in post [:title] to-kebab-case))
+            (normalized-id [post]
+              (if (:id post)
+                (update-in post [:id] #(when % (string/lower-case %)))
+                post))
+            (matches [post]
+              (let [matching-post (normalized-id (route-entitled post))]
+                (= (select-keys matching-post (keys locator))
+                   (normalized-id locator))))]
+      (first  
+       (->> (posts)
+            (filter matches))))))
 
 (defn as-parsed
   "Yields an interned record with parsed markdown."
