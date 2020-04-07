@@ -110,9 +110,10 @@
     (when pieces 
       (string/join "-" pieces))))
 
-(defn cautious-update
-  [m k f & xs]
-  (if (k m)
+(defn update-if
+  "Updates only if pred is truthy."
+  [m pred k f & xs]
+  (if (pred m)
     (apply update (concat [m k f] xs))
     m))
 
@@ -121,13 +122,8 @@
   (let [locator (into {} (filter #(second %) locator))
         canonicalize (fn [post] 
                        (-> post
-                           (cautious-update :title to-kebab-case)
-                           (cautious-update :id string/lower-case)))
-        route-entitled (fn [post] (cautious-update post :title to-kebab-case))
-        normalized-id (fn [post]
-                        (if (:id post)
-                          (update post :id #(when % (string/lower-case %)))
-                          post))]
+                           (update-if :title :title to-kebab-case)
+                           (update-if :id :id string/lower-case)))]
     (fn [post] 
       (= (select-keys (canonicalize post) (keys locator))
          (canonicalize locator)))))
@@ -147,6 +143,12 @@ done on the basis of kebab casing.
        (filter (locator-matcher locator))))
 
 (defn find-post [locator] (first (find-posts locator)))
+
+(defn update-posts
+  [locator k f & xs]
+  (let [matcher (locator-matcher locator)]
+    (map #(apply update-if % (concat [matcher k f] xs)) 
+         (posts))))
 
 (defn as-parsed
   "Yields an interned record with parsed markdown."
