@@ -8,6 +8,7 @@
             [gascan.posts :as posts]
             [gascan.session :as session]
             [gascan.template :as tmpl]
+            [clojure.string :as string]
             [clojure.zip :as z])
   (:use [gascan.debug]))
 
@@ -58,9 +59,13 @@
                                 zip-to-linktext
                                 .getChars .toString)
             link (some-> link-string
-                         (clojure.string/replace #"^: " "")
-                         (clojure.string/replace #" width=.*" ""))]
-        {reference link}))))
+                         (string/replace #"^: " "")
+                         (string/replace #" width=.*" ""))
+            width-and-height (some-> link-string
+                                     (string/replace #"^.*? (width=|height=)"
+                                                     "$1")
+                                     string/trim)]
+        {reference {:link link :attrs width-and-height}}))))
 
 (defn extract-image-map
   [[tags scaffold-ast]]
@@ -73,10 +78,10 @@
             (recur image-links (z/next loc)))))))
 
 (defn new-image-link
-  [referent]
+  [{:keys [link attrs]}]
   (new com.vladsch.flexmark.ast.HtmlInline 
        (com.vladsch.flexmark.util.sequence.CharSubSequence/of 
-        (str "<img src=\"" referent "\"/>"))))
+        (str "<img src=\"" link "\" " attrs " />"))))
 
 (defn apply-image-map
   [[tags scaffold-ast]]
@@ -117,6 +122,9 @@
        clojure.pprint/pprint)
   (->> (test-ast)
        transform-ast
+       ast/stringify
+       clojure.pprint/pprint)
+  (->> (test-ast)
        ast/stringify
        clojure.pprint/pprint)
 )
