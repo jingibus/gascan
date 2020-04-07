@@ -21,7 +21,11 @@
 (s/fdef fetch-posts
   :ret (s/every post-spec/intern-post))
 
-(def posts-lazy (lazy-seq (list (fetch-posts))))
+(defn reset-posts
+  []
+  (def posts-lazy (lazy-seq (list (fetch-posts)))))
+
+(reset-posts)
 
 (defn posts
   []
@@ -30,7 +34,8 @@
 (defn put-posts!
   [posts]
   {:pre [(every? #(s/assert post-spec/intern-post %) posts)]}
-  (intern-edn! post-metadata-edn posts))
+  (intern-edn! post-metadata-edn posts)
+  (reset-posts))
 
 (s/fdef put-posts!
   :args (s/cat :posts (s/every post-spec/intern-post)))
