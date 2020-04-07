@@ -4,6 +4,18 @@
 
 (def ^:dynamic *verbose* false)
 
+(defmacro names-and-vals
+  ([] nil)
+  ([x]
+   `(list (~str (~name (quote ~x)) ":") ~x))
+  ([x & xs] 
+   `(concat (~list (~str (~name (quote ~x)) ":") ~x)
+          (names-and-vals ~@xs))))
+
+(defmacro print-and-name
+  [& args]
+  (list 'apply 'println `(names-and-vals ~@args)))
+
 (defmacro printlnv
   [& args]
   `(when *verbose*
