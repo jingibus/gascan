@@ -42,17 +42,21 @@
   (let [paragraph? (partial instance? com.vladsch.flexmark.ast.Paragraph)
         linkref? (partial instance? com.vladsch.flexmark.ast.LinkRef)
         text? (partial instance? com.vladsch.flexmark.ast.Text)
+        zip-to-linkref #(some-> % z/down z/right z/down z/node)
+        zip-to-linktext #(some-> % z/down z/right z/right z/node)
         ]
     (when (and (some-> loc z/down z/node paragraph?)
                ;(do (println "found a para!") true)
-               (some-> loc z/down z/right z/down z/node linkref?)
+               (some-> loc zip-to-linkref linkref?)
                ;(do (println "found a linkref!") true)
-               (some-> loc z/down z/right z/right z/node text?))
+               (some-> loc zip-to-linktext text?))
       (let [reference (some-> loc 
-                              z/down z/right z/down z/node 
+                              zip-to-linkref
                               .getReference
                               .toString)
-            link-string (some-> loc z/down z/right z/right z/node .getChars .toString)
+            link-string (some-> loc 
+                                zip-to-linktext
+                                .getChars .toString)
             link (some-> link-string
                          (clojure.string/replace #"^: " "")
                          (clojure.string/replace #" width=.*" ""))]
