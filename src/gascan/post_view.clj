@@ -22,19 +22,20 @@
 
 (defn find-post
   [locator]
-  (letfn [(route-entitled [post]
-            (update-in post [:title] to-kebab-case))
-          (normalized-id [post]
-            (if (:id post)
-              (update-in post [:id] #(when % (string/lower-case %)))
-              post))
-          (matches [post]
-            (let [matching-post (normalized-id (route-entitled post))]
-              (= (select-keys matching-post (keys locator))
-                 (normalized-id locator))))]
-    (first  
-     (->> (posts/posts)
-          (filter matches)))))
+  (let [locator (into {} (filter #(second %) all))]
+    (letfn [(route-entitled [post]
+              (update-in post [:title] to-kebab-case))
+            (normalized-id [post]
+              (if (:id post)
+                (update-in post [:id] #(when % (string/lower-case %)))
+                post))
+            (matches [post]
+              (let [matching-post (normalized-id (route-entitled post))]
+                (= (select-keys matching-post (keys locator))
+                   (normalized-id locator))))]
+      (first  
+       (->> (posts/posts)
+            (filter matches))))))
 
 (defn link-entry
   [loc]
@@ -177,24 +178,38 @@
 
 (defn post-by-title-path
   [title]
-  (str "/posts/title/" title))
+  (str "/posts/title/" title "/"))
+
+(defn post-resources-by-title-path
+  [title res-name]
+  (str "/posts/title/" title "/" res-name))
 
 (defn post-by-id
   [id]
-  (str "/posts/id/" id))
+  (str "/posts/id/" id "/"))
+
+(defn post-resources-by-id
+  [id res-name]
+  (str "/posts/id/" id "/" res-name))
 
 (defn post-resources-view
-  [sess {:keys [id title] :as all} res-name]
-  )
+  [sess {:keys [id title] :as locator} res-name]
+  (let [{resources :extra-resources-rel
+         :as post} (find-post locator)]
+    (when post
+      (some->> resources
+               (filter #(= res-name (last (clojure.string/split % #"/"))))
+               first
+               gascan.intern/readable-file))))
 
 (defn post-view
-  [sess {:keys [id title] :as all}]
-  (let [non-null-args (into {} (filter #(second %) all))
+  [sess {:keys [id title] :as locator}]
+  (let [
         {title             :title
          timestamp         :timestamp
          path              :markdown-rel-path
          :as post} 
-        (find-post non-null-args)
+        (find-post locator)
         visible? (posts/visible-to-session? sess post) 
         rendered (and visible? (render-markdown path))
         ]

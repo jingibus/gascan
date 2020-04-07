@@ -45,9 +45,15 @@
   (routes
    (GET "/:path{|index.htm|index.html}" [path]
         (index-view/index-view sess))
+   (GET (post-view/post-resources-by-title-path ":title" ":resname") [title resname]
+        (println "route resource by title: " title " resname: " resname)
+        (post-view/post-resources-view sess {:title title} resname))
    (GET (post-view/post-by-title-path ":title") [title]
         (println "route by title:" title)
         (post-view/post-view sess {:title title}))
+   (GET (post-view/post-resources-by-id ":id" ":res-name") [id res-name]
+        (println "route resource by id: " id " res-name: " res-name)
+        (post-view/post-resources-view sess {:id id} res-name))
    (GET (post-view/post-by-id ":id") [id]
         (println "route by id:" id)
         (post-view/post-view sess {:id id}))
@@ -70,35 +76,6 @@
         {:status 404
          :headers {"Content-Type" "text/html"}
          :body content-not-found-page})))
-(comment
-  (defroutes all-routes
-    (GET "/:path{|index.htm|index.html}" [path]
-         (index-view/index-view))
-    (GET (post-view/post-by-title-path ":title") [title]
-         (println "route by title:" title)
-         (post-view/post-view {:title title}))
-    (GET (post-view/post-by-id ":id") [id]
-         (println "route by id:" id)
-         (post-view/post-view {:id id}))
-    (GET (posts-view/posts-by-date-path ":criteria") [criteria]
-         (println "route to posts matching criteria " criteria)
-         (posts-view/posts-by-date-view criteria))
-    (GET (posts-view/posts-by-date-path) []
-         (println "route to all posts")
-         (posts-view/posts-by-date-view))
-    (GET (posts-view/posts-by-date-path "") []
-         (println "route to all posts")
-         (posts-view/posts-by-date-view))
-    (GET "/favicon.ico" []
-         (println "it's that favicon")
-         {:status 200
-          :headers {"Content-Type" "image/png"}
-          :body (gascan.intern/readable-file "favicon.png")})
-    (GET [":unknown-route", :unknown-route #".*"] [unknown-route]
-         (println "Unknown path:" unknown-route)
-         {:status 404
-          :headers {"Content-Type" "text/html"}
-          :body content-not-found-page})))
 
 (defn render-template
   [inner-html]
