@@ -140,7 +140,7 @@
   ;; restart
   (do 
     (.stop (server))
-    (def lazy-server (lazy-seq (list (run :sess session/public-session))))
+    (def lazy-server (lazy-seq (list (run :sess session/private-session))))
     )
   )
 
