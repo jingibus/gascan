@@ -114,14 +114,6 @@
 
 (defonce lazy-server (lazy-seq (list (run))))
 
-(defn restart-server
-  [sess]
-  (do 
-    (.stop (server))
-    (def lazy-server (lazy-seq (list (run :sess sess))))
-    (server)
-    ))
-
 (comment
   (restart-server session/public-session)
   (restart-server session/private-session)
@@ -129,6 +121,14 @@
   )
 
 (defn server [] (first lazy-server))
+
+(defn restart-server
+  [sess]
+  (do 
+    (.stop (server))
+    (def lazy-server (lazy-seq (list (run :sess sess))))
+    (server)
+    ))
 
 (comment
   (.stop (server))
