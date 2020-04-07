@@ -66,3 +66,11 @@
   [& body]
   `(binding [*verbose* true] ~@body))
 
+(defn show-methods
+  [instance]
+  (->>  instance
+        .getClass
+        .getMethods
+        (sort-by #(.getName %))
+        (map str)
+        distinct))
