@@ -136,12 +136,19 @@
     (jty/run-jetty (handler sess) ring-params)))
 
 (defonce lazy-server (lazy-seq (list (run))))
-(comment
-  ;; restart
+
+(defn restart-server
+  [sess]
   (do 
     (.stop (server))
-    (def lazy-server (lazy-seq (list (run :sess session/private-session))))
-    )
+    (def lazy-server (lazy-seq (list (run :sess sess))))
+    (server)
+    ))
+
+(comment
+  (restart-server session/public-session)
+  (restart-server session/private-session)
+  
   )
 
 (defn server [] (first lazy-server))
