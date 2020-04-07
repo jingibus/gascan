@@ -43,6 +43,7 @@
                     (map keyword (clojure.string/split criteria #"-"))
                     criteria)
          key-fn #(day-key (:timestamp %) zone)
+         visible? (partial posts/visible-to-session? sess)
          matches-criteria #(or (empty? criteria)
                                (seq (clojure.set/intersection
                                      criteria
@@ -50,7 +51,7 @@
          ;; Create a list of ("YYYY/MM/dd" (posts...)) pairs 
          ;; ordered by day descending.
          posts-by-day (->> (posts/posts)
-                           (filter matches-criteria)
+                           (filter (every-pred visible? matches-criteria))
                            (sort-by #(- (:timestamp %)))
                            (partition-by key-fn)
                            (map (juxt #(key-fn (first %)) identity)))]
