@@ -110,7 +110,29 @@
     (when pieces 
       (string/join "-" pieces))))
 
-(defn find-post
+(defn cautious-update
+  [m k f & xs]
+  (if (k m)
+    (apply update (concat [m k f] xs))
+    m))
+
+(defn locator-matcher
+  [locator]
+  (let [locator (into {} (filter #(second %) locator))
+        canonicalize (fn [post] 
+                       (-> post
+                           (cautious-update :title to-kebab-case)
+                           (cautious-update :id string/lower-case)))
+        route-entitled (fn [post] (cautious-update post :title to-kebab-case))
+        normalized-id (fn [post]
+                        (if (:id post)
+                          (update post :id #(when % (string/lower-case %)))
+                          post))]
+    (fn [post] 
+      (= (select-keys (canonicalize post) (keys locator))
+         (canonicalize locator)))))
+
+(defn find-posts
   "
 Finds a post matching a locator.
 
@@ -121,20 +143,10 @@ the post matches that locator.
 done on the basis of kebab casing.
 "
   [locator]
-  (let [locator (into {} (filter #(second %) locator))]
-    (letfn [(route-entitled [post]
-              (update-in post [:title] to-kebab-case))
-            (normalized-id [post]
-              (if (:id post)
-                (update-in post [:id] #(when % (string/lower-case %)))
-                post))
-            (matches [post]
-              (let [matching-post (normalized-id (route-entitled post))]
-                (= (select-keys matching-post (keys locator))
-                   (normalized-id locator))))]
-      (first  
-       (->> (posts)
-            (filter matches))))))
+  (->> (posts)
+       (filter (locator-matcher locator))))
+
+(defn find-post [locator] (first (find-posts locator)))
 
 (defn as-parsed
   "Yields an interned record with parsed markdown."
