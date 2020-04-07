@@ -64,7 +64,11 @@
                 <Content>
                     <ItemID>6F15E33D-3A99-4879-AB82-008EA803A1F3</ItemID>
                 </Content>
-                <NavigationHistory CurrentIndex="3">
+                <NavigationHistory CurrentIndex="7">
+                    <HistoryItem Type="BinderItems" ViewMode="Single">04F1976F-A885-4F28-8436-7BB0A15946B6</HistoryItem>
+                    <HistoryItem Type="BinderItems" ViewMode="Single">6F15E33D-3A99-4879-AB82-008EA803A1F3</HistoryItem>
+                    <HistoryItem Type="BinderItems" ViewMode="Single">04F1976F-A885-4F28-8436-7BB0A15946B6</HistoryItem>
+                    <HistoryItem Type="BinderItems" ViewMode="Single">6F15E33D-3A99-4879-AB82-008EA803A1F3</HistoryItem>
                     <HistoryItem Type="BinderItems" ViewMode="Single">04F1976F-A885-4F28-8436-7BB0A15946B6</HistoryItem>
                     <HistoryItem Type="BinderItems" ViewMode="Single">6F15E33D-3A99-4879-AB82-008EA803A1F3</HistoryItem>
                     <HistoryItem Type="BinderItems" ViewMode="Single">04F1976F-A885-4F28-8436-7BB0A15946B6</HistoryItem>
@@ -76,7 +80,7 @@
                 <PageLayout Facing="No">No</PageLayout>
                 <TypewriterScrolling>No</TypewriterScrolling>
                 <LineNumbers Interval="1">No</LineNumbers>
-                <Selection>0,0</Selection>
+                <Selection>32,0</Selection>
             </Text>
             <Outliner>
                 <Columns>

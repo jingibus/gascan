@@ -1,4 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <SearchIndexes Version="1.0">
-    <Documents/>
+    <Documents>
+        <Document ID="04F1976F-A885-4F28-8436-7BB0A15946B6">
+            <Title>Basic Test</Title>
+            <Text>Heading 1
+Paragraph 1.1
+Paragraph 1.2
+Heading 2
+Paragraph 2.1
+Paragraph 2.2: code_span
+code_block 2.3
+</Text>
+        </Document>
+        <Document ID="6F15E33D-3A99-4879-AB82-008EA803A1F3">
+            <Title>Image Test</Title>
+            <Text>Paragraph 1.1
+	#
+Paragraph 1.2
+#
+
+</Text>
+        </Document>
+    </Documents>
 </SearchIndexes>
