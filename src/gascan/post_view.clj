@@ -63,9 +63,11 @@
   (let [non-null-args (into {} (filter #(second %) all))
         {title             :title
          timestamp         :timestamp
-         path              :markdown-rel-path} 
+         path              :markdown-rel-path
+         :as post} 
         (find-post non-null-args)
-        rendered (render-markdown path)
+        visible? (posts/visible-to-session? sess post) 
+        rendered (and visible? (render-markdown path))
         ]
     (when rendered
       (tmpl/enframe title rendered))))
