@@ -5,4 +5,4 @@ Paragraph 1.2
 
 [post-creation-workflow]: post-creation-workflow.jpg width=421px height=329px
 
-[ScreenShot2020-03-30at110216PM]: ScreenShot2020-03-30at110216PM.png width=1235px height=565px
+[ScreenShot2020-03-30at110216PM]: ScreenShot2020-03-30at110216PM.png width=495px height=227px
