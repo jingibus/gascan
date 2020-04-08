@@ -14,7 +14,8 @@
 
 (defmacro print-and-name
   [& args]
-  (list 'apply 'println `(names-and-vals ~@args)))
+  (list 
+'clojure.pprint/pprint `(names-and-vals ~@args)))
 
 (defmacro printlnv
   [& args]
