@@ -12,7 +12,7 @@
    `(concat (~list (~str (~name (quote ~x)) ":") ~x)
           (names-and-vals ~@xs))))
 
-(defmacro print-and-name
+(defmacro pprint-symbols
   [& args]
   (list 
 'clojure.pprint/pprint `(names-and-vals ~@args)))
