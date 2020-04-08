@@ -74,3 +74,7 @@
    relpath
    resource
    (.openStream)))
+
+(defn delete-file
+  [relpath]
+  (some-> relpath resource as-file .delete))

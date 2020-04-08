@@ -30,7 +30,8 @@
      :timestamp (System/currentTimeMillis)
      :extra-resources extra-resources
      :dir-depth 1
-     :parsed-markdown parsed-markdown}))
+     :parsed-markdown parsed-markdown
+     :src-path dirpath}))
 
 (s/fdef record-from-mm-dir
   :ret post-spec/remote-post)
@@ -43,7 +44,8 @@
      :timestamp (System/currentTimeMillis)
      :extra-resources []
      :dir-depth 0
-     :parsed-markdown parsed-markdown}))
+     :parsed-markdown parsed-markdown
+     :src-path filepath}))
 
 (s/fdef record-from-mm-flat
   :ret post-spec/remote-post)

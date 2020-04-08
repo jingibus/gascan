@@ -7,8 +7,10 @@
    [gascan.multimarkdown :as mm :refer [parse-multimarkdown-flat
                                         render]]
    [gascan.post-spec :as post-spec]
+   [gascan.remote-posts :as remote]
    [java-time :refer [local-date-time instant]]
-   [clojure.string :as string])
+   [clojure.string :as string]
+   [gascan.intern :as intern])
   (:use [gascan.debug]))
 
 (def toplevel-post-contents-folder "posts")
@@ -74,7 +76,8 @@
          parsed-markdown :parsed-markdown
          markdown-abs-path :markdown-abs-path
          extra-resources :extra-resources
-         dir-depth :dir-depth} remote-post
+         dir-depth :dir-depth
+         src-path :src-path} remote-post
         timestamp-subfolders (to-yyyy-mm-dd-mmmm timestamp)
         post-contents-folder (clojure.string/join "/" [toplevel-post-contents-folder timestamp-subfolders])
         intern-copied-file! #(intern-file! % post-contents-folder dir-depth)
@@ -94,6 +97,7 @@
      :id (java.util.UUID/randomUUID)
      :status :draft
      :filter #{}
+     :src-path src-path
      }
     ))
 
@@ -144,11 +148,51 @@ done on the basis of kebab casing.
 
 (defn find-post [locator] (first (find-posts locator)))
 
+(defn update-posts-check
+  [locator & xs]
+  (map #(apply update % xs) (find-posts locator)))
+
 (defn update-posts
   [locator k f & xs]
   (let [matcher (locator-matcher locator)]
     (map #(apply update-if % (concat [matcher k f] xs)) 
          (posts))))
+
+(defn remove-posts!
+  [locator]
+  (let [matcher (locator-matcher locator)
+        posts (posts)
+        posts-to-remove (filter matcher posts)
+        remaining-posts (filter (complement matcher) posts)
+        post-resources (fn [post]
+                         (conj (:extra-resources-rel post)
+                               (:markdown-rel-path post)))
+        all-resources (->> posts-to-remove
+                           (map post-resources)
+                           flatten)]
+    (doall (map intern/delete-file all-resources))
+    (put-posts! remaining-posts)))
+
+(defn update-posts!
+  [& xs]
+  (put-posts! (apply update-posts xs)))
+
+(defn import-and-add-post!
+  [remote-post]
+  (let [interned-post (import-post! remote-post)]
+    (put-posts! (conj (posts) interned-post))))
+
+(defn refresh-post!
+  [locator]
+  (let [{src-path :src-path id :id timestamp :timestamp} (find-post locator)]
+    (print-and-name locator src-path id)
+    (when src-path
+      (let [new-remote-post (remote/read-remote-post src-path)
+            with-old-timestamp (assoc new-remote-post :timestamp timestamp)]
+        (print-and-name src-path new-remote-post)
+        (when new-remote-post
+          (remove-posts! {:id id})
+          (import-and-add-post! with-old-timestamp))))))
 
 (defn as-parsed
   "Yields an interned record with parsed markdown."
