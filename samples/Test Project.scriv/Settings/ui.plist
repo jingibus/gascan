@@ -18,6 +18,13 @@
 			<key>Row</key>
 			<integer>-1</integer>
 		</dict>
+		<key>0D323EEA-D4B5-4A77-8DBA-06B06A00A3A8</key>
+		<dict>
+			<key>DocID</key>
+			<string>3646E00E-998B-4BBB-A024-25537F3816DD</string>
+			<key>Row</key>
+			<integer>0</integer>
+		</dict>
 		<key>3646E00E-998B-4BBB-A024-25537F3816DD</key>
 		<dict>
 			<key>Row</key>
@@ -47,6 +54,8 @@
 	</array>
 	<key>inspectorWidth</key>
 	<real>245</real>
+	<key>mainDocumentEditor.PDFAutoScales</key>
+	<false/>
 	<key>mainDocumentEditor.dockedQRTextSettings</key>
 	<dict>
 		<key>textScaleFactor</key>

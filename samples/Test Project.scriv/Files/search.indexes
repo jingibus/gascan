@@ -15,7 +15,10 @@ code_block 2.3
         <Document ID="3646E00E-998B-4BBB-A024-25537F3816DD">
             <Title>PDF Link Test</Title>
             <Text>Heading 1
-Para 1.1 Link to my PDF
+Para 1.1 
+File link to PDF
+Research link to PDF 
+
 </Text>
         </Document>
         <Document ID="6F15E33D-3A99-4879-AB82-008EA803A1F3">

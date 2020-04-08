@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ScrivenerProject Identifier="231D4AB4-DE65-425B-8F03-A4A5B17B1C09" Version="2.0" Creator="SCRMAC-3.1.5-12258" Device="Bills-MacBook-Pro" Author="Bill Phillips" Modified="2020-04-07 21:43:01 -0700" ModID="85DBE367-1502-4C25-B3AE-F3CF6B506170">
+<ScrivenerProject Identifier="231D4AB4-DE65-425B-8F03-A4A5B17B1C09" Version="2.0" Creator="SCRMAC-3.1.5-12258" Device="Bills-MacBook-Pro" Author="Bill Phillips" Modified="2020-04-08 06:15:34 -0700" ModID="538C537F-CDF0-402A-B5CA-B5D1EA90C532">
     <Binder>
         <BinderItem UUID="AC5C88A6-63FC-435A-9FC0-5E0CB466D245" Type="DraftFolder" Created="2020-03-18 19:43:48 -0700" Modified="2020-03-18 19:43:48 -0700">
             <Title>Draft</Title>
@@ -19,13 +19,13 @@
                         <TextSelection>32,0</TextSelection>
                     </TextSettings>
                 </BinderItem>
-                <BinderItem UUID="3646E00E-998B-4BBB-A024-25537F3816DD" Type="Text" Created="2020-04-07 21:37:30 -0700" Modified="2020-04-07 21:38:51 -0700">
+                <BinderItem UUID="3646E00E-998B-4BBB-A024-25537F3816DD" Type="Text" Created="2020-04-07 21:37:30 -0700" Modified="2020-04-07 22:29:55 -0700">
                     <Title>PDF Link Test</Title>
                     <MetaData>
                         <IncludeInCompile>Yes</IncludeInCompile>
                     </MetaData>
                     <TextSettings>
-                        <TextSelection>34,0</TextSelection>
+                        <TextSelection>60,0</TextSelection>
                     </TextSettings>
                 </BinderItem>
             </Children>
@@ -42,6 +42,9 @@
                         <IncludeInCompile>Yes</IncludeInCompile>
                         <FileExtension>pdf</FileExtension>
                     </MetaData>
+                    <MediaSettings>
+                        <CurrentPDFPage>0</CurrentPDFPage>
+                    </MediaSettings>
                     <Bookmarks>
                         <Bookmark BinderUUID="3646E00E-998B-4BBB-A024-25537F3816DD"/>
                     </Bookmarks>
@@ -109,12 +112,12 @@
     </StatusSettings>
     <ProjectTargets Notify="No">
         <DraftTarget Type="Words" CountIncludedOnly="Yes" CurrentCompileGroupOnly="No" Deadline="2020-03-18 19:43:46 -0700" IgnoreDeadline="Yes">0</DraftTarget>
-        <SessionTarget Type="Words" CountDraftOnly="Yes" AllowNegatives="Yes" NextResetDate="2020-04-08 01:00:00 -0700" ResetType="Time" ResetTime="00:00" DeterminedFromDeadline="No" WritingDays="" CanWriteOnDeadlineDate="No">0</SessionTarget>
-        <PreviousSession Words="8" Characters="34" Date="2020-04-07 21:42:47 -0700"/>
+        <SessionTarget Type="Words" CountDraftOnly="Yes" AllowNegatives="Yes" NextResetDate="2020-04-09 01:00:00 -0700" ResetType="Time" ResetTime="00:00" DeterminedFromDeadline="No" WritingDays="" CanWriteOnDeadlineDate="No">0</SessionTarget>
+        <PreviousSession Words="0" Characters="0" Date="2020-04-08 06:07:49 -0700"/>
     </ProjectTargets>
-    <RecentWritingHistory Date="2020-04-07 00:00:00 -0700">
-        <DraftWordCount>8</DraftWordCount>
-        <DraftCharCount>34</DraftCharCount>
+    <RecentWritingHistory Date="2020-04-08 00:00:00 -0700">
+        <DraftWordCount>0</DraftWordCount>
+        <DraftCharCount>0</DraftCharCount>
         <OtherWordCount>0</OtherWordCount>
         <OtherCharCount>0</OtherCharCount>
     </RecentWritingHistory>
