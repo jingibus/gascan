@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ScrivenerProject Identifier="231D4AB4-DE65-425B-8F03-A4A5B17B1C09" Version="2.0" Creator="SCRMAC-3.1.5-12258" Device="Bills-MacBook-Pro" Author="Bill Phillips" Modified="2020-04-07 18:15:47 -0700" ModID="DAD19817-EA03-451C-940B-798F784A7345">
+<ScrivenerProject Identifier="231D4AB4-DE65-425B-8F03-A4A5B17B1C09" Version="2.0" Creator="SCRMAC-3.1.5-12258" Device="Bills-MacBook-Pro" Author="Bill Phillips" Modified="2020-04-07 21:43:01 -0700" ModID="85DBE367-1502-4C25-B3AE-F3CF6B506170">
     <Binder>
         <BinderItem UUID="AC5C88A6-63FC-435A-9FC0-5E0CB466D245" Type="DraftFolder" Created="2020-03-18 19:43:48 -0700" Modified="2020-03-18 19:43:48 -0700">
             <Title>Draft</Title>
@@ -15,11 +15,17 @@
                 </BinderItem>
                 <BinderItem UUID="6F15E33D-3A99-4879-AB82-008EA803A1F3" Type="Text" Created="2020-03-18 19:46:06 -0700" Modified="2020-04-07 08:54:12 -0700">
                     <Title>Image Test</Title>
+                    <TextSettings>
+                        <TextSelection>32,0</TextSelection>
+                    </TextSettings>
+                </BinderItem>
+                <BinderItem UUID="3646E00E-998B-4BBB-A024-25537F3816DD" Type="Text" Created="2020-04-07 21:37:30 -0700" Modified="2020-04-07 21:38:51 -0700">
+                    <Title>PDF Link Test</Title>
                     <MetaData>
                         <IncludeInCompile>Yes</IncludeInCompile>
                     </MetaData>
                     <TextSettings>
-                        <TextSelection>32,0</TextSelection>
+                        <TextSelection>34,0</TextSelection>
                     </TextSettings>
                 </BinderItem>
             </Children>
@@ -29,6 +35,18 @@
             <MetaData>
                 <IncludeInCompile>Yes</IncludeInCompile>
             </MetaData>
+            <Children>
+                <BinderItem UUID="0D323EEA-D4B5-4A77-8DBA-06B06A00A3A8" Type="PDF" Created="2020-04-04 09:53:10 -0700" Modified="2020-04-04 09:53:10 -0700">
+                    <Title>Jubilate - Full Score</Title>
+                    <MetaData>
+                        <IncludeInCompile>Yes</IncludeInCompile>
+                        <FileExtension>pdf</FileExtension>
+                    </MetaData>
+                    <Bookmarks>
+                        <Bookmark BinderUUID="3646E00E-998B-4BBB-A024-25537F3816DD"/>
+                    </Bookmarks>
+                </BinderItem>
+            </Children>
         </BinderItem>
         <BinderItem UUID="1C56A03F-6A40-434F-9715-584298B588B9" Type="TrashFolder" Created="2020-03-18 19:43:48 -0700" Modified="2020-03-18 19:43:48 -0700">
             <Title>Trash</Title>
@@ -92,11 +110,11 @@
     <ProjectTargets Notify="No">
         <DraftTarget Type="Words" CountIncludedOnly="Yes" CurrentCompileGroupOnly="No" Deadline="2020-03-18 19:43:46 -0700" IgnoreDeadline="Yes">0</DraftTarget>
         <SessionTarget Type="Words" CountDraftOnly="Yes" AllowNegatives="Yes" NextResetDate="2020-04-08 01:00:00 -0700" ResetType="Time" ResetTime="00:00" DeterminedFromDeadline="No" WritingDays="" CanWriteOnDeadlineDate="No">0</SessionTarget>
-        <PreviousSession Words="0" Characters="0" Date="2020-04-07 08:53:44 -0700"/>
+        <PreviousSession Words="8" Characters="34" Date="2020-04-07 21:42:47 -0700"/>
     </ProjectTargets>
     <RecentWritingHistory Date="2020-04-07 00:00:00 -0700">
-        <DraftWordCount>0</DraftWordCount>
-        <DraftCharCount>0</DraftCharCount>
+        <DraftWordCount>8</DraftWordCount>
+        <DraftCharCount>34</DraftCharCount>
         <OtherWordCount>0</OtherWordCount>
         <OtherCharCount>0</OtherCharCount>
     </RecentWritingHistory>
