@@ -45,7 +45,7 @@
 
 (defn flexmark-document?
   [o]
-  (instance? com.vladsch.flexmark.util.ast.Document))
+  (instance? com.vladsch.flexmark.util.ast.Document o))
 
 
 (defn valid-uuid?
