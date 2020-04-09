@@ -1,5 +1,7 @@
 (ns gascan.ast
   (:require [clojure.zip :as z])
+  (:import [com.vladsch.flexmark.util.sequence BasedSequence CharSubSequence]
+           [com.vladsch.flexmark.ast Link])
   (:use [gascan.debug]))
 
 (defn getNodeChildren
@@ -140,4 +142,44 @@
     (restitch scaffold-ast)
     (node-value scaffold-ast)))
 
+(defn char-sequence
+  [s]
+  (CharSubSequence/of s))
 
+(defn construct [klass & args]
+    (clojure.lang.Reflector/invokeConstructor klass (into-array Object args)))
+
+(defn link
+  [text url]
+  (let [all-chars (char-sequence (str "[" text "]" "(" url ")"))
+        start-text-open 0
+        start-text 1
+        start-text-close (+ start-text (count text))
+        start-link-open (+ start-text-close 1)
+        start-link (+ start-link-open 1)
+        start-link-close (+ start-link (count url))
+        end-link-close (+ start-link-close 1)
+        marks [start-text-open start-text start-text-close 
+               start-link-open start-link start-link-close end-link-close]
+        args (map #(.subSequence all-chars (key %) (val %)) 
+             (zipmap (butlast marks) (rest marks)))
+        text-subchars (.subSequence all-chars 1 (+ 1 (count text)))
+        url-subchars (.subSequence all-chars (count text) (count (str text url)))
+        new-link
+;    public Link(BasedSequence textOpenMarker, BasedSequence text, BasedSequence textCloseMarker, BasedSequence linkOpenMarker, BasedSequence url, BasedSequence linkCloseMarker) {
+
+        (doto 
+            (apply construct (cons Link args))
+             ; linkCloseMarker
+          .setCharsFromContent
+          (.setPageRef (.subSequence all-chars start-link start-link-close)))
+        text (-> new-link .getText .toString)]
+    (pprint-symbols new-link text args)
+    new-link))
+        (comment (new Link 
+                      (.subSequence all-chars start-text-open) ; textOpenMarker
+                      text-subchars                            ; text
+                      BasedSequence/NULL  ; textCloseMarker
+                      BasedSequence/NULL  ; linkOpenMarker
+                      url-subchars        ; url
+                      BasedSequence/NULL))
