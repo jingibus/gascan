@@ -67,34 +67,3 @@
   [& body]
   `(binding [*verbose* true] ~@body))
 
-(defn show-methods
-  [instance]
-  (->>  instance
-        .getClass
-        .getMethods
-        (sort-by #(.getName %))
-        (map str)
-        distinct))
-
-(defn find-field
-  [klass field-name]
-  (let [pull-field (fn [k] (try (.getDeclaredField k field-name)
-                                (catch Exception e nil)))]
-    (loop [superklass (.getSuperclass klass)
-           field (pull-field klass)]
-      (cond field
-            field
-            (or (nil? superklass) (= Object superklass))
-            nil
-            :else
-            (recur (.getSuperclass superklass) (pull-field superklass)))      )))
-
-(defn get-private-field
-  [instance field-name]
-  (let [method (find-field (.getClass instance) field-name)]
-    (.setAccessible method true)
-    (.get method instance)))
-
-(defn show-fields
-  [s instance field-names]
-  (pprint [s instance (map #(vector % (get-private-field instance %)) field-names)]))

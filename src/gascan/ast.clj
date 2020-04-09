@@ -146,9 +146,6 @@
   [s]
   (CharSubSequence/of s))
 
-(defn construct [klass & args]
-    (clojure.lang.Reflector/invokeConstructor klass (into-array Object args)))
-
 (defn link
   [text url]
   (doto (new Link)
