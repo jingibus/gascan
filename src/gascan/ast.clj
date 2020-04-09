@@ -152,6 +152,7 @@
 (defn link
   [text url]
   (let [all-chars (char-sequence (str "[" text "]" "(" url ")"))
+        ;; The following lay out a sequence of stops within the string.
         start-text-open 0
         start-text 1
         start-text-close (+ start-text (count text))
@@ -161,25 +162,11 @@
         end-link-close (+ start-link-close 1)
         marks [start-text-open start-text start-text-close 
                start-link-open start-link start-link-close end-link-close]
-        args (map #(.subSequence all-chars (key %) (val %)) 
-             (zipmap (butlast marks) (rest marks)))
-        text-subchars (.subSequence all-chars 1 (+ 1 (count text)))
-        url-subchars (.subSequence all-chars (count text) (count (str text url)))
-        new-link
-;    public Link(BasedSequence textOpenMarker, BasedSequence text, BasedSequence textCloseMarker, BasedSequence linkOpenMarker, BasedSequence url, BasedSequence linkCloseMarker) {
 
-        (doto 
-            (apply construct (cons Link args))
-             ; linkCloseMarker
-          .setCharsFromContent
-          (.setPageRef (.subSequence all-chars start-link start-link-close)))
-        text (-> new-link .getText .toString)]
-    (pprint-symbols new-link text args)
-    new-link))
-        (comment (new Link 
-                      (.subSequence all-chars start-text-open) ; textOpenMarker
-                      text-subchars                            ; text
-                      BasedSequence/NULL  ; textCloseMarker
-                      BasedSequence/NULL  ; linkOpenMarker
-                      url-subchars        ; url
-                      BasedSequence/NULL))
+        ;; Then pair them up and feed them to subSequence
+        args (map #(.subSequence all-chars (key %) (val %)) 
+             (zipmap (butlast marks) (rest marks)))]
+    (doto (apply construct (cons Link args))
+      .setCharsFromContent
+      (.setPageRef (.subSequence all-chars start-link start-link-close)))))
+        
