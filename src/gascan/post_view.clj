@@ -160,7 +160,7 @@
 
 (defn post->title-path
   [post]
-  (str "/posts/title/" (posts/to-kebab-case (:title post))))
+  (str "/posts/title/" (posts/to-kebab-case (:title post)) "/"))
 
 (defn post-by-title-path
   [title]
