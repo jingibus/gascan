@@ -151,22 +151,12 @@
 
 (defn link
   [text url]
-  (let [all-chars (char-sequence (str "[" text "]" "(" url ")"))
-        ;; The following lay out a sequence of stops within the string.
-        start-text-open 0
-        start-text 1
-        start-text-close (+ start-text (count text))
-        start-link-open (+ start-text-close 1)
-        start-link (+ start-link-open 1)
-        start-link-close (+ start-link (count url))
-        end-link-close (+ start-link-close 1)
-        marks [start-text-open start-text start-text-close 
-               start-link-open start-link start-link-close end-link-close]
-
-        ;; Then pair them up and feed them to subSequence
-        args (map #(.subSequence all-chars (key %) (val %)) 
-             (zipmap (butlast marks) (rest marks)))]
-    (doto (apply construct (cons Link args))
-      .setCharsFromContent
-      (.setPageRef (.subSequence all-chars start-link start-link-close)))))
+  (doto (new Link)
+    (.setText (char-sequence text))
+    (.setUrl (char-sequence url))
+    (.setPageRef (char-sequence url))
+    (.setUrlOpeningMarker (char-sequence "("))
+    (.setUrlClosingMarker (char-sequence ")"))
+    (.setTextOpeningMarker (char-sequence "["))
+    (.setTextClosingMarker (char-sequence "]"))))
         
