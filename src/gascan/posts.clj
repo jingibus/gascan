@@ -10,7 +10,8 @@
    [gascan.remote-posts :as remote]
    [java-time :refer [local-date-time instant]]
    [clojure.string :as string]
-   [gascan.intern :as intern])
+   [gascan.intern :as intern]
+   [clojure.java.io :as io])
   (:use [gascan.debug]))
 
 (def toplevel-post-contents-folder "posts")
@@ -53,14 +54,16 @@
     (format "%04d/%02d/%02d/%04d" year month day-of-month minute)))
 
 (defn strip-title-section!
-  [document]
-  (-> document 
-      ast/build-scaffold-ast 
-      z/vector-zip
-      z/down z/right 
-      z/remove
-      z/root
-      ast/restitch-scaffold-ast))
+  [[tags document]]
+  [tags (-> document 
+            z/vector-zip
+            z/down z/right 
+            z/remove
+            z/root)])
+
+(s/fdef strip-title-section!
+  :args (s/cat :tagged-scaffold (s/cat :tags map? :scaffold vector?))
+  :ret (s/cat :tags map? :scaffold-ast vector?))
 
 (defn visible-to-session?
   [session post]
@@ -68,42 +71,110 @@
     (#{:published} (:status post))
     true))
 
-(defn import-post!
-  "Imports a remote-post into an intern-post. Note that this mutates the parsed Markdown in the remote-post."
-  [remote-post]
-  (let [{title :title 
-         timestamp :timestamp
-         parsed-markdown :parsed-markdown
-         markdown-abs-path :markdown-abs-path
-         extra-resources :extra-resources
-         dir-depth :dir-depth
-         src-path :src-path} remote-post
-        timestamp-subfolders (to-yyyy-mm-dd-mmmm timestamp)
-        post-contents-folder (clojure.string/join "/" [toplevel-post-contents-folder timestamp-subfolders])
-        intern-copied-file! #(intern-file! % post-contents-folder dir-depth)
-        interned-resources (map intern-copied-file! extra-resources)
-        rendered-markdown (do
-                            (strip-title-section! parsed-markdown)
-                            (render parsed-markdown))
-        interned-markdown-path (intern-file! markdown-abs-path 
-                                        post-contents-folder 
-                                        dir-depth 
-                                        rendered-markdown)]
-    {
-     :title title
-     :timestamp timestamp
-     :markdown-rel-path interned-markdown-path
-     :extra-resources-rel interned-resources
-     :id (java.util.UUID/randomUUID)
-     :status :draft
-     :filter #{}
-     :src-path src-path
-     }
-    ))
+(defn translate-links!
+  [[tags scaffold-ast] f]
+  (loop [nodes (flatten scaffold-ast)
+         translations {}]
+    (cond (empty? nodes)
+          [(assoc tags :link-translations translations) scaffold-ast]
+          (instance? com.vladsch.flexmark.ast.Link (first nodes))
+          (let [[node & rest] nodes
+                url (.getUrl node)
+                transformed-url (f url)]
+            (if (= transformed-url url)
+              (recur rest translations)
+              (do
+                (.setUrl node (com.vladsch.flexmark.util.sequence.CharSubSequence/of transformed-url))
+                (recur rest
+                       (assoc translations (str url) transformed-url)))))
+          :else
+          (recur (rest nodes) translations))))
 
-(s/fdef import-post!
-  :args #(post-spec/remote-post (:remote-post %))
-  :ret  #(post-spec/intern-post %))
+(s/fdef translate-links!
+  :args (s/cat :tagged-scaffold (s/cat :tags map? :scaffold vector?) :translator fn?)
+  :ret (s/cat :tags (s/keys :req-un [::link-translations])
+              :scaffold-ast vector?))
+
+(comment
+  (defn test-ast 
+    []
+    (-> (find-post {:title "PDF Link Test"})
+        :markdown-rel-path
+        intern/readable-file
+        slurp
+        (monitor-> "raw md")
+        mm/parse-multimarkdown-str
+        ast/build-scaffold-ast))
+  (-> (test-ast)
+      ast/scaffold->tagged-scaffold
+      (translate-links! 
+       (fn [path]
+         (if (.startsWith path "file://")
+           (last (string/split path #"/"))
+           path)))
+      clojure.pprint/pprint)
+  (defn find-node
+    [pred ast]
+    (loop [loc (z/vector-zip ast)]
+      (cond (z/end? loc) nil
+            (pred (z/node loc)) (z/node loc)
+            :else (recur (z/next loc))))))
+
+(defn valid-against-spec? [spec args]
+  (if-not (s/valid? spec args)
+    (s/explain spec args)
+    true))
+
+(let [args-spec (s/cat :remote-post post-spec/remote-post)]
+  (defn import-post!
+    "Imports a remote-post into an intern-post. Note that this mutates the parsed Markdown in the remote-post."
+    [remote-post]
+    (when (valid-against-spec? args-spec [remote-post])
+      (let [{title :title 
+             timestamp :timestamp
+             parsed-markdown :parsed-markdown
+             markdown-abs-path :markdown-abs-path
+             extra-resources :extra-resources
+             dir-depth :dir-depth
+             src-path :src-path} remote-post
+            timestamp-subfolders (to-yyyy-mm-dd-mmmm timestamp)
+            map-file-url-to-relative-url (fn [path]
+                                           (if (.startsWith path "file://")
+                                             (last (string/split path #"/"))
+                                             path))
+            [tags scaffold-ast] (-> parsed-markdown
+                                    ast/build-scaffold-ast
+                                    ast/scaffold->tagged-scaffold
+                                    strip-title-section!
+                                    (translate-links! map-file-url-to-relative-url))
+            other-files-to-import (keys (:translated-links tags))
+            rendered-markdown (-> scaffold-ast
+                                  ast/restitch-scaffold-ast
+                                  render)
+            post-contents-folder (string/join "/" [toplevel-post-contents-folder 
+                                                   timestamp-subfolders])
+            intern-copied-file! #(intern-file! % post-contents-folder dir-depth)
+            interned-resources (map intern-copied-file! (concat extra-resources
+                                                                other-files-to-import))
+            interned-markdown-path (intern-file! markdown-abs-path 
+                                                 post-contents-folder 
+                                                 dir-depth 
+                                                 rendered-markdown)]
+        {
+         :title title
+         :timestamp timestamp
+         :markdown-rel-path interned-markdown-path
+         :extra-resources-rel interned-resources
+         :id (java.util.UUID/randomUUID)
+         :status :draft
+         :filter #{}
+         :src-path src-path
+         }
+        )))
+
+  (s/fdef import-post!
+    :args args-spec
+    :ret  post-spec/intern-post))
 
 (defn to-kebab-case
   [s]
@@ -158,6 +229,21 @@ done on the basis of kebab casing.
     (map #(apply update-if % (concat [matcher k f] xs)) 
          (posts))))
 
+(defn clean-posts-folder!
+  []
+  (let [files (fn [] (-> toplevel-post-contents-folder
+                         io/resource
+                         io/as-file
+                         file-seq))
+        clean (fn [f]
+                (when (and (.exists f)
+                           (.isDirectory f)
+                           (empty? (.list f)))
+                  (println "cleaning" f)
+                  (.delete f)))]
+    (while 
+        (some identity (map clean (files))))))
+
 (defn remove-posts!
   [locator]
   (let [matcher (locator-matcher locator)
@@ -170,8 +256,11 @@ done on the basis of kebab casing.
         all-resources (->> posts-to-remove
                            (map post-resources)
                            flatten)]
+    (println "removing posts" locator)
     (doall (map intern/delete-file all-resources))
-    (put-posts! remaining-posts)))
+    (clean-posts-folder!)
+    (put-posts! remaining-posts)
+    ))
 
 (defn update-posts!
   [& xs]
