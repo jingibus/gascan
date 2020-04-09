@@ -40,7 +40,8 @@
         reldest
         folder-depth
         (clojure.java.io/input-stream fileobj))
-       (throw (new java.io.IOException "Cannot interna a non-file")))))
+       (throw (new java.io.IOException 
+                   (str "Cannot intern a non-file: " fileobj))))))
   ([filepath reldest folder-depth contents]
    (let [intern-rel-filepath (interned-filepath filepath reldest folder-depth)
          intern-abs-filepath (intern-abs-filepath intern-rel-filepath)
