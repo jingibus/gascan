@@ -21,9 +21,7 @@
         zip-to-linktext #(some-> % z/down z/right z/right z/node)
         ]
     (when (and (some-> loc z/down z/node paragraph?)
-               ;(do (println "found a para!") true)
                (some-> loc zip-to-linkref linkref?)
-               ;(do (println "found a linkref!") true)
                (some-> loc zip-to-linktext text?))
       (let [reference (some-> loc 
                               zip-to-linkref
@@ -123,13 +121,19 @@
       (mm/render-multimarkdown massaged-mm))))
 
 (comment
+  (defn def-test-case
+    [title]
+    (def test-case-title title))
+  (def-test-case "PDF Link Test")
+
   (def image-test (first (filter #(= (:title %) "Image Test") (posts/fetch-posts))))
   (defn test-ast 
     []
-    (-> (first (filter #(= (:title %) "Image Test") (posts/fetch-posts)))
+    (-> (posts/find-post {:title test-case-title})
         :markdown-rel-path
         intern/readable-file
         slurp
+        (monitor-> "raw md:")
         mm/parse-multimarkdown-str
         ast/build-scaffold-ast))
   (defn find-node
@@ -139,23 +143,28 @@
             (pred (z/node loc)) (z/node loc)
             :else (recur (z/next loc)))))
 
-  (->  (find-node (partial instance? com.vladsch.flexmark.ast.LinkRef) (test-ast))
-       .getReference)
-  (->>  (find-node (partial instance? com.vladsch.flexmark.ast.LinkRef) (test-ast))
-        .getClass
-        .getMethods
-        (sort-by #(.getName %))
-        (map str)
-        (map #(clojure.string/replace % #"com.vladsch.flexmark.(util.|)ast." ""))
-      clojure.pprint/pprint)
+  (some->  (find-node (partial instance? com.vladsch.flexmark.ast.LinkRef) (test-ast))
+           .getReference)
+  (some->>  (find-node (partial instance? com.vladsch.flexmark.ast.LinkRef) (test-ast))
+            .getClass
+            .getMethods
+            (sort-by #(.getName %))
+            (map str)
+            (map #(clojure.string/replace % #"com.vladsch.flexmark.(util.|)ast." ""))
+            clojure.pprint/pprint)
 
   (->> (test-ast)
-    transform-ast
-    (ast/deep-map-vec #(some-> % type .getName))
-    clojure.pprint/pprint)
-  
-  
+       (ast/deep-map-vec #(some-> % type .getName))
+       clojure.pprint/pprint)
 
+  (->> (test-ast)
+       transform-ast
+       (ast/deep-map-vec #(some-> % type .getName))
+       clojure.pprint/pprint)
+
+  (->> (test-ast)
+       ast/stringify
+       clojure.pprint/pprint)
   )
 
 (defn post->title-path
@@ -216,7 +225,7 @@
                                     count)]
         (is (> number-of-paras 5))))
     (testing "invalid post yields nil"
-      (is (nil? (view-post {:title "not-there"}))))
+      (is (nil? (post-view session/private-session {:title "not-there"}))))
     nil))
 
 (comment
@@ -228,4 +237,5 @@
   (post->title-path (first (posts/posts)))
   (update-in {:title "blog-project"} [:id] identity)
   (gascan.browser/look-at (post->title-path (first (posts/posts))))
+  (gascan.browser/look-at (post->title-path (posts/find-post {:title "pdf-link-test"})))
   )
