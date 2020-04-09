@@ -12,7 +12,9 @@
    [clojure.string :as string]
    [gascan.intern :as intern]
    [clojure.java.io :as io])
-  (:use [gascan.debug]))
+  (:use [gascan.debug])
+  (:import [java.util.regex Pattern]
+           ))
 
 (def toplevel-post-contents-folder "posts")
 (def post-metadata-edn "metadata.edn")
@@ -71,24 +73,45 @@
     (#{:published} (:status post))
     true))
 
+(defn transformed-link
+  [link-node url transformed-url]
+  (let [wrap-parens #(str "(" % ")")
+        original-chars (-> link-node .getChars .toString)
+        url-pattern (re-pattern (str (Pattern/quote 
+                                      (wrap-parens url))
+                                     "$"))
+        new-chars (-> original-chars
+                      (string/replace url-pattern (wrap-parens transformed-url)))
+        new-node (ast/link (-> link-node .getText .toString) transformed-url)
+        new-text (ast/char-sequence (str "[" (-> link-node .getText .toString) "]"))
+        old-text (-> link-node .getText .toString)
+        field-names ["url" "urlOpeningMarker" "pageRef" "anchorMarker" 
+                     "anchorRef" "urlClosingMarker" "titleOpeningMarker"
+                     "title" "titleClosingMarker"]]
+    ;(.setUrl new-node (ast/char-sequence transformed-url))
+    ;(.setTextChars new-node new-text)
+    new-node))
+
 (defn translate-links!
   [[tags scaffold-ast] f]
-  (loop [nodes (flatten scaffold-ast)
-         translations {}]
-    (cond (empty? nodes)
-          [(assoc tags :link-translations translations) scaffold-ast]
-          (instance? com.vladsch.flexmark.ast.Link (first nodes))
-          (let [[node & rest] nodes
-                url (.getUrl node)
-                transformed-url (f url)]
-            (if (= transformed-url url)
-              (recur rest translations)
-              (do
-                (.setUrl node (com.vladsch.flexmark.util.sequence.CharSubSequence/of transformed-url))
-                (recur rest
-                       (assoc translations (str url) transformed-url)))))
-          :else
-          (recur (rest nodes) translations))))
+  (monitor->> 
+   "translated links result: "
+   
+   (loop [loc (z/vector-zip scaffold-ast)
+          translations {}]
+     (cond (z/end? loc)
+           [(assoc tags :link-translations translations) (z/root loc)]
+           (instance? com.vladsch.flexmark.ast.Link (z/node loc))
+           (let [node (z/node loc)
+                 url (.toString (.getUrl node))
+                 transformed-url (f url)
+                 new-link #(transformed-link node url transformed-url)]
+             (if (= transformed-url url)
+               (recur (z/next loc) translations)
+               (recur (-> loc (z/replace (new-link)) z/next)
+                      (assoc translations url transformed-url))))
+           :else
+           (recur (z/next loc) translations)))))
 
 (s/fdef translate-links!
   :args (s/cat :tagged-scaffold (s/cat :tags map? :scaffold vector?) :translator fn?)
@@ -118,7 +141,13 @@
     (loop [loc (z/vector-zip ast)]
       (cond (z/end? loc) nil
             (pred (z/node loc)) (z/node loc)
-            :else (recur (z/next loc))))))
+            :else (recur (z/next loc)))))
+  (as-> (test-ast) x
+       (find-node (partial instance? com.vladsch.flexmark.ast.Link) x)
+       (.getChars x)
+       (.toString x)
+       )
+  )
 
 (defn valid-against-spec? [spec args]
   (if-not (s/valid? spec args)
@@ -147,10 +176,15 @@
                                     ast/scaffold->tagged-scaffold
                                     strip-title-section!
                                     (translate-links! map-file-url-to-relative-url))
-            other-files-to-import (keys (:translated-links tags))
+            other-files-to-import (->> tags 
+                                       :link-translations 
+                                       keys
+                                       (map (comp io/as-file io/as-url)))
             rendered-markdown (-> scaffold-ast
+                                  (monitor-> "processed AST: " ast/stringify)
                                   ast/restitch-scaffold-ast
-                                  render)
+                                  render
+                                  (monitor-> "rendered md:"))
             post-contents-folder (string/join "/" [toplevel-post-contents-folder 
                                                    timestamp-subfolders])
             intern-copied-file! #(intern-file! % post-contents-folder dir-depth)
@@ -274,11 +308,11 @@ done on the basis of kebab casing.
 (defn refresh-post!
   [locator]
   (let [{src-path :src-path id :id timestamp :timestamp} (find-post locator)]
-    (print-and-name locator src-path id)
+    (pprint-symbols locator src-path id)
     (when src-path
       (let [new-remote-post (remote/read-remote-post src-path)
             with-old-timestamp (assoc new-remote-post :timestamp timestamp)]
-        (print-and-name src-path new-remote-post)
+        (pprint-symbols src-path new-remote-post)
         (when new-remote-post
           (remove-posts! {:id id})
           (import-and-add-post! with-old-timestamp))))))
