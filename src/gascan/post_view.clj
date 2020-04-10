@@ -237,5 +237,5 @@
   (post->title-path (first (posts/posts)))
   (update-in {:title "blog-project"} [:id] identity)
   (gascan.browser/look-at (post->title-path (first (posts/posts))))
-  (gascan.browser/look-at (post->title-path (posts/find-post {:title "pdf-link-test"})))
+  (gascan.browser/look-at (post->title-path (posts/find-post {:title test-case-title})))
   )
