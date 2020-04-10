@@ -8,6 +8,7 @@
                  [clojure.java-time "0.3.2"]
                  [com.vladsch.flexmark/flexmark-all "0.60.2"]
                  [compojure "1.6.1"]
+                 [environ "1.1.0"]
                  [etaoin "0.3.6"]
                  [hiccup "1.0.5"]
                  [org.clojure/clojure "1.10.1"] 
