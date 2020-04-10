@@ -32,13 +32,6 @@
     content-not-found-page
     (browser/look-at "posts/title/blog-project")))
 
-((GET "/:test1/route?parameter1=:param&parameter2=:param2" [test1 param param2]
-       (println test1 param param2))
- {:request-method :get 
-  :uri  "/abbleton/route?parameter2=fluff&parameter1=ernutterer"
-  :scheme :http
-  :server-name "localhost"})
-
 ;; Compojure routing
 (defn all-routes
   [sess]
