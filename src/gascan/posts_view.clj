@@ -54,16 +54,18 @@
                            (filter (every-pred visible? matches-criteria))
                            (sort-by #(- (:timestamp %)))
                            (partition-by key-fn)
-                           (map (juxt #(key-fn (first %)) identity)))]
+                           (map (juxt #(key-fn (first %)) identity)))
+         draft-warning #(when-not (#{:published} (:status %)) 
+                          [:font {:color "red"} " (DRAFT)"])]
      (when (seq posts-by-day)
        (template/enframe
         "The Gas Can"
         (hc/html
-         (map (fn [[a b]] 
+         (map (fn [[date-heading posts]] 
                 (list 
-                 [:h3 a] 
+                 [:h3 date-heading] 
                  (map 
-                  #(vec [:p (post->link %)]) b)))
+                  #(vec [:p (post->link %) (draft-warning %)]) posts)))
               posts-by-day)))))))
 
 (comment

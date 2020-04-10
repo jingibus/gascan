@@ -203,13 +203,16 @@
         {title             :title
          timestamp         :timestamp
          path              :markdown-rel-path
+         status            :status
          :as post} 
         (posts/find-post locator)
         visible? (posts/visible-to-session? sess post) 
         rendered (and visible? (render-markdown path))
+        title-warning (when-not (#{:published} status) 
+                        [:font {:color "red"} " (DRAFT)"])
         ]
     (when rendered
-      (tmpl/enframe title rendered))))
+      (tmpl/enframe (list title title-warning) rendered))))
 
 (comment
   (do
