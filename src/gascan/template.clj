@@ -7,7 +7,7 @@
    [:html
     [:head
      [:link {:href "https://fonts.googleapis.com/css2?family=Domine&display=swap" :rel "stylesheet"}]
-     [:style "p { font-family: 'Domine', serif; }"]
+     [:style "h1, h2, h3 { font-family: 'Domine', serif; }"]
      [:title title]]
     [:body 
      [:div {:style "padding: 100px; margin 50px; background-color: #dddddd;"}
