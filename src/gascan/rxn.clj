@@ -36,4 +36,4 @@
 (defn dyn-construct [klass & args]
   "Dynamically invokes constructor for klass. I expect this will get messy if 
 there are multiple constructor overloads with the same arity."
-    (clojure.lang.Reflector/invokeConstructor klass (into-array Object args)))
+  (clojure.lang.Reflector/invokeConstructor klass (into-array Object args)))

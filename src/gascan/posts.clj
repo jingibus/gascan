@@ -39,7 +39,7 @@
 
 (defn put-posts!
   [posts]
-  {:pre [(every? #(s/assert post-spec/intern-post %) posts)]}
+  {:pre [(every? #(s/valid? post-spec/intern-post %) posts)]}
   (intern-edn! post-metadata-edn posts)
   (reset-posts))
 
@@ -254,10 +254,12 @@ done on the basis of kebab casing.
 (defn find-post [locator] (first (find-posts locator)))
 
 (defn update-posts-check
+  "Works like update-posts, but only yields the posts modified."
   [locator & xs]
   (map #(apply update % xs) (find-posts locator)))
 
 (defn update-posts
+  "For posts matching locator, applies the function to the given key value."
   [locator k f & xs]
   (let [matcher (locator-matcher locator)]
     (map #(apply update-if % (concat [matcher k f] xs)) 

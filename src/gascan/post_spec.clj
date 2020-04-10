@@ -74,7 +74,8 @@
                    ::title 
                    ::timestamp 
                    ::markdown-rel-path 
-                   ::extra-resources-rel]
+                   ::extra-resources-rel
+                   ::filter]
           :opt-un [::parsed-markdown])) 
 
 (s/def ::parsed-markdown flexmark-document?)
