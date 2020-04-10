@@ -7,4 +7,4 @@
 
 (defn -main [& [port]]
   (let [port (Integer. (or port (environ/env :port) 5000))]
-    (svr/run :port port :session session/public-session)))
+    (svr/run :port port :sess session/public-session)))
