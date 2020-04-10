@@ -4,7 +4,6 @@
   :license {:name "EPL-2.0 OR GPL-2.0-or-later WITH Classpath-exception-2.0"
             :url "https://www.eclipse.org/legal/epl-2.0/"}
   :dependencies [
-                 [cli-matic "0.3.11"]
                  [clojure.java-time "0.3.2"]
                  [com.vladsch.flexmark/flexmark-all "0.60.2"]
                  [compojure "1.6.1"]
@@ -17,5 +16,6 @@
                  [ring/ring-jetty-adapter "1.6.3"]]
   :main ^:skip-aot gascan.core
   :target-path "target/%s"
+  :min-lein-version "2.9.2"
   :profiles {:uberjar {:aot :all}
              :dev {}})
