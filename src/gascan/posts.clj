@@ -154,57 +154,61 @@
     (s/explain spec args)
     true))
 
-(let [args-spec (s/cat :remote-post post-spec/remote-post)]
+(let [args-spec (s/or :no-filters (s/cat :remote-post post-spec/remote-post)
+                      :with-filters (s/cat :remote-post post-spec/remote-post 
+                             :filters :post-spec/filters))]
   (defn import-post!
     "Imports a remote-post into an intern-post. Note that this mutates the parsed Markdown in the remote-post."
-    [remote-post]
-    (when (valid-against-spec? args-spec [remote-post])
-      (let [{title :title 
-             timestamp :timestamp
-             parsed-markdown :parsed-markdown
-             markdown-abs-path :markdown-abs-path
-             extra-resources :extra-resources
-             dir-depth :dir-depth
-             src-path :src-path} remote-post
-            timestamp-subfolders (to-yyyy-mm-dd-mmmm timestamp)
-            map-file-url-to-relative-url (fn [path]
-                                           (if (.startsWith path "file://")
-                                             (last (string/split path #"/"))
-                                             path))
-            [tags scaffold-ast] (-> parsed-markdown
-                                    ast/build-scaffold-ast
-                                    ast/scaffold->tagged-scaffold
-                                    strip-title-section!
-                                    (translate-links! map-file-url-to-relative-url))
-            other-files-to-import (->> tags 
-                                       :link-translations 
-                                       keys
-                                       (map (comp io/as-file io/as-url)))
-            rendered-markdown (-> scaffold-ast
-                                  (monitor-> "processed AST: " ast/stringify)
-                                  ast/restitch-scaffold-ast
-                                  render
-                                  (monitor-> "rendered md:"))
-            post-contents-folder (string/join "/" [toplevel-post-contents-folder 
-                                                   timestamp-subfolders])
-            intern-copied-file! #(intern-file! % post-contents-folder dir-depth)
-            interned-resources (map intern-copied-file! (concat extra-resources
-                                                                other-files-to-import))
-            interned-markdown-path (intern-file! markdown-abs-path 
-                                                 post-contents-folder 
-                                                 dir-depth 
-                                                 rendered-markdown)]
-        {
-         :title title
-         :timestamp timestamp
-         :markdown-rel-path interned-markdown-path
-         :extra-resources-rel interned-resources
-         :id (java.util.UUID/randomUUID)
-         :status :draft
-         :filter #{}
-         :src-path src-path
-         }
-        )))
+    ([remote-post]
+     (import-post! remote-post #{}))
+    ([remote-post filters]
+     (when (valid-against-spec? args-spec [remote-post])
+       (let [{title :title 
+              timestamp :timestamp
+              parsed-markdown :parsed-markdown
+              markdown-abs-path :markdown-abs-path
+              extra-resources :extra-resources
+              dir-depth :dir-depth
+              src-path :src-path} remote-post
+             timestamp-subfolders (to-yyyy-mm-dd-mmmm timestamp)
+             map-file-url-to-relative-url (fn [path]
+                                            (if (.startsWith path "file://")
+                                              (last (string/split path #"/"))
+                                              path))
+             [tags scaffold-ast] (-> parsed-markdown
+                                     ast/build-scaffold-ast
+                                     ast/scaffold->tagged-scaffold
+                                     strip-title-section!
+                                     (translate-links! map-file-url-to-relative-url))
+             other-files-to-import (->> tags 
+                                        :link-translations 
+                                        keys
+                                        (map (comp io/as-file io/as-url)))
+             rendered-markdown (-> scaffold-ast
+                                   (monitor-> "processed AST: " ast/stringify)
+                                   ast/restitch-scaffold-ast
+                                   render
+                                   (monitor-> "rendered md:"))
+             post-contents-folder (string/join "/" [toplevel-post-contents-folder 
+                                                    timestamp-subfolders])
+             intern-copied-file! #(intern-file! % post-contents-folder dir-depth)
+             interned-resources (map intern-copied-file! (concat extra-resources
+                                                                 other-files-to-import))
+             interned-markdown-path (intern-file! markdown-abs-path 
+                                                  post-contents-folder 
+                                                  dir-depth 
+                                                  rendered-markdown)]
+         {
+          :title title
+          :timestamp timestamp
+          :markdown-rel-path interned-markdown-path
+          :extra-resources-rel interned-resources
+          :id (java.util.UUID/randomUUID)
+          :status :draft
+          :filter #{}
+          :src-path src-path
+          }
+         ))))
 
   (s/fdef import-post!
     :args args-spec

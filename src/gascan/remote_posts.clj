@@ -63,3 +63,9 @@
 
 (s/fdef read-remote-post
   :ret post-spec/remote-post)
+
+(defn read-from-documents-md
+  [relpath]
+  (let [filepath (str "/Users/bphillips/Documents/" relpath
+                      (when-not (.endsWith relpath ".md") ".md"))]
+    (read-remote-post filepath)))
