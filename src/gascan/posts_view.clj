@@ -40,7 +40,7 @@
   ([sess criteria]
    (let [zone (java-time/zone-id "America/Los_Angeles")
          criteria (if (string? criteria)
-                    (map keyword (clojure.string/split criteria #"-"))
+                    (into #{} (map keyword (clojure.string/split criteria #"-")))
                     criteria)
          key-fn #(day-key (:timestamp %) zone)
          visible? (partial posts/visible-to-session? sess)
