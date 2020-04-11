@@ -351,17 +351,25 @@ done on the basis of kebab casing.
          (map publish-post)
          put-posts!)))
 
+(defn replace-post-contents 
+  [old-post new-post]
+  (let [relevant-contents (select-keys new-post 
+                                       [:title 
+                                        :markdown-rel-path 
+                                        :extra-resources-rel])]
+    (conj old-post relevant-contents)))
+
 (defn refresh-post!
   [locator]
-  (let [{src-path :src-path id :id timestamp :timestamp} (find-post locator)]
-    (pprint-symbols locator src-path id)
+  (let [{src-path :src-path id :id :as old-post} (find-post locator)]
     (when src-path
-      (let [new-remote-post (remote/read-remote-post src-path)
-            with-old-timestamp (assoc new-remote-post :timestamp timestamp)]
-        (pprint-symbols src-path new-remote-post)
+      (let [new-remote-post (remote/read-remote-post src-path)]
         (when new-remote-post
           (remove-posts! {:id id})
-          (import-and-add-post! with-old-timestamp))))))
+          (let [imported-new-post (import-post! new-remote-post)]
+            (put-posts! 
+             (conj (posts) 
+                   (replace-post-contents old-post imported-new-post)))))))))
 
 (defn as-parsed
   "Yields an interned record with parsed markdown."
