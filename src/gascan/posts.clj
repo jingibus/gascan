@@ -230,6 +230,13 @@
     (apply update (concat [m k f] xs))
     m))
 
+(defn assoc-if
+  "Assocs only if pred is truthy."
+  [m pred k v & xs]
+  (if (pred m)
+    (apply assoc (concat [m k v] xs))
+    m))
+
 (defn locator-matcher
   [locator]
   (let [locator (into {} (filter #(second %) locator))
@@ -260,7 +267,23 @@ done on the basis of kebab casing.
 (defn update-posts-check
   "Works like update-posts, but only yields the posts modified."
   [locator & xs]
-  (map #(apply update % xs) (find-posts locator)))
+  (map #(apply update (cons % xs)) (find-posts locator)))
+
+(defn assoc-posts-check
+  "Works like assoc-posts, but only yields the posts modified."
+  [locator & xs]
+  (map #(apply assoc (cons % xs)) (find-posts locator)))
+
+(defn assoc-posts
+  "For posts matching locator, applies the function to the given key value."
+  [locator k f & xs]
+  (let [matcher (locator-matcher locator)]
+    (map #(apply assoc-if % (concat [matcher k f] xs)) 
+         (posts))))
+
+(defn assoc-posts!
+  [& xs]
+  (put-posts! (apply assoc-posts xs)))
 
 (defn update-posts
   "For posts matching locator, applies the function to the given key value."
@@ -268,6 +291,10 @@ done on the basis of kebab casing.
   (let [matcher (locator-matcher locator)]
     (map #(apply update-if % (concat [matcher k f] xs)) 
          (posts))))
+
+(defn update-posts!
+  [& xs]
+  (put-posts! (apply update-posts xs)))
 
 (defn clean-posts-folder!
   []
@@ -302,14 +329,26 @@ done on the basis of kebab casing.
     (put-posts! remaining-posts)
     ))
 
-(defn update-posts!
-  [& xs]
-  (put-posts! (apply update-posts xs)))
-
 (defn import-and-add-post!
   [remote-post]
   (let [interned-post (import-post! remote-post)]
     (put-posts! (conj (posts) interned-post))))
+
+(defn publish-post
+  [post]
+  (-> post
+      (assoc :timestamp (System/currentTimeMillis))
+      (assoc :status :published)))
+
+(defn publish-posts!
+  [locator]
+  (let [matcher (locator-matcher locator)
+        publish-if-matches #(if (matcher %)
+                              (publish-post %)
+                              %)]
+    (->> (posts)
+         (map publish-post)
+         put-posts!)))
 
 (defn refresh-post!
   [locator]
