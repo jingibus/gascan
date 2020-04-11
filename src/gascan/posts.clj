@@ -50,10 +50,11 @@
   [timestamp]
   (let [date-time (local-date-time (instant timestamp) "America/Los_Angeles")
         minute (.getMinute date-time)
+        hour (.getHour date-time)
         day-of-month (.getDayOfMonth date-time)
         month (.getMonthValue date-time)
         year (.getYear date-time)]
-    (format "%04d/%02d/%02d/%04d" year month day-of-month minute)))
+    (format "%04d/%02d/%02d/%02d%02d" year month day-of-month hour minute)))
 
 (defn strip-title-section!
   [[tags document]]
