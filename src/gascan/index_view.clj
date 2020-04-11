@@ -11,6 +11,7 @@
    ["spiritual" #{:spiritual}]
    ["music" #{:music}]
    ["clojure" #{:clojure}]
+   ["meta" #{:meta}]
    ["the firehose" #{}]])
 
 (defn index-view
