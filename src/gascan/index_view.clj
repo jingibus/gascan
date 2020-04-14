@@ -3,7 +3,7 @@
             [gascan.template :as template]
             [hiccup.core :as hc]
             [gascan.posts :as posts]
-            [gascan.post-view :as post-view])
+            [gascan.routing :as routing])
   )
 
 (def post-filters
@@ -34,11 +34,11 @@
             (when first-post
               [:p 
                title " - \""
-               [:a {:href (post-view/post->title-path first-post)}
+               [:a {:href (routing/post->title-path first-post)}
                 (:title first-post) ]
                "\""
                draft-warning
-               " -[" [:a {:href (posts-view/posts-by-date-path post-filter)}
+               " -[" [:a {:href (routing/posts-by-date-path post-filter)}
                       "index"] "]-"])))]
     (template/enframe
      "The Gas Can"

@@ -1,11 +1,11 @@
 (ns gascan.posts-view
   (:require [gascan.browser :as browser]
-            [gascan.post-view :as post-view]
             [gascan.posts :as posts]
             [gascan.session :as session]
             [gascan.template :as template]
             [gascan.view-common :as view-common]
-            [hiccup.core :as hc])
+            [hiccup.core :as hc]
+            [gascan.routing :as routing])
   (:use gascan.debug))
 
 (def sorting-formatter (java-time/formatter "YYYY/MM/dd"))
@@ -19,16 +19,8 @@
 
 (defn post->link
   [post criteria]
-  (vec [:a {:href (post-view/post->title-path post criteria)}
+  (vec [:a {:href (routing/post->title-path post criteria)}
         (:title post)]))
-
-(defn posts-by-date-path
-  ([]
-   "/posts")
-  ([criteria]
-   (let [criteria (if (string? criteria) #{(keyword criteria)} criteria)
-         criteria-kebab (clojure.string/join "-" (map name criteria))]
-     (str "/posts/criteria/" criteria-kebab))))
 
 (defn posts-by-date-view
   "Yields a view of posts by date, possibly with criteria.

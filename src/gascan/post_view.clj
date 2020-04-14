@@ -12,8 +12,8 @@
             [gascan.template :as tmpl]
             [org.bovinegenius.exploding-fish :as uri]
             [org.bovinegenius.exploding-fish.query-string :as query-string]
-            [gascan.posts-view :as posts-view]
-            [gascan.view-common :as view-common])
+            [gascan.view-common :as view-common]
+            [gascan.routing :as routing])
   (:use [gascan.debug]))
 
 (defn link-entry
@@ -171,35 +171,6 @@
        clojure.pprint/pprint)
   )
 
-(defn post->title-path
-  ([post]
-   (post->title-path post nil))
-  ([post parent-criteria]
-   (let [uri (uri/uri 
-              (str "/posts/title/" (posts/to-kebab-case (:title post)) "/"))
-         joined-criteria (some->> parent-criteria (map name) (string/join ","))
-         query-params (when joined-criteria 
-                        (query-string/alist->query-string 
-                         [["up" joined-criteria]]))]
-     
-     (uri/map->string (assoc uri :query query-params)))))
-
-(defn post-by-title-path
-  [title]
-  (str "/posts/title/" title "/"))
-
-(defn post-resources-by-title-path
-  [title res-name]
-  (str "/posts/title/" title "/" res-name))
-
-(defn post-by-id
-  [id]
-  (str "/posts/id/" id "/"))
-
-(defn post-resources-by-id
-  [id res-name]
-  (str "/posts/id/" id "/" res-name))
-
 (defn post-resources-view
   [sess {:keys [id title] :as locator} res-name]
   (let [{resources :extra-resources-rel
@@ -219,14 +190,12 @@
          status            :status
          :as post} 
         (posts/find-post locator)
-        up-criteria (set 
-                     (map keyword 
-                          (some-> query-params :up (string/split #","))))
+        {up-criteria :up} (routing/post-query-params->map query-params)
         visible? (posts/visible-to-session? sess post) 
         rendered (and visible? (render-markdown path))
         title-warning (when-not (#{:published} status) 
                         [:font {:color "red"} " (DRAFT)"])
-        up-target (posts-view/posts-by-date-path up-criteria)
+        up-target (routing/posts-by-date-path up-criteria)
         ]
     (when rendered
       (tmpl/enframe (list title title-warning) rendered

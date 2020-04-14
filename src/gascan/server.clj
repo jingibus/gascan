@@ -3,6 +3,7 @@
             [gascan.index-view :as index-view]
             [gascan.post-view :as post-view]
             [gascan.posts-view :as posts-view]
+            [gascan.routing :as routing]
             [gascan.session :as session]
             [gascan.template :as tmpl]
             [hiccup.core :as hc]
@@ -40,25 +41,25 @@
    (routes
     (GET "/:path{|index.htm|index.html}" [path]
          (index-view/index-view sess))
-    (GET (post-view/post-resources-by-title-path ":title" ":resname") [title resname]
+    (GET (routing/post-resources-by-title-path ":title" ":resname") [title resname]
          (println "route resource by title: " title " resname: " resname)
          (post-view/post-resources-view sess {:title title} resname))
-    (GET (post-view/post-by-title-path ":title") [title & query-params]
+    (GET (routing/post-by-title-path ":title") [title & query-params]
          (println "route by title:" title "params:" query-params)
          (post-view/post-view sess {:title title} :query-params query-params))
-    (GET (post-view/post-resources-by-id ":id" ":res-name") [id res-name]
+    (GET (routing/post-resources-by-id ":id" ":res-name") [id res-name]
          (println "route resource by id: " id " res-name: " res-name)
          (post-view/post-resources-view sess {:id id} res-name))
-    (GET (post-view/post-by-id ":id") [id]
+    (GET (routing/post-by-id ":id") [id]
          (println "route by id:" id)
          (post-view/post-view sess {:id id}))
-    (GET (posts-view/posts-by-date-path ":criteria") [criteria]
+    (GET (routing/posts-by-date-path ":criteria") [criteria]
          (println "route to posts matching criteria " criteria)
          (posts-view/posts-by-date-view sess criteria))
-    (GET (posts-view/posts-by-date-path) []
+    (GET (routing/posts-by-date-path) []
          (println "route to all posts")
          (posts-view/posts-by-date-view sess))
-    (GET (posts-view/posts-by-date-path "") []
+    (GET (routing/posts-by-date-path "") []
          (println "route to all posts")
          (posts-view/posts-by-date-view sess))
     (GET "/favicon.ico" []
