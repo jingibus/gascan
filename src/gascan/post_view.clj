@@ -113,7 +113,7 @@
       apply-image-map
       ast/tagged-scaffold->scaffold))
 
-(defn render-markdown
+(defn render-markdown-to-html
   [relpath]
   (let [md-contents (some-> (intern/readable-file relpath) slurp)
         massaged-mm (some-> md-contents
@@ -122,7 +122,7 @@
                             transform-ast
                             ast/restitch-scaffold-ast)]
     (when md-contents
-      (mm/render-multimarkdown massaged-mm))))
+      (mm/render-html massaged-mm))))
 
 (comment
   (defn def-test-case
@@ -193,7 +193,7 @@
         (posts/find-post locator)
         {up-criteria :up} (routing/post-query-params->map query-params)
         visible? (posts/visible-to-session? sess post) 
-        rendered (and visible? (render-markdown path))
+        rendered (and visible? (render-markdown-to-html path))
         title-warning (when-not (#{:published} status) 
                         [:font {:color "red"} " (DRAFT)"])
         up-target (routing/posts-by-date-from-post-id-path id up-criteria)

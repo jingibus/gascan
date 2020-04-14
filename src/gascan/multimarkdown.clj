@@ -38,7 +38,7 @@
   ([options readable]
    (parse-multimarkdown-str options(slurp readable))))
 
-(defn render-multimarkdown
+(defn render-html
   ([options flexmark-document]
    (-> (HtmlRenderer/builder options)
        (.build)
@@ -86,7 +86,7 @@
         (recur (conj values (.next iterator)))
         values))))
 
-(defn render
+(defn render-markdown
   [document]
   (let [renderer (-> (Formatter/builder flexmark-options) (.build))]
     (.render renderer document)))

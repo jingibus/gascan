@@ -4,8 +4,7 @@
    [clojure.zip :as z]
    [gascan.ast :as ast]
    [gascan.intern :refer [intern-edn! read-edn intern-file! readable-file]]
-   [gascan.multimarkdown :as mm :refer [parse-multimarkdown-flat
-                                        render]]
+   [gascan.multimarkdown :as mm :refer [parse-multimarkdown-flat]]
    [gascan.post-spec :as post-spec]
    [gascan.remote-posts :as remote]
    [java-time :refer [local-date-time instant]]
@@ -120,9 +119,10 @@
               :scaffold-ast vector?))
 
 (comment
+  (def test-title "Basic Test")
   (defn test-ast 
     []
-    (-> (find-post {:title "PDF Link Test"})
+    (-> (find-post {:title test-title})
         :markdown-rel-path
         intern/readable-file
         slurp
@@ -148,12 +148,32 @@
        (.getChars x)
        (.toString x)
        )
+  (with-verbose 
+    (-> (remote/read-from-samples-md test-title)
+        (remote-post->processed-tagged-scaffold)))
   )
 
 (defn valid-against-spec? [spec args]
   (if-not (s/valid? spec args)
     (s/explain spec args)
     true))
+
+(defn remote-post->processed-tagged-scaffold
+  [remote-post]
+  (let [map-file-url-to-relative-url 
+        (fn [path]
+          (if (.startsWith path "file://")
+            (last (string/split path #"/"))
+            path))]
+    (-> remote-post
+        :parsed-markdown
+        (monitorv-> "rendered source:" mm/render-markdown)
+        ast/build-scaffold-ast
+        (monitorv-> "source AST:" ast/stringify)
+        ast/scaffold->tagged-scaffold
+        strip-title-section!
+        (translate-links! map-file-url-to-relative-url)
+        (monitorv-> "processed AST:" (comp ast/stringify second)))))
 
 (let [args-spec (s/or :no-filters (s/cat :remote-post post-spec/remote-post)
                       :with-filters (s/cat :remote-post post-spec/remote-post 
@@ -172,24 +192,16 @@
               dir-depth :dir-depth
               src-path :src-path} remote-post
              timestamp-subfolders (to-yyyy-mm-dd-mmmm timestamp)
-             map-file-url-to-relative-url (fn [path]
-                                            (if (.startsWith path "file://")
-                                              (last (string/split path #"/"))
-                                              path))
-             [tags scaffold-ast] (-> parsed-markdown
-                                     ast/build-scaffold-ast
-                                     ast/scaffold->tagged-scaffold
-                                     strip-title-section!
-                                     (translate-links! map-file-url-to-relative-url))
+             [tags scaffold-ast] (remote-post->processed-tagged-scaffold remote-post)
              other-files-to-import (->> tags 
                                         :link-translations 
                                         keys
                                         (map (comp io/as-file io/as-url)))
              rendered-markdown (-> scaffold-ast
-                                   (monitor-> "processed AST: " ast/stringify)
+                                   (monitorv-> "processed AST: " ast/stringify)
                                    ast/restitch-scaffold-ast
-                                   render
-                                   (monitor-> "rendered md:"))
+                                   mm/render-markdown
+                                   (monitorv-> "rendered md:"))
              post-contents-folder (string/join "/" [toplevel-post-contents-folder 
                                                     timestamp-subfolders])
              intern-copied-file! #(intern-file! % post-contents-folder dir-depth)
