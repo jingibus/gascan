@@ -7,4 +7,6 @@ Paragraph 1.2
 
 Paragraph 2.1
 Paragraph 2.2: `code_span`
-code_block 2.3
+
+        code_block 2.3
+

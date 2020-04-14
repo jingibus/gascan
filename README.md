@@ -68,6 +68,8 @@ When writing in Scrivener:
 * Export with the following settings:
     * Plain MultiMarkdown format
     * Check the box marked "Convert links to MultiMarkdown"
+    * Create a new MultiMarkdown Format with the following changes:
+        * Under "Styles," select "Code Block". Add a carriage return prefix by typing `Opt-Return` in the prefix/suffix area. (Nothing will appear, but it will work anyway.)
 
 ### Bugs
 
