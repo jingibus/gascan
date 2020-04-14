@@ -2,7 +2,8 @@
   (:require [clojure.string :as string]
             [org.bovinegenius.exploding-fish :as uri]
             [gascan.posts :as posts]
-            [org.bovinegenius.exploding-fish.query-string :as query-string]))
+            [org.bovinegenius.exploding-fish.query-string :as query-string])
+  (:import [java.util UUID]))
 
 (defn posts-by-date-path
   ([]
@@ -11,6 +12,13 @@
    (let [criteria (if (string? criteria) #{(keyword criteria)} criteria)
          criteria-kebab (clojure.string/join "-" (map name criteria))]
      (str "/posts/criteria/" criteria-kebab))))
+
+(defn posts-by-date-from-post-id-path
+  [post-id & base-path-args]
+  (let [base-uri (uri/uri (apply posts-by-date-path base-path-args))
+        query-params (query-string/alist->query-string
+                      [["from-post-id" post-id]])]
+    (uri/map->string (assoc base-uri :query query-params))))
 
 (defn post-by-title-path
   [title]

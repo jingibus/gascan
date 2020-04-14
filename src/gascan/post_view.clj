@@ -188,6 +188,7 @@
          timestamp         :timestamp
          path              :markdown-rel-path
          status            :status
+         id                :id
          :as post} 
         (posts/find-post locator)
         {up-criteria :up} (routing/post-query-params->map query-params)
@@ -195,7 +196,7 @@
         rendered (and visible? (render-markdown path))
         title-warning (when-not (#{:published} status) 
                         [:font {:color "red"} " (DRAFT)"])
-        up-target (routing/posts-by-date-path up-criteria)
+        up-target (routing/posts-by-date-from-post-id-path id up-criteria)
         ]
     (when rendered
       (tmpl/enframe (list title title-warning) rendered

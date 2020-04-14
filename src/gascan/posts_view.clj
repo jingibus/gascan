@@ -18,20 +18,24 @@
     (java-time/format sorting-formatter as-date)))
 
 (defn post->link
-  [post criteria]
-  (vec [:a {:href (routing/post->title-path post criteria)}
-        (:title post)]))
+  [post criteria from-post-id]
+  (let [link (vec [:a {:href (routing/post->title-path post criteria)}
+                   (:title post)])]
+    (if (= (:id post) from-post-id)
+      (list "#==" link "==#")
+      link)))
 
 (defn posts-by-date-view
   "Yields a view of posts by date, possibly with criteria.
 
-  (posts-by-date-view #{:meta :programming}) is equivalent to
-  (posts-by-date-view \"meta-programming\").
+  (posts-by-date-view ... #{:meta :programming}) is equivalent to
+  (posts-by-date-view ... \"meta-programming\").
 "
-  ([sess]
-   (posts-by-date-view sess #{}))
-  ([sess criteria]
-   (let [zone (java-time/zone-id "America/Los_Angeles")
+  ([sess query-params]
+   (posts-by-date-view sess query-params #{}))
+  ([sess query-params criteria]
+   (let [{from-post-id :from-post-id} (routing/posts-query-params->map query-params)
+         zone (java-time/zone-id "America/Los_Angeles")
          criteria (if (string? criteria)
                     (into #{} (map keyword (clojure.string/split criteria #"-")))
                     criteria)
@@ -58,7 +62,9 @@
                 (list 
                  [:h3 date-heading] 
                  (map 
-                  #(vec [:p (post->link % criteria) (draft-warning %)]) posts)))
+                  #(vec [:p 
+                         (post->link % criteria from-post-id) 
+                         (draft-warning %)]) posts)))
               posts-by-day))
         :up-link (view-common/up-link "/"))))))
 

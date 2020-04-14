@@ -53,15 +53,15 @@
     (GET (routing/post-by-id ":id") [id]
          (println "route by id:" id)
          (post-view/post-view sess {:id id}))
-    (GET (routing/posts-by-date-path ":criteria") [criteria]
+    (GET (routing/posts-by-date-path ":criteria") [criteria & query-params]
          (println "route to posts matching criteria " criteria)
-         (posts-view/posts-by-date-view sess criteria))
-    (GET (routing/posts-by-date-path) []
+         (posts-view/posts-by-date-view sess query-params criteria))
+    (GET (routing/posts-by-date-path) [& query-params]
          (println "route to all posts")
-         (posts-view/posts-by-date-view sess))
-    (GET (routing/posts-by-date-path "") []
+         (posts-view/posts-by-date-view sess query-params))
+    (GET (routing/posts-by-date-path "") [& query-params]
          (println "route to all posts")
-         (posts-view/posts-by-date-view sess))
+         (posts-view/posts-by-date-view sess query-params))
     (GET "/favicon.ico" []
          (println "it's that favicon")
          {:status 200
