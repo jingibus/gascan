@@ -12,7 +12,8 @@
             [gascan.template :as tmpl]
             [org.bovinegenius.exploding-fish :as uri]
             [org.bovinegenius.exploding-fish.query-string :as query-string]
-            [gascan.posts-view :as posts-view])
+            [gascan.posts-view :as posts-view]
+            [gascan.view-common :as view-common])
   (:use [gascan.debug]))
 
 (defn link-entry
@@ -229,7 +230,7 @@
         ]
     (when rendered
       (tmpl/enframe (list title title-warning) rendered
-                    :up-link [:a {:href up-target} "-Up-^"]))))
+                    :up-link (view-common/up-link up-target)))))
 
 (comment
   (do

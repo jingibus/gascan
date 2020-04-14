@@ -4,6 +4,7 @@
             [gascan.posts :as posts]
             [gascan.session :as session]
             [gascan.template :as template]
+            [gascan.view-common :as view-common]
             [hiccup.core :as hc])
   (:use gascan.debug))
 
@@ -66,7 +67,8 @@
                  [:h3 date-heading] 
                  (map 
                   #(vec [:p (post->link % criteria) (draft-warning %)]) posts)))
-              posts-by-day)))))))
+              posts-by-day))
+        :up-link (view-common/up-link "/"))))))
 
 (comment
   (def some-post (first (posts/posts)))
