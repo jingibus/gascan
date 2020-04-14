@@ -2,7 +2,7 @@
   (:require [hiccup.core :as hc]))
 
 (defn enframe
-  [title body]
+  [title body & {:keys [up-link]}]
   (hc/html
    [:html
     [:head
@@ -12,4 +12,6 @@
     [:body 
      [:div {:style "padding: 100px; margin 50px; background-color: #dddddd;"}
       [:h1 title]
-      body]]]))
+      body
+      (when up-link 
+        [:div {:style "justify-content:center; display: flex"} up-link])]]]))

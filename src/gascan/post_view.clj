@@ -11,7 +11,8 @@
             [gascan.session :as session]
             [gascan.template :as tmpl]
             [org.bovinegenius.exploding-fish :as uri]
-            [org.bovinegenius.exploding-fish.query-string :as query-string])
+            [org.bovinegenius.exploding-fish.query-string :as query-string]
+            [gascan.posts-view :as posts-view])
   (:use [gascan.debug]))
 
 (defn link-entry
@@ -217,13 +218,18 @@
          status            :status
          :as post} 
         (posts/find-post locator)
+        up-criteria (set 
+                     (map keyword 
+                          (some-> query-params :up (string/split #","))))
         visible? (posts/visible-to-session? sess post) 
         rendered (and visible? (render-markdown path))
         title-warning (when-not (#{:published} status) 
                         [:font {:color "red"} " (DRAFT)"])
+        up-target (posts-view/posts-by-date-path up-criteria)
         ]
     (when rendered
-      (tmpl/enframe (list title title-warning) rendered))))
+      (tmpl/enframe (list title title-warning) rendered
+                    :up-link [:a {:href up-target} "-Up-^"]))))
 
 (comment
   (do
