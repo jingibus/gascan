@@ -42,8 +42,8 @@
             </Ebook>
         </Options>
         <MetaData>
-            <ProjectTitle>PDF Link Test</ProjectTitle>
-            <ProjectAbbreviatedTitle>PDF Link Test</ProjectAbbreviatedTitle>
+            <ProjectTitle>Basic Test</ProjectTitle>
+            <ProjectAbbreviatedTitle>Basic Test</ProjectAbbreviatedTitle>
             <Authors>
                 <Author FileAs="Phillips, Bill" Role="aut">Bill Phillips</Author>
             </Authors>
