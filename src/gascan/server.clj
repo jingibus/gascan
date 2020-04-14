@@ -6,6 +6,7 @@
             [gascan.routing :as routing]
             [gascan.session :as session]
             [gascan.template :as tmpl]
+            [gascan.what-it-is-view :as what-it-is-view]
             [hiccup.core :as hc]
             [ring.adapter.jetty :as jty]
             [gascan.browser :as browser]
@@ -62,6 +63,9 @@
     (GET (routing/posts-by-date-path "") [& query-params]
          (println "route to all posts")
          (posts-view/posts-by-date-view sess query-params))
+    (GET (routing/what-it-is-path) [& query-params]
+         (println "route to what it is")
+         (what-it-is-view/view sess query-params))
     (GET "/favicon.ico" []
          (println "it's that favicon")
          {:status 200

@@ -49,6 +49,14 @@
      
      (uri/map->string (assoc uri :query query-params)))))
 
+(defn posts-query-params->map
+  [{:keys [from-post-id]}]
+  {:from-post-id (some-> from-post-id UUID/fromString)})
+
 (defn post-query-params->map
   [{:keys [up]}]
   {:up (set (map keyword (some-> up (string/split #","))))})
+
+(defn what-it-is-path
+  []
+  "/what-it-is.html")

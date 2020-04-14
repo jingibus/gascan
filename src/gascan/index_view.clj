@@ -42,7 +42,14 @@
                       "index"] "]-"])))]
     (template/enframe
      "The Gas Can"
-     (filter identity (map post-filter-para post-filters)))))
+     (list
+      (filter identity (map post-filter-para post-filters))
+      [:div {:style "justify-content:flex-end; display: flex"}
+       [:p
+        "..."
+        [:a {:href (routing/what-it-is-path)}
+         "what is it?"]]])
+     )))
 
 (comment
   (gascan.browser/look-at "/")
