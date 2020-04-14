@@ -17,8 +17,8 @@
     (java-time/format sorting-formatter as-date)))
 
 (defn post->link
-  [post]
-  (vec [:a {:href (post-view/post->title-path post)}
+  [post criteria]
+  (vec [:a {:href (post-view/post->title-path post criteria)}
         (:title post)]))
 
 (defn posts-by-date-path
@@ -65,7 +65,7 @@
                 (list 
                  [:h3 date-heading] 
                  (map 
-                  #(vec [:p (post->link %) (draft-warning %)]) posts)))
+                  #(vec [:p (post->link % criteria) (draft-warning %)]) posts)))
               posts-by-day)))))))
 
 (comment

@@ -1,5 +1,7 @@
 (ns gascan.post-view
   (:require [clojure.string :as string]
+            [clojure.string :as string]
+            [clojure.zip :as z]
             [gascan.ast :as ast]
             [gascan.ast :as ast]
             [gascan.intern :as intern]
@@ -8,8 +10,8 @@
             [gascan.posts :as posts]
             [gascan.session :as session]
             [gascan.template :as tmpl]
-            [clojure.string :as string]
-            [clojure.zip :as z])
+            [org.bovinegenius.exploding-fish :as uri]
+            [org.bovinegenius.exploding-fish.query-string :as query-string])
   (:use [gascan.debug]))
 
 (defn link-entry
@@ -168,8 +170,17 @@
   )
 
 (defn post->title-path
-  [post]
-  (str "/posts/title/" (posts/to-kebab-case (:title post)) "/"))
+  ([post]
+   (post->title-path post nil))
+  ([post parent-criteria]
+   (let [uri (uri/uri 
+              (str "/posts/title/" (posts/to-kebab-case (:title post)) "/"))
+         joined-criteria (some->> parent-criteria (map name) (string/join ","))
+         query-params (when joined-criteria 
+                        (query-string/alist->query-string 
+                         [["up" joined-criteria]]))]
+     
+     (uri/map->string (assoc uri :query query-params)))))
 
 (defn post-by-title-path
   [title]
@@ -198,7 +209,7 @@
                gascan.intern/readable-file))))
 
 (defn post-view
-  [sess {:keys [id title] :as locator}]
+  [sess locator & {:keys [query-params]}]
   (let [
         {title             :title
          timestamp         :timestamp
@@ -237,8 +248,9 @@
   (posts/find-post {:title "blog-project"})
   (flatten (seq) {1 2})
   (posts/posts)
-  (post->title-path (first (posts/posts)))
+  (post->title-path (first (posts/posts)) #{:meta :technical})
   (update-in {:title "blog-project"} [:id] identity)
   (gascan.browser/look-at (post->title-path (first (posts/posts))))
   (gascan.browser/look-at (post->title-path (posts/find-post {:title test-case-title})))
+  
   )

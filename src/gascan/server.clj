@@ -7,7 +7,8 @@
             [gascan.template :as tmpl]
             [hiccup.core :as hc]
             [ring.adapter.jetty :as jty]
-            [gascan.browser :as browser])
+            [gascan.browser :as browser]
+            [compojure.handler :as comp-hand])
   (:use compojure.core gascan.debug))
 
 (def content-not-found-page
@@ -35,40 +36,41 @@
 ;; Compojure routing
 (defn all-routes
   [sess]
-  (routes
-   (GET "/:path{|index.htm|index.html}" [path]
-        (index-view/index-view sess))
-   (GET (post-view/post-resources-by-title-path ":title" ":resname") [title resname]
-        (println "route resource by title: " title " resname: " resname)
-        (post-view/post-resources-view sess {:title title} resname))
-   (GET (post-view/post-by-title-path ":title") [title]
-        (println "route by title:" title)
-        (post-view/post-view sess {:title title}))
-   (GET (post-view/post-resources-by-id ":id" ":res-name") [id res-name]
-        (println "route resource by id: " id " res-name: " res-name)
-        (post-view/post-resources-view sess {:id id} res-name))
-   (GET (post-view/post-by-id ":id") [id]
-        (println "route by id:" id)
-        (post-view/post-view sess {:id id}))
-   (GET (posts-view/posts-by-date-path ":criteria") [criteria]
-        (println "route to posts matching criteria " criteria)
-        (posts-view/posts-by-date-view sess criteria))
-   (GET (posts-view/posts-by-date-path) []
-        (println "route to all posts")
-        (posts-view/posts-by-date-view sess))
-   (GET (posts-view/posts-by-date-path "") []
-        (println "route to all posts")
-        (posts-view/posts-by-date-view sess))
-   (GET "/favicon.ico" []
-        (println "it's that favicon")
-        {:status 200
-         :headers {"Content-Type" "image/png"}
-         :body (gascan.intern/readable-file "favicon.png")})
-   (GET [":unknown-route", :unknown-route #".*"] [unknown-route]
-        (println "Unknown path:" unknown-route)
-        {:status 404
-         :headers {"Content-Type" "text/html"}
-         :body content-not-found-page})))
+  (comp-hand/api
+   (routes
+    (GET "/:path{|index.htm|index.html}" [path]
+         (index-view/index-view sess))
+    (GET (post-view/post-resources-by-title-path ":title" ":resname") [title resname]
+         (println "route resource by title: " title " resname: " resname)
+         (post-view/post-resources-view sess {:title title} resname))
+    (GET (post-view/post-by-title-path ":title") [title & query-params]
+         (println "route by title:" title "params:" query-params)
+         (post-view/post-view sess {:title title} :query-params query-params))
+    (GET (post-view/post-resources-by-id ":id" ":res-name") [id res-name]
+         (println "route resource by id: " id " res-name: " res-name)
+         (post-view/post-resources-view sess {:id id} res-name))
+    (GET (post-view/post-by-id ":id") [id]
+         (println "route by id:" id)
+         (post-view/post-view sess {:id id}))
+    (GET (posts-view/posts-by-date-path ":criteria") [criteria]
+         (println "route to posts matching criteria " criteria)
+         (posts-view/posts-by-date-view sess criteria))
+    (GET (posts-view/posts-by-date-path) []
+         (println "route to all posts")
+         (posts-view/posts-by-date-view sess))
+    (GET (posts-view/posts-by-date-path "") []
+         (println "route to all posts")
+         (posts-view/posts-by-date-view sess))
+    (GET "/favicon.ico" []
+         (println "it's that favicon")
+         {:status 200
+          :headers {"Content-Type" "image/png"}
+          :body (gascan.intern/readable-file "favicon.png")})
+    (GET [":unknown-route", :unknown-route #".*"] [unknown-route]
+         (println "Unknown path:" unknown-route)
+         {:status 404
+          :headers {"Content-Type" "text/html"}
+          :body content-not-found-page}))))
 
 (defn render-template
   [inner-html]
