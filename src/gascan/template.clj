@@ -4,21 +4,25 @@
 (defn enframe
   [title body & {:keys [up-link]}]
   (let [main-bg-color "#dcc48d"
-        secondary-bg-color "#dcc000"
+        secondary-bg-color "#dca200"
+        secondary-bg-color-but-darker "#a07601"
         accent-color "#1a0aa2"
         top-banner-top-margin "10px"
         top-banner-height "50px"
         top-banner-bottom-margin "10px"
         left-accent-strip-left-margin "50px"
         left-accent-strip-width "10px"
-        left-accent-strip-right-margin "10px"
+        left-accent-strip-right-margin "20px"
         main-content-width "400px"
-        main-content-right-margin "50px"]
+        main-content-right-margin "50px"
+        main-content-bottom-padding "50px"]
     (hc/html
      [:html
       [:head
        [:link {:href "https://fonts.googleapis.com/css2?family=Domine&display=swap" :rel "stylesheet"}]
-       [:style "h1, h2, h3 { font-family: 'Domine', serif; }"]
+       [:style (str  "h1, h2, h3 { font-family: 'Domine', serif; } "
+                     "a:link { color: " secondary-bg-color-but-darker "; } "
+                     "a:visited { color: " accent-color "; } ")]
        [:title title]]
       [:body {:style (str "margin: 8px; display: flex; flex-direction: row; ")
               }
@@ -38,7 +42,8 @@
                            "margin-top: " top-banner-top-margin "; "
                            "background-color: " secondary-bg-color "; ")}]
         [:div {:style (str "padding-left: " left-accent-strip-right-margin "; "
-                           "padding-top: " top-banner-bottom-margin "; " )}
+                           "padding-top: 0px; "
+                           "padding-bottom: " main-content-bottom-padding "; ")}
          [:h1 title]
          body
          (when up-link 
