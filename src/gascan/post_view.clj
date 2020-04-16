@@ -75,6 +75,24 @@
             :else
             (recur (z/next loc))))))
 
+(defn apply-simple-text-replacements
+  [[tags scaffold-ast] f]
+  (loop [loc (z/vector-zip scaffold-ast)]
+    (cond (z/end? loc) [tags (z/root loc)]
+          ; Skip over any code blocks.
+          (instance? com.vladsch.flexmark.ast.Code (z/node loc))
+          (recur (ast/z-skip-subtree loc))
+          (instance? com.vladsch.flexmark.ast.Text (z/node loc))
+          (let [original (-> loc z/node .getChars str)
+                txformed (f original)]
+            (if (= original txformed)
+              (recur (z/next loc))
+              (do
+                (.setChars (z/node loc) (ast/char-sequence txformed))
+                (recur (z/next loc)))))
+          :else
+          (recur (z/next loc)))))
+
 (comment
   (->> (test-ast) 
        ast/scaffold->tagged-scaffold
@@ -103,15 +121,32 @@
   (->> (test-ast)
        ast/stringify
        clojure.pprint/pprint)
+  (->> (test-ast)
+       (ast/deep-map-vec type)
+       clojure.pprint/pprint)
+  (-> (test-ast)
+      (monitor-> "raw ast" ast/stringify)
+      ast/scaffold->tagged-scaffold
+      (apply-simple-text-replacements #(string/replace % #"---" "\u2014"))
+      ast/tagged-scaffold->scaffold
+      ast/stringify
+      clojure.pprint/pprint
+       )
 )
 (defn transform-ast
   [ast]
-  (-> ast 
-      ast/split-line-breaks
-      ast/scaffold->tagged-scaffold
-      extract-image-map
-      apply-image-map
-      ast/tagged-scaffold->scaffold))
+  (let [text-replacements 
+        (fn [s]
+          (-> s 
+              (string/replace #"---" "\u2014")
+              (string/replace #"--" "\u2013")))]
+    (-> ast 
+        ast/split-line-breaks
+        ast/scaffold->tagged-scaffold
+        extract-image-map
+        apply-image-map
+        (apply-simple-text-replacements text-replacements)
+        ast/tagged-scaffold->scaffold)))
 
 (defn render-markdown-to-html
   [relpath]
@@ -133,13 +168,19 @@
   (def image-test (first (filter #(= (:title %) "Image Test") (posts/fetch-posts))))
   (defn test-ast 
     []
-    (-> (posts/find-post {:title test-case-title})
-        :markdown-rel-path
-        intern/readable-file
-        slurp
-        (monitor-> "raw md:")
-        mm/parse-multimarkdown-str
-        ast/build-scaffold-ast))
+    (let [md-line-filter (monitor->> "md-line-filter" (or (resolve 'test-case-md-filter) identity))
+          filter-lines #(->> (string/split % #"\n")
+                             (filter md-line-filter) 
+                             (string/join "\n"))]
+      (-> (posts/find-post {:title test-case-title})
+          :markdown-rel-path
+          intern/readable-file
+          slurp
+          filter-lines
+          (monitor-> "raw md:")
+          mm/parse-multimarkdown-str
+          ast/build-scaffold-ast)))
+
   (defn find-node
     [pred ast]
     (loop [loc (z/vector-zip ast)]

@@ -142,6 +142,15 @@
     (restitch scaffold-ast)
     (node-value scaffold-ast)))
 
+(defn z-skip-subtree
+  "Fast-forward a zipper to skip the subtree at `loc`."
+  [loc]
+  (cond
+    (z/end? loc) loc
+    (some? (z/right loc)) (z/right loc)
+    (some? (z/up loc)) (recur (z/up loc))
+    :else (assoc loc 1 :end)))
+
 (defn char-sequence
   [s]
   (CharSubSequence/of s))
