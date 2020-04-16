@@ -12,8 +12,7 @@
                                 stringify]]
             [gascan.multimarkdown :refer [parse-multimarkdown-flat 
                                           flexmark-options 
-                                          make-options
-                                          render-multimarkdown]]
+                                          make-options]]
             [gascan.post-view :as post-view]
             [gascan.server :as svr]
             [gascan.browser :as browser]
