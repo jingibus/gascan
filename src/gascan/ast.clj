@@ -120,7 +120,8 @@
       (cond (z/end? loc)
             ;; If we've finished walking the tree, yield the edited tree
             (z/root loc)
-            ;; If we're inside a blockquote, format normally - this helps for lyrics
+            ;; If we're inside a blockquote, instead sub in <br> for soft
+            ;; breaks
             (is-block-quote? loc)
             (recur (-> loc 
                        (z/replace (replace-soft-breaks-br (z/node loc)))
