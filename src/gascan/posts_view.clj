@@ -52,8 +52,14 @@
                            (sort-by #(- (:timestamp %)))
                            (partition-by key-fn)
                            (map (juxt #(key-fn (first %)) identity)))
-         draft-warning #(when-not (#{:published} (:status %)) 
-                          [:font {:color "red"} " (DRAFT)"])]
+         status-warning #(let [status (:status %)]
+                           (cond (#{:draft} status) 
+                                 [:font {:color "red"} " (DRAFT)"]
+                                 (#{:soft-published} status)
+                                 [:font {:color "orange"} " (SOFT)"]
+                                 (not (#{:published} status))
+                                 [:font {:color "purple"} 
+                                  " (? " (name status) " ?)"]))]
      (when (seq posts-by-day)
        (template/enframe
         "The Gas Can"
@@ -64,7 +70,7 @@
                  (map 
                   #(vec [:p 
                          (post->link % criteria from-post-id) 
-                         (draft-warning %)]) posts)))
+                         (status-warning %)]) posts)))
               posts-by-day))
         :up-link (view-common/up-link "/"))))))
 
