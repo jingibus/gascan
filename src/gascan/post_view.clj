@@ -233,9 +233,9 @@
          :as post} 
         (posts/find-post locator)
         {up-criteria :up} (routing/post-query-params->map query-params)
-        visible? (posts/visible-to-session? sess post) 
+        visible? (posts/soft-visible-to-session? sess post) 
         rendered (and visible? (render-markdown-to-html path))
-        title-warning (when-not (#{:published :soft-published} status) 
+        title-warning (when (#{:draft} status) 
                         [:font {:color "red"} " (DRAFT)"])
         up-target (routing/posts-by-date-from-post-id-path id up-criteria)
         ]
