@@ -3,8 +3,8 @@
   :markdown-rel-path "posts/2020/04/17/2240/Easter Lament.md",
   :extra-resources-rel ("posts/2020/04/17/2240/Easter Lament.mp3"),
   :id #uuid "2974a8bd-9282-42f2-bbe8-bf3042de7fbb",
-  :status :draft,
-  :filter #{},
+  :status :soft-published,
+  :filter #{:music :spiritual},
   :src-path "/Users/bphillips/Documents/Easter Lament.md"}
   {:title "Basic Test",
    :timestamp 1586899730533,
