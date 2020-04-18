@@ -285,7 +285,12 @@ done on the basis of kebab casing.
 (defn assoc-posts-check
   "Works like assoc-posts, but only yields the posts modified."
   [locator & xs]
-  (map #(apply assoc (cons % xs)) (find-posts locator)))
+  (let [updated-posts (map #(apply assoc (cons % xs)) (find-posts locator))
+        check-post (fn [post] (when-not (s/valid? post-spec/intern-post post)
+                                (println "Invalid post")
+                                (s/explain post-spec/intern-post post)))]
+    (doall (map check-post updated-posts))
+    updated-posts))
 
 (defn assoc-posts
   "For posts matching locator, applies the function to the given key value."
