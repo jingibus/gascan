@@ -3,13 +3,16 @@
   (:refer-clojure)
   (:require 
    [clojure.edn :as edn]
+   [clojure.java.io 
+    :as io
+    :refer [as-file 
+            file 
+            make-parents
+            copy
+            resource
+            reader]]
+   [clojure.pprint :as pprint]
    [clojure.reflect :refer [reflect]]
-   [clojure.java.io :refer [as-file 
-                            file 
-                            make-parents
-                            copy
-                            resource
-                            reader]]
    [clojure.string :as string])
   (:gen-class))
 
@@ -51,10 +54,17 @@
        (copy contents intern-fileobj)
        intern-rel-filepath))))
 
+(defn edn-repr
+  [structure]
+  (with-out-str
+    (binding [pprint/*print-right-margin* 80]
+      (pprint/with-pprint-dispatch pprint/code-dispatch 
+        (pprint/pprint structure)))))
+
 (defn intern-edn!
   [relpath structure]
   (let [abspath (intern-abs-filepath relpath)
-        edn-repr (prn-str structure)]
+        edn-repr (edn-repr structure)]
     (spit abspath edn-repr)))
 
 (defn read-edn

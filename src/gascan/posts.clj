@@ -3,7 +3,7 @@
    [clojure.spec.alpha :as s]
    [clojure.zip :as z]
    [gascan.ast :as ast]
-   [gascan.intern :refer [intern-edn! read-edn intern-file! readable-file]]
+   [gascan.intern :as intern :refer [read-edn intern-file! readable-file]]
    [gascan.multimarkdown :as mm :refer [parse-multimarkdown-flat]]
    [gascan.post-spec :as post-spec]
    [gascan.remote-posts :as remote]
@@ -39,7 +39,7 @@
 (defn put-posts!
   [posts]
   {:pre [(every? #(s/valid? post-spec/intern-post %) posts)]}
-  (intern-edn! post-metadata-edn posts)
+  (intern/intern-edn! post-metadata-edn posts)
   (reset-posts))
 
 (s/fdef put-posts!
