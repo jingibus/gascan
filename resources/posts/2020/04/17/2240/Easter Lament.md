@@ -27,6 +27,6 @@
 > I can't face it
 > I can't face it
 
-Written 4/17/2020 morning. I was trying to start my written meditation on one of those Easter Week post-crucifixion readings and I just couldn't deal. My practice is to seek actionable guidance in these meditations.
+Written 4/17/2020 morning. I was trying to start my written meditation on one of those Easter Week post-crucifixion readings and I just couldn't deal. My practice is to seek actionable guidance in these meditations; I was frustrated. So I wrote a song.
 
 [recording](Easter%20Lament.mp3)
