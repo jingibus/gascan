@@ -235,7 +235,7 @@
         {up-criteria :up} (routing/post-query-params->map query-params)
         visible? (posts/visible-to-session? sess post) 
         rendered (and visible? (render-markdown-to-html path))
-        title-warning (when-not (#{:published} status) 
+        title-warning (when-not (#{:published :soft-published} status) 
                         [:font {:color "red"} " (DRAFT)"])
         up-target (routing/posts-by-date-from-post-id-path id up-criteria)
         ]

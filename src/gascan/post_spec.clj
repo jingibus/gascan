@@ -56,7 +56,11 @@
         (catch Exception e false))))
 
 (s/def ::filter (s/every #{:meta :technical :clojure :spiritual :music}))
-(s/def ::status #{:draft :published})
+(s/def ::status #{
+                  :draft           ;; Drafts aren't visible at all publicly.
+                  :published       ;; Published are totally visible.
+                  :soft-published  ;; Soft published don't show up in indices.
+                  })
 (s/def ::id valid-uuid?)
 (s/def ::title string?)
 (s/def ::timestamp 
@@ -75,7 +79,8 @@
                    ::timestamp 
                    ::markdown-rel-path 
                    ::extra-resources-rel
-                   ::filter]
+                   ::filter
+                   ::status]
           :opt-un [::parsed-markdown])) 
 
 (s/def ::parsed-markdown flexmark-document?)
