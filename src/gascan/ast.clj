@@ -27,6 +27,19 @@
                              (f item))]
            (vec (cons mapped-item (deep-map-vec f items)))))))
 
+(defn char-sequence
+  [s]
+  (CharSubSequence/of s))
+
+(defn z-skip-subtree
+  "Fast-forward a zipper to skip the subtree at `loc`."
+  [loc]
+  (cond
+    (z/end? loc) loc
+    (some? (z/right loc)) (z/right loc)
+    (some? (z/up loc)) (recur (z/up loc))
+    :else (assoc loc 1 :end)))
+
 (defn stringify
   [scaffold-ast]
   (deep-map-vec str scaffold-ast))
@@ -60,7 +73,23 @@
 (defn split-line-breaks
   "Modifies scaffold so that all line breaks split into paragraphs"
   [scaffold-node]
-  (letfn [(is-line-break?
+  (letfn [(is-block-quote?
+            [node]
+            (some->> node z/down z/node (instance? com.vladsch.flexmark.ast.BlockQuote)))
+          (replace-soft-breaks-br
+            [node]
+            (loop [loc (z/vector-zip node)]
+              (cond (z/end? loc)
+                    (z/root loc)
+                    (some->> loc z/node (instance? com.vladsch.flexmark.ast.SoftLineBreak))
+                    (recur (-> loc 
+                               (z/replace
+                                (new com.vladsch.flexmark.ast.HtmlInline 
+                                     (char-sequence "<br>")))
+                               z/next))
+                    :else
+                    (recur (z/next loc)))))
+          (is-line-break?
             [node] 
             (or (instance? com.vladsch.flexmark.ast.SoftLineBreak node) 
                 (instance? com.vladsch.flexmark.ast.HardLineBreak node)))
@@ -91,6 +120,12 @@
       (cond (z/end? loc)
             ;; If we've finished walking the tree, yield the edited tree
             (z/root loc)
+            ;; If we're inside a blockquote, format normally - this helps for lyrics
+            (is-block-quote? loc)
+            (recur (-> loc 
+                       (z/replace (replace-soft-breaks-br (z/node loc)))
+                       (monitor-> "hmm")
+                       z/next))
             (is-line-break? (z/node loc))
             ;; If this node is a line break, then create a new paragraph node
             ;; with all its rightmost siblings, remove those rightmost siblings, 
@@ -141,19 +176,6 @@
                 )))]
     (restitch scaffold-ast)
     (node-value scaffold-ast)))
-
-(defn z-skip-subtree
-  "Fast-forward a zipper to skip the subtree at `loc`."
-  [loc]
-  (cond
-    (z/end? loc) loc
-    (some? (z/right loc)) (z/right loc)
-    (some? (z/up loc)) (recur (z/up loc))
-    :else (assoc loc 1 :end)))
-
-(defn char-sequence
-  [s]
-  (CharSubSequence/of s))
 
 (defn link
   [text url]
