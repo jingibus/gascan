@@ -93,6 +93,13 @@
           :else
           (recur (z/next loc)))))
 
+(defn add-inline-audio
+  [[tags scaffold-ast]]
+  (loop [loc (z/vector-zip scaffold-ast)]
+    (cond (z/end? loc) [tags (z/root loc)]
+          :else
+          (recur (z/next loc)))))
+
 (comment
   (->> (test-ast) 
        ast/scaffold->tagged-scaffold
