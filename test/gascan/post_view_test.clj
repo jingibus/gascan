@@ -33,21 +33,25 @@
           (is (= 2 (count (re-seq #"<br>" blockquoted-output)))))))
 
 
-    (let [mp3-input "
-Here's a [song](audio.mp3) that I wrote."
-          wav-input "
-[Here](audio.wav) it is in another format."]
-      (let [[mp3-output wav-output] (map #(rerender-with-transform 
-                                           %
-                                           add-inline-audio)
-                                         [mp3-input wav-input])]
+    (let [[mp3-input 
+           wav-input 
+           other-input
+           :as inputs] ["Here's a [song](audio.mp3) that I wrote."
+                        "[Here](audio.wav) it is in another format."
+                        "[Here](score.pdf) is another thing."]]
+      (let [[mp3-output wav-output other-output] 
+            (map #(rerender-with-transform % add-inline-audio)
+                 inputs)]
         (testing (str "mp3: \n" mp3-input "\n -> \n" mp3-output)
           (testing "Includes audio link"
             (is (re-find #"<audio controls>" mp3-output)))
           (testing "It's after the end of the link"
-            (is (re-find #"</a> *<audio" mp3-output))))
-        (testing wav-output
+            (is (re-find #"(?s)</a>.*<audio" mp3-output))))
+        (testing (str "wav: \n" wav-input "\n -> \n"  wav-output)
           (testing "Includes audio link"
             (is (re-find #"<audio controls>" wav-output)))
           (testing "It's after the end of the link"
-            (is (re-find #"</a> *<audio" wav-output))))))))
+            (is (re-find #"(?s)</a>.*<audio" wav-output))))
+        (testing (str "other: \n " other-input "\n -> \n" other-output)
+          (testing "Includes no link"
+            (is (not (re-find #"<audio controls>" other-output)))))))))

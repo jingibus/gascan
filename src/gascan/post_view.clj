@@ -95,24 +95,45 @@
 
 (defn add-inline-audio
   [[tags scaffold-ast]]
-  (loop [loc (z/vector-zip scaffold-ast)]
-    (cond (z/end? loc) [tags (z/root loc)]
-          :else
-          (recur (z/next loc)))))
+  (let [audio-link?
+        (fn [loc]
+          (let [possible-link (some->> loc z/down z/node)
+                is-audio-file? #(or (.endsWith % ".mp3") (.endsWith % ".wav"))]
+            (and (instance? com.vladsch.flexmark.ast.Link possible-link)
+                 (-> possible-link .getUrl .toString is-audio-file?))))
+        inline-audio-html
+        (fn [link-loc]
+          (let [url (-> link-loc z/down z/node .getUrl str
+                        (monitor-> "URL extracted:"))
+                audio-html (str "
+<audio controls>
+  <source src=\"" url "\" />
+</audio>")]
+            (->  (new com.vladsch.flexmark.ast.HtmlInline
+                      (ast/char-sequence audio-html))
+                 )))]
+    (loop [loc (z/vector-zip scaffold-ast)]
+      (cond (z/end? loc) [tags (z/root loc)]
+            (audio-link? loc)
+            (recur (-> loc 
+                       (z/insert-right (inline-audio-html loc))
+                       z/next))
+            :else
+            (recur (z/next loc))))))
 
 (comment
-  (->> (test-ast) 
+  (->> (subject-ast) 
        ast/scaffold->tagged-scaffold
        extract-image-map
        apply-image-map
        clojure.pprint/pprint)
-  (->> (test-ast) 
+  (->> (subject-ast) 
        ast/scaffold->tagged-scaffold
        extract-image-map
        first
        :image-map
        clojure.pprint/pprint)
-  (->> (test-ast) 
+  (->> (subject-ast) 
        ast/scaffold->tagged-scaffold
        extract-image-map
        first
@@ -121,24 +142,39 @@
        first
        ;show-methods
        clojure.pprint/pprint)
-  (->> (test-ast)
+  (->> (subject-ast)
        transform-ast
        ast/stringify
        clojure.pprint/pprint)
-  (->> (test-ast)
+  (->> (subject-ast)
        ast/stringify
        clojure.pprint/pprint)
-  (->> (test-ast)
+  (->> (subject-ast)
        (ast/deep-map-vec type)
        clojure.pprint/pprint)
-  (-> (test-ast)
+  (-> (subject-ast)
       (monitor-> "raw ast" ast/stringify)
       ast/scaffold->tagged-scaffold
       (apply-simple-text-replacements #(string/replace % #"---" "\u2014"))
       ast/tagged-scaffold->scaffold
       ast/stringify
-      clojure.pprint/pprint
+      clojure.pprint/pprint)
+  (-> (subject-ast)
+      (monitor-> "raw ast" ast/stringify)
+      ast/scaffold->tagged-scaffold
+      add-inline-audio
+      ast/tagged-scaffold->scaffold
+      ast/restitch-scaffold-ast
+      mm/render-html
        )
+  (-> (subject-ast)
+      (monitor-> "raw ast" ast/stringify)
+      ast/scaffold->tagged-scaffold
+      add-inline-audio
+      ast/tagged-scaffold->scaffold
+      ast/stringify
+      clojure.pprint/pprint
+)
 )
 (defn transform-ast
   [ast]
@@ -153,6 +189,7 @@
         extract-image-map
         apply-image-map
         (apply-simple-text-replacements text-replacements)
+        add-inline-audio
         ast/tagged-scaffold->scaffold)))
 
 (defn render-markdown-to-html
@@ -167,37 +204,41 @@
       (mm/render-html massaged-mm))))
 
 (comment
-  (defn def-test-case
-    [title]
-    (def test-case-title title))
-  (def-test-case "PDF Link Test")
+  (do
+    (defn def-subject-title
+      [title]
+      (def subject-title title))
 
-  (def image-test (first (filter #(= (:title %) "Image Test") (posts/fetch-posts))))
-  (defn test-ast 
-    []
-    (let [md-line-filter (monitor->> "md-line-filter" (or (resolve 'test-case-md-filter) identity))
-          filter-lines #(->> (string/split % #"\n")
-                             (filter md-line-filter) 
-                             (string/join "\n"))]
-      (-> (posts/find-post {:title test-case-title})
-          :markdown-rel-path
-          intern/readable-file
-          slurp
-          filter-lines
-          (monitor-> "raw md:")
-          mm/parse-multimarkdown-str
-          ast/build-scaffold-ast)))
+    (defn def-subject-from-post
+      [criteria]
+      (def subject
+        (-> (posts/find-post criteria)
+            :markdown-rel-path
+            intern/readable-file
+            slurp)))
 
-  (defn find-node
-    [pred ast]
-    (loop [loc (z/vector-zip ast)]
-      (cond (z/end? loc) nil
-            (pred (z/node loc)) (z/node loc)
-            :else (recur (z/next loc)))))
+    (defn subject-ast 
+      []
+      (let [md-line-filter (monitor->> "md-line-filter" (or (resolve 'test-case-md-filter) identity))
+            filter-lines #(->> (string/split % #"\n")
+                               (filter md-line-filter) 
+                               (string/join "\n"))]
+        (-> subject
+            filter-lines
+            (monitor-> "raw md:")
+            mm/parse-multimarkdown-str
+            ast/build-scaffold-ast)))
 
-  (some->  (find-node (partial instance? com.vladsch.flexmark.ast.LinkRef) (test-ast))
+    (defn find-node
+      [pred ast]
+      (loop [loc (z/vector-zip ast)]
+        (cond (z/end? loc) nil
+              (pred (z/node loc)) (z/node loc)
+              :else (recur (z/next loc))))))
+
+  (some->  (find-node (partial instance? com.vladsch.flexmark.ast.LinkRef) (subject-ast))
            .getReference)
-  (some->>  (find-node (partial instance? com.vladsch.flexmark.ast.LinkRef) (test-ast))
+  (some->>  (find-node (partial instance? com.vladsch.flexmark.ast.LinkRef) (subject-ast))
             .getClass
             .getMethods
             (sort-by #(.getName %))
@@ -205,16 +246,16 @@
             (map #(clojure.string/replace % #"com.vladsch.flexmark.(util.|)ast." ""))
             clojure.pprint/pprint)
 
-  (->> (test-ast)
+  (->> (subject-ast)
        (ast/deep-map-vec #(some-> % type .getName))
        clojure.pprint/pprint)
 
-  (->> (test-ast)
+  (->> (subject-ast)
        transform-ast
        (ast/deep-map-vec #(some-> % type .getName))
        clojure.pprint/pprint)
 
-  (->> (test-ast)
+  (->> (subject-ast)
        ast/stringify
        clojure.pprint/pprint)
   )
@@ -276,6 +317,6 @@
   (post->title-path (first (posts/posts)) #{:meta :technical})
   (update-in {:title "blog-project"} [:id] identity)
   (gascan.browser/look-at (post->title-path (first (posts/posts))))
-  (gascan.browser/look-at (post->title-path (posts/find-post {:title test-case-title})))
+  (gascan.browser/look-at (post->title-path (posts/find-post {:title subject-title})))
   
   )
