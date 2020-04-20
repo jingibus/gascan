@@ -13,7 +13,8 @@
             [org.bovinegenius.exploding-fish :as uri]
             [org.bovinegenius.exploding-fish.query-string :as query-string]
             [gascan.view-common :as view-common]
-            [gascan.routing :as routing])
+            [gascan.routing :as routing]
+            [hiccup.core :as hc])
   (:use [gascan.debug]))
 
 (defn link-entry
@@ -111,13 +112,13 @@
             ))
         new-link
         (fn [[url text]]
-          (let [audio-html (str "
-<p>" text ": <audio controls>
-  <source src=\"" url "\" />
-</audio></p>")]
+          (let [audio-html 
+                (hc/html [:p {:style "display: flex; align-items: center"}
+                          text ":&nbsp;&nbsp;&nbsp;"
+                          [:audio {:controls ""}
+                           [:source {:src url}]]])]
             (new com.vladsch.flexmark.ast.HtmlInline
-                 (ast/char-sequence audio-html))
-            ))]
+                 (ast/char-sequence audio-html))))]
     (loop [loc (z/vector-zip scaffold-para)
            links-by-url {}]
       (cond (z/end? loc)

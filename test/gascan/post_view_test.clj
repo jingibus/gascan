@@ -46,7 +46,7 @@
             (fn [name input output]
               (testing (str name ": \n" input "\n -> \n" output)
                 (testing "Includes audio link"
-                  (is (re-find #"<audio controls>" output)))
+                  (is (re-find #"<audio controls[^>]*>" output)))
                 (testing "It comes after a close para"
                   (is (re-find #"(?s)</a>.*</p>.*<audio" output)))))]
         (type-test "mp3" mp3-input mp3-output)
@@ -54,4 +54,4 @@
         
         (testing (str "other: \n " other-input "\n -> \n" other-output)
           (testing "Includes no link"
-            (is (not (re-find #"<audio controls>" other-output)))))))))
+            (is (not (re-find #"<audio controls[^>]*>" other-output)))))))))
