@@ -40,6 +40,21 @@
     (some? (z/up loc)) (recur (z/up loc))
     :else (assoc loc 1 :end)))
 
+(defn z-skip-up
+  [loc stop?]
+  (->> loc
+       (iterate z/up)
+       (filter stop?)
+       first))
+
+(defn z-insert-rights
+  [loc rights]
+  (loop [loc loc 
+         rights rights]
+    (if (empty? rights)
+      loc
+      (recur (z/insert-right loc (first rights)) (rest rights)))))
+
 (defn stringify
   [scaffold-ast]
   (deep-map-vec str scaffold-ast))
@@ -100,12 +115,6 @@
                 (if (while? (z/node loc))
                   (recur (z/remove loc))
                   loc)))
-          (find-loc
-            [loc stop?]
-            (->> loc
-                 (iterate z/up)
-                 (filter stop?)
-                 first))
           (show-node-and-right-siblings
             ;; For debugging.
             [node]
@@ -125,7 +134,6 @@
             (is-block-quote? loc)
             (recur (-> loc 
                        (z/replace (replace-soft-breaks-br (z/node loc)))
-                       (monitor-> "hmm")
                        z/next))
             (is-line-break? (z/node loc))
             ;; If this node is a line break, then create a new paragraph node
@@ -141,7 +149,7 @@
                              (remove-while #(not (= % (z/node loc))))
                              (monitorv-> "Removed right children of" show-node-and-right-siblings)
                              z/remove
-                             (find-loc #(= left-sibling (z/node %)))
+                             (z-skip-up #(= left-sibling (z/node %)))
                              z/up
                              (monitorv-> "And now we insert a node to the right here:" show-node-and-siblings)
                              (z/insert-right new-node))]

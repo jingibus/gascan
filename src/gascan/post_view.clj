@@ -93,31 +93,54 @@
           :else
           (recur (z/next loc)))))
 
-(defn add-inline-audio
-  [[tags scaffold-ast]]
+(defn- extract-audio-controls
+  [[tags scaffold-para]]
   (let [audio-link?
         (fn [loc]
           (let [possible-link (some->> loc z/down z/node)
                 is-audio-file? #(or (.endsWith % ".mp3") (.endsWith % ".wav"))]
             (and (instance? com.vladsch.flexmark.ast.Link possible-link)
                  (-> possible-link .getUrl .toString is-audio-file?))))
-        inline-audio-html
+        link-info
         (fn [link-loc]
-          (let [url (-> link-loc z/down z/node .getUrl str
-                        (monitor-> "URL extracted:"))
-                audio-html (str "
-<audio controls>
+          (let [link-node (-> link-loc z/down z/node)
+                url (-> link-node .getUrl str)
+                text (-> link-node .getText str)
+                ]
+            [url text]
+            ))
+        new-link
+        (fn [[url text]]
+          (let [audio-html (str "
+<p>" text ": <audio controls>
   <source src=\"" url "\" />
-</audio>")]
-            (->  (new com.vladsch.flexmark.ast.HtmlInline
-                      (ast/char-sequence audio-html))
-                 )))]
-    (loop [loc (z/vector-zip scaffold-ast)]
-      (cond (z/end? loc) [tags (z/root loc)]
+</audio></p>")]
+            (new com.vladsch.flexmark.ast.HtmlInline
+                 (ast/char-sequence audio-html))
+            ))]
+    (loop [loc (z/vector-zip scaffold-para)
+           links-by-url {}]
+      (cond (z/end? loc)
+            [(assoc tags :audio-controls (map new-link links-by-url)) (z/root loc)]
             (audio-link? loc)
-            (recur (-> loc 
-                       (z/insert-right (inline-audio-html loc))
-                       z/next))
+            (recur (z/next loc)
+                   (apply (partial assoc links-by-url) 
+                          (link-info loc)))
+            :else
+            (recur (z/next loc)
+                   links-by-url)))))
+
+(defn add-inline-audio
+  [[tags scaffold-ast]]
+  (let [para? #(instance? com.vladsch.flexmark.ast.Paragraph %)
+                ]
+    (loop [loc (z/vector-zip scaffold-ast)]
+      (cond (z/end? loc) 
+            [tags (z/root loc)]
+            (para? (some-> loc z/down z/node))
+            (let [[{audio-controls :audio-controls} scaffold-para]
+                  (extract-audio-controls [{} (z/node loc)])]
+              (recur (z/next (ast/z-insert-rights loc audio-controls))))
             :else
             (recur (z/next loc))))))
 
@@ -316,6 +339,7 @@
   (posts/posts)
   (post->title-path (first (posts/posts)) #{:meta :technical})
   (update-in {:title "blog-project"} [:id] identity)
+  (gascan.browser/look-at "/")
   (gascan.browser/look-at (post->title-path (first (posts/posts))))
   (gascan.browser/look-at (post->title-path (posts/find-post {:title subject-title})))
   
