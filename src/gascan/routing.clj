@@ -58,5 +58,14 @@
   {:up (set (map keyword (some-> up (string/split #","))))})
 
 (defn what-it-is-path
-  []
-  "/what-it-is.html")
+  ([]
+   "/what-it-is")
+  ([which-what]
+   (-> (uri/uri "/what-it-is")
+       (assoc :query (query-string/alist->query-string 
+                      [["which-what" which-what]]))
+       uri/map->string)))
+
+(defn what-it-is-query-params->map
+  [{:keys [which-what]}]
+  {:which-what (keyword which-what)})

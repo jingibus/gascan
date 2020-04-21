@@ -1,12 +1,13 @@
 (ns gascan.what-it-is-view
   (:require [hiccup.core :as hc]
+            [gascan.debug :refer :all]
             [gascan.template :as tmpl]
-            [gascan.view-common :as view-common]))
+            [gascan.view-common :as view-common]
+            [gascan.routing :as routing]
+            [clojure.string :as string]))
 
-(defn view
-  [sess query-params]
-  (tmpl/enframe 
-   "What It Is"
+(def whats-it-ises
+  {:reactionary
    (hc/html
     [:p
      "The Gas Can is a reactionary web site built by Bill Phillips as a place to publish things he makes."]
@@ -57,4 +58,62 @@
     [:h3 "\"What sort of things do you make, anyway?\""]
     [:p
      "Empirically speaking, I seem to make little blog posts about programming and life, and I write music. "])
-   :up-link (view-common/up-link "/")))
+   :art-project
+   (hc/html
+    [:p
+     "The Gas Can is an ongoing art project by programmer, musician, writer, doctor, nuclear physicist, and theoretical philosopher Bill Phillips. "
+     "By creating this place and working within it, he seeks to answer the questions that have long plagued him: "
+     [:ul
+      [:li "What purpose should each day serve? "]
+      [:li "What is the proper relation between God and man?"]
+      [:li "What laws govern the popularity of music in high society?"]
+      [:li "In low society?"]
+      [:li "What should be private? What should be public?"]
+      [:li "How can we best address the Great Problems of the day?"]
+      [:li "Is there a God? Why? Or why not?"]
+      [:li "What kind of web site is required to solve the economic problem of connecting information producers with information consumers?"]
+      ]]
+    [:p
+     "Eager grant writers are invited to reach out to him on LinkedIn regarding paid residency opportunities. "
+     "Interpreters of his work are invited to contemplate it without any further explanation."])
+})
+
+(defn meta-what-it-is
+  []
+  (let [whats-it-is (->> whats-it-ises
+                         keys
+                         (map name)
+                         (map #(str "\"" % "\""))
+                         (string/join ", "))]
+    (hc/html
+     [:html
+      [:head
+       [:script {:type "text/javascript"}
+        (str "
+function nav() {
+  whats = [ " whats-it-is " ]
+  what = whats[Math.floor(Math.random() * whats.length)];
+  window.location.href = \"/what-it-is?which-what=\" + what;
+}
+
+window.onload = nav;
+")]]
+      [:body
+]])))
+
+(defn view
+  [sess query-params]
+  (let [{which-what :which-what} 
+        (routing/what-it-is-query-params->map query-params)
+        the-what (get whats-it-ises which-what)]
+    (pprint-symbols which-what)
+    (cond (not which-what)
+          (meta-what-it-is)
+          the-what
+          (tmpl/enframe 
+           "What It Is"
+           the-what
+           :up-link (view-common/up-link "/"))
+          :else
+          nil))
+  )
