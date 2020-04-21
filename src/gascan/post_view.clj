@@ -108,7 +108,7 @@
     (new com.vladsch.flexmark.ast.HtmlInline
          (ast/char-sequence audio-html))))
 
-(defn- extract-audio-controls-para
+(defn- extract-audio-links-para
   [[tags scaffold-para]]
   (let [audio-link?
         (fn [loc]
@@ -122,12 +122,13 @@
                 url (-> link-node .getUrl str)
                 text (-> link-node .getText str)
                 ]
-            {:url url :text text}))]
-    (loop [loc (z/vector-zip scaffold-para)
+            {:url url :text text}))
+        loc (z/vector-zip scaffold-para)
+        source-para (-> loc z/down z/node)]
+    (loop [loc loc
            link-infos []]
       (cond (z/end? loc)
-            [(assoc tags :audio-controls 
-                    (map link-info->htmlinline link-infos)) 
+            [(assoc-in tags [:audio-links source-para] link-infos)
              (z/root loc)]
             (audio-link? loc)
             (recur (z/next loc) (conj link-infos (link-info loc)))
@@ -135,45 +136,49 @@
             (recur (z/next loc)
                    link-infos)))))
 
-
-
-(defn- convert-all-audio-links-to-html
-  [[tags scaffold-para]]
-  (let [audio-controls
-        (->> tags
-             :audio-links
-             (map val)
-             (mapcat (map ))
-             )]))
-
-(defn extract-audio-controls
+(defn- all-audio-controls
   [[tags scaffold-ast]]
-  "Adds an :audio-controls key that maps from paragraphs to audio controls."
+  (->> tags
+       :audio-links
+       (map val)
+       (mapcat link-info->htmlinline)))
+
+(defn extract-audio-links
+  [[tags scaffold-ast]]
+  "Adds an :audio-links key that maps from paragraphs to audio controls."
   (let [para? #(instance? com.vladsch.flexmark.ast.Paragraph %)]
-    (loop [loc (z/vector-zip scaffold-ast)
-           audio-controls]
-      (cond (z/end? loc) 
-            [(assoc tags :audio-controls audio-controls) (z/root loc)]
-            (para? (some-> loc z/down z/node))
-            (let [[{audio-controls :audio-controls} scaffold-para]
-                  (extract-audio-controls-para [{} (z/node loc)])]
-              (recur (z/next (ast/z-insert-rights loc audio-controls))))
-            :else
-            (recur (z/next loc))))))
-
-(defn add-inline-audio
-  [[tags scaffold-ast]]
-  (let [para? #(instance? com.vladsch.flexmark.ast.Paragraph %)
-                ]
-    (loop [loc (z/vector-zip scaffold-ast)]
+    (loop [tags tags
+           loc (z/vector-zip scaffold-ast)]
       (cond (z/end? loc) 
             [tags (z/root loc)]
             (para? (some-> loc z/down z/node))
-            (let [[{audio-controls :audio-controls} scaffold-para]
-                  (extract-audio-controls-para [{} (z/node loc)])]
-              (recur (z/next (ast/z-insert-rights loc audio-controls))))
+            (let [[tags _]
+                  (extract-audio-links-para [tags (z/node loc)])]
+              (recur tags (z/next loc)))
             :else
-            (recur (z/next loc))))))
+            (recur tags (z/next loc))))))
+
+(defn apply-audio-links
+  [[tags scaffold-ast]]
+  (let [audio-links (:audio-links tags)
+        links-for-para-branch
+        (fn [loc]
+          (get audio-links (some-> loc z/down z/node)))]
+    (if-not (seq audio-links)
+      [tags scaffold-ast]
+      (loop [loc (z/vector-zip scaffold-ast)]
+        (cond (z/end? loc)
+              [tags (z/root loc)]
+              (links-for-para-branch loc)
+              (let [audio-controls
+                    (map link-info->htmlinline 
+                         (links-for-para-branch loc))]
+                (recur (-> loc 
+                           (ast/z-insert-rights audio-controls)
+                           z/next)))
+              :else
+              (recur (z/next loc)))
+        ))))
 
 (comment
   (->> (subject-ast) 
@@ -216,7 +221,6 @@
   (-> (subject-ast)
       (monitor-> "raw ast" ast/stringify)
       ast/scaffold->tagged-scaffold
-      add-inline-audio
       ast/tagged-scaffold->scaffold
       ast/restitch-scaffold-ast
       mm/render-html
@@ -224,7 +228,6 @@
   (-> (subject-ast)
       (monitor-> "raw ast" ast/stringify)
       ast/scaffold->tagged-scaffold
-      add-inline-audio
       ast/tagged-scaffold->scaffold
       ast/stringify
       clojure.pprint/pprint)
@@ -240,9 +243,10 @@
         ast/split-line-breaks
         ast/scaffold->tagged-scaffold
         extract-image-map
+        extract-audio-links
         apply-image-map
         (apply-simple-text-replacements text-replacements)
-        add-inline-audio
+        apply-audio-links
         ast/tagged-scaffold->scaffold)))
 
 (defn render-markdown-to-html

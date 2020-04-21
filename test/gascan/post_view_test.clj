@@ -45,7 +45,8 @@
 
 [Here is the song](song.mp3)"
                         "I have written a song. [Here is the song](song.mp3)."]]
-      (let [[mp3-output wav-output other-output standalone-line-output
+      (let [add-inline-audio (comp apply-audio-links extract-audio-links)
+            [mp3-output wav-output other-output standalone-line-output
              terminal-line-output] 
             (map #(rerender-with-transform % add-inline-audio)
                  inputs)
