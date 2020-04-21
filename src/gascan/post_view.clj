@@ -113,8 +113,12 @@
         new-link
         (fn [[url text]]
           (let [audio-html 
-                (hc/html [:p {:style "display: flex; align-items: center"}
-                          text ":&nbsp;&nbsp;&nbsp;"
+                (hc/html [:p {:style (str "display: flex; " 
+                                          "align-items: center; "
+                                          "flex-wrap: wrap; "
+                                          "margin: 10px")}
+                          [:p {:style "margin: 10px"}
+                           text ":"] ;":&nbsp;&nbsp;&nbsp;"
                           [:audio {:controls ""}
                            [:source {:src url}]]])]
             (new com.vladsch.flexmark.ast.HtmlInline
