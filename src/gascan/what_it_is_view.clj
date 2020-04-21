@@ -76,6 +76,46 @@
     [:p
      "Eager grant writers are invited to reach out to him on LinkedIn regarding paid residency opportunities. "
      "Interpreters of his work are invited to contemplate it without any further explanation."])
+   
+   :goals
+   (hc/html
+    [:p
+     "The Gas Can is a web site I built because I wanted a place to publish things. "
+     "Well, that's how it started, anyway..."]
+    [:p
+     "As I've gotten into the project more, I've found that there's a lot of fun to be had from a programming point of view. "
+     "So some of the things you'll see here will just be programming fun. "
+     "I'm not a web developer by trade, so it feels nice to build something that I'm not thinking of as a business card. "]
+    [:p
+     "But other things I'll publish here will be writing, or music, or who knows what. "
+     "Maybe that writing will be professionally relevant. "
+     "Maybe it will be personal. "
+     "Maybe I'll get bored and won't publish anything at all. "]
+    [:p
+     "Whatever happens, it will be something that I made from start to finish. "
+     "And whenever you check it out, it will be here. "
+     "I won't make it any easier or harder for anyone. "
+     "There will be no likes, no shares, no comments, no moderation. "]
+    [:p
+     "This is my cassette tape. "
+     "And if you don't listen to music on tapes anymore, well that's kind of the idea."]
+    [:i
+     [:p {:style "text-align: right"}
+      (interpose [:br] ["Bill Phillips"
+                        "looking out over the Fillmore"
+                        "nighttime"
+                        "San Francisco"
+                        "4/20/2020"])
+      ]])
+
+   :technical
+   (hc/html
+    [:p
+     "The Gas Can is a Clojure publishing platform built and used by Bill Phillips. "
+     "It was originally designed around publishing content written in Scrivener and exported to MultiMarkdown."]
+    [:p
+     "You can find the source code to The Gas Can at " [:a {:href "https://github.com/jingibus/gascan"} "GitHub"] "."])
+
 })
 
 (defn meta-what-it-is
@@ -112,7 +152,11 @@ window.onload = nav;
           the-what
           (tmpl/enframe 
            "What It Is"
-           the-what
+           (hc/html
+            [:img {:src "/images/what-it-is-header.jpg"
+                   :style "width: 100%; height: auto"}]
+            [:div {:style "height: 10px"}]
+            the-what)
            :up-link (view-common/up-link "/"))
           :else
           nil))
