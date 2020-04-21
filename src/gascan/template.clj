@@ -19,6 +19,9 @@
     (hc/html
      [:html
       [:head
+       [:meta {:name "viewport"
+               :content "width=device-width, initial-scale=1"}]
+
        [:link {:href "https://fonts.googleapis.com/css2?family=Domine&display=swap" :rel "stylesheet"}]
        [:style (str  "h1, h2, h3 { font-family: 'Domine', serif; } "
                      "a:link { color: " secondary-bg-color-but-darker "; } "
@@ -42,6 +45,7 @@
                            "margin-top: " top-banner-top-margin "; "
                            "background-color: " secondary-bg-color "; ")}]
         [:div {:style (str "padding-left: " left-accent-strip-right-margin "; "
+                           "padding-right: " left-accent-strip-right-margin "; "
                            "padding-top: 0px; "
                            "padding-bottom: " main-content-bottom-padding "; ")}
          [:h1 title]
