@@ -66,6 +66,9 @@
     (GET (routing/what-it-is-path) [& query-params]
          (println "route to what it is")
          (what-it-is-view/view sess query-params))
+    (GET "/images/:image-path" [image-path]
+         (println "gettin an image:" image-path)
+         (gascan.intern/readable-file (str "images/" image-path)))
     (GET "/favicon.ico" []
          (println "it's that favicon")
          {:status 200
