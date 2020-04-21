@@ -97,14 +97,16 @@
 (defn- link-info->htmlinline
   [{text :text url :url location :location}]
   (let [audio-html
-        (hc/html [:p {:style (str "display: flex; " 
-                                  "align-items: center; "
-                                  "flex-wrap: wrap; "
-                                  "margin: 10px")}
-                  [:p {:style "margin: 10px"}
-                   text ":"]
-                  [:audio {:controls ""}
-                   [:source {:src url}]]])]
+        (hc/html 
+         [:p {:style (str "display: flex; " 
+                          "align-items: center; "
+                          "flex-wrap: wrap; "
+                          "margin: 10px")}
+          (when-not (= location :end)
+            [:p {:style "margin: 10px"}
+             text ":"])
+          [:audio {:controls ""}
+           [:source {:src url}]]])]
     (new com.vladsch.flexmark.ast.HtmlInline
          (ast/char-sequence audio-html))))
 
