@@ -41,7 +41,9 @@
   [image-path width]
   (let [image-stream (gascan.intern/readable-file (str "images/" image-path))
         ext (second (re-find #"\.([^.]*)$" image-path))
-        width (and width (Integer/parseInt width))]
+        ;; If there's a width, parse it and limit it so that we aren't
+        ;; serving any ginormous images.
+        width (and width (min 500 (Integer/parseInt width)))]
     (pprint-symbols ext width image-path)
     (if width
       (-> image-stream
