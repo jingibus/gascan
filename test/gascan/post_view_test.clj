@@ -36,15 +36,22 @@
     (let [[mp3-input 
            wav-input 
            other-input
+           standalone-line-input
+           terminal-line-input
            :as inputs] ["Here's a [song](audio.mp3) that I wrote."
                         "[Here](audio.wav) it is in another format."
-                        "[Here](score.pdf) is another thing."]]
-      (let [[mp3-output wav-output other-output] 
+                        "[Here](score.pdf) is another thing."
+                        "I have written a song. Here is a link to it:
+
+[Here is the song](song.mp3)"
+                        "I have written a song. [Here is the song](song.mp3)."]]
+      (let [[mp3-output wav-output other-output standalone-line-output
+             terminal-line-output] 
             (map #(rerender-with-transform % add-inline-audio)
                  inputs)
             type-test
-            (fn [name input output]
-              (testing (str name ": \n" input "\n -> \n" output)
+            (fn [desc input output]
+              (testing (str desc ": \n" input "\n -> \n" output)
                 (testing "Includes audio link"
                   (is (re-find #"<audio controls[^>]*>" output)))
                 (testing "It comes after a close para"
@@ -54,4 +61,18 @@
         
         (testing (str "other: \n " other-input "\n -> \n" other-output)
           (testing "Includes no link"
-            (is (not (re-find #"<audio controls[^>]*>" other-output)))))))))
+            (is (not (re-find #"<audio controls[^>]*>" other-output)))))
+
+        (let [test-standalone
+              (fn [desc input output]
+                (testing (str desc ": \n " input
+                              "\n -> \n" output)
+                  (testing "Omits additional text"
+                    (is (= 1 (count (re-seq #"Here is the song" output)))))))]
+          (test-standalone "standalone" 
+                           standalone-line-input standalone-line-output)
+          (test-standalone "terminal line"
+                           terminal-line-input terminal-line-output)
+          )
+        
+        ))))
