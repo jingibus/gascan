@@ -55,6 +55,16 @@
       loc
       (recur (z/insert-right loc (first rights)) (rest rights)))))
 
+(defn re-find
+  [scaffold-ast pattern]
+  (let [re-find-node?
+        (fn [node]
+          (when (instance? com.vladsch.flexmark.util.ast.Node node)
+            (re-find pattern (or (some-> node .getChars str) ""))))]
+    (if (coll? scaffold-ast)
+      (some re-find-node? (flatten scaffold-ast))
+      (re-find-node? scaffold-ast))))
+
 (defn stringify
   [scaffold-ast]
   (deep-map-vec str scaffold-ast))

@@ -110,6 +110,12 @@
     (new com.vladsch.flexmark.ast.HtmlInline
          (ast/char-sequence audio-html))))
 
+(defn- location
+  [loc]
+  (let [punctuation-pattern #"[^. )\]!?]"]
+    (when-not (some #(ast/re-find % punctuation-pattern) (z/rights loc))
+      :end)))
+
 (defn- extract-audio-links-para
   [[tags scaffold-para]]
   (let [audio-link?
@@ -123,8 +129,8 @@
           (let [link-node (-> link-loc z/down z/node)
                 url (-> link-node .getUrl str)
                 text (-> link-node .getText str)
-                ]
-            {:url url :text text}))
+                location (location link-loc)]
+            {:url url :text text :location location}))
         loc (z/vector-zip scaffold-para)
         source-para (-> loc z/down z/node)]
     (loop [loc loc
@@ -230,9 +236,12 @@
   (-> (subject-ast)
       (monitor-> "raw ast" ast/stringify)
       ast/scaffold->tagged-scaffold
+      extract-audio-links
+      apply-audio-links
       ast/tagged-scaffold->scaffold
       ast/stringify
       clojure.pprint/pprint)
+
 )
 (defn transform-ast
   [ast]
