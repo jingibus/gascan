@@ -153,7 +153,7 @@ window.onload = nav;
           (tmpl/enframe 
            "What It Is"
            (hc/html
-            [:img {:src "/images/what-it-is-header.jpg"
+            [:img {:src "/images/what-it-is-header.jpg?width=500"
                    :style "width: 100%; height: auto"}]
             [:div {:style "height: 10px"}]
             the-what)

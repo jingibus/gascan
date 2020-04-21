@@ -8,6 +8,8 @@
             [gascan.template :as tmpl]
             [gascan.what-it-is-view :as what-it-is-view]
             [hiccup.core :as hc]
+            [image-resizer.core :as image-resizer]
+            [image-resizer.format :as image-format]
             [ring.adapter.jetty :as jty]
             [gascan.browser :as browser]
             [compojure.handler :as comp-hand])
@@ -34,6 +36,19 @@
     (post-view/view-post {:id "5000"})
     content-not-found-page
     (browser/look-at "posts/title/blog-project")))
+
+(defn serve-image
+  [image-path width]
+  (let [image-stream (gascan.intern/readable-file (str "images/" image-path))
+        ext (second (re-find #"\.([^.]*)$" image-path))
+        width (and width (Integer/parseInt width))]
+    (pprint-symbols ext width image-path)
+    (if width
+      (-> image-stream
+          (image-resizer/resize width width)
+          (monitor-> "image" #(str (.getHeight %) " " (.getWidth %)))
+          (image-format/as-stream ext))
+      image-stream)))
 
 ;; Compojure routing
 (defn all-routes
@@ -66,9 +81,9 @@
     (GET (routing/what-it-is-path) [& query-params]
          (println "route to what it is")
          (what-it-is-view/view sess query-params))
-    (GET "/images/:image-path" [image-path]
+    (GET "/images/:image-path" [image-path width & query-params]
          (println "gettin an image:" image-path)
-         (gascan.intern/readable-file (str "images/" image-path)))
+         (serve-image image-path width))
     (GET "/favicon.ico" []
          (println "it's that favicon")
          {:status 200

@@ -10,6 +10,7 @@
                  [environ "1.1.0"]
                  [etaoin "0.3.6"]
                  [hiccup "1.0.5"]
+                 [image-resizer "0.1.10"]
                  [org.bovinegenius/exploding-fish "0.3.6"]
                  [org.clojure/clojure "1.10.1"] 
                  [org.clojure/tools.trace "0.7.10"]
