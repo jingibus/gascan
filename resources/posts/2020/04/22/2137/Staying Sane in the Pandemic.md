@@ -1,14 +1,14 @@
 I live alone.
 I generally like living alone. I like being on the internet. I like working on projects by myself. Left to my own devices, I will sit in my eyrie looking out over the Fillmore and read, argue, type, play games, and so on until the end of time.
-I guess people call that kind of person an "introvert," and when I compare myself to other people I can't deny that's what I am. But being an introvert doesn't mean living in isolation, and I've found that finding happiness as an introvert can't be found alone.
+I guess people call that kind of person an "introvert," and when I compare myself to other people I can't deny that's what I am. But being an introvert doesn't mean living in isolation, and I've found that finding happiness as an introvert can't be done alone.
 Well, not totally alone. I do have a demanding cat. But a cat isn't a person.
 
 ### Sanity is found in groups
 
 If you're worried about going crazy in the lockdown (and you should be), the single most important thing to discard is the idea that sanity and happiness is something that can be found by yourself. Running is great. Waking up early is great. Having a pet is great, meditation is great, eating well is great, there are so many things you can that are great and that will help, but none of us are individuals in isolation.
-There's not a lot of analytical evidence that this is the case. Analytical techniques require focusing on and isolating elements of interest, so it's much easier to apply them to people as individuals. But there is some out there: Bruce Alexander's famous "Rat Park" studies and later followups showed that addiction more than a matter of dangerous substances. It's also a matter of social isolation. Simply put, rats are active, social creatures, and if they have an active place in rat society the phenomenon of addiction doesn't emerge.
+There's not a lot of analytical evidence that this is the case. Analytical techniques require focusing on and isolating elements of interest, so it's much easier to apply them to people as individuals. But there is some out there: Bruce Alexander's famous "Rat Park" studies and later followups showed that addiction is more than a matter of dangerous substances. It's also a matter of social isolation. Simply put, rats are active, social creatures, and if they have an active place in rat society the phenomenon of addiction doesn't emerge.
 In Alexander's later research and writing, he doesn't even restrict himself to drugs and alcohol. He makes the case that addiction is a more general phenomenon, and that most addictions are not the kinds of substance abuse we usually associate with the term. He claims that addiction is a result of fragmented societies.
-"Psychosocial integration." That's the positive term he uses, and that I like to use: being a person among people. It is an awkward term for a great truth:
+"Psychosocial integration." That's the positive term he uses for being well-integrated into your community, and that I use for a simple idea: being a person among people. It is an awkward term for a great truth:
 
 > No man is an island,  entire of itself; every man is a piece of the continent, a part of the main; if a clod be washed away by the sea, Europe is the less, as well as if a promontory were, as well as if a manor of thy friend's or of thine own were;  any man's death diminishes me, because I am involved in mankind, and therefore never send to know for whom the bell tolls; it tolls for thee.
 
@@ -18,11 +18,11 @@ So that's point one: if you live alone or alone-ish and you want to be happy in 
 ### Connection is a high bandwidth activity
 
 We aren't called social apes for nothing: most of our brainpower and development growing up and most of our literature and culture is concerned with our relationships with one another.
-And you can't fool us with technology, either. We know if our friend is there or if we're looking at a photograph. We can smell our lovers, and we can feel their hands. We know.
+And you can't fool us with technology, either. Our hearts know the difference between a photograph and a friend. We can smell our lovers, and we can feel their hands. We know. It sounds obvious enough, but how many of try to fool ourselves anyway?
 Facebook knows this, too, by the way. The most memorable talk I saw at my orientation at Facebook was Chris Cox's analysis of where the company's different businesses fit into the world of communication. It was an exegesis of the mission of social connection.
 A key point was that text doesn't make those connections as well as pictures, pictures not as well as videos, and videos not as well as VR. These all take up different amounts of our bandwidth --- our attention bandwidth, and our megabytes bandwidth. When you can't leave the house, that communication bandwidth is the most valuable asset you have for addressing social needs.
 What are you spending yours on? Are you spending it on text? Why? I'm guilty of it too, but it's a pennywise tactic. We're like people who've lost the ocean, and are trying to replace it by wetting our hands under a faucet. It's convenient. It's better than nothing. It doesn't work.
-So that's point two: bias towards high bandwidth modes of communication over low bandwidth as much as is feasible. Video calls beat phone calls beat text messages. VR? Sure, why not. If you can find a way to smell a loved one, do that, too. And if you can safely take a socially distant walk in the park with them, that's even better.
+So that's point two: bias towards high bandwidth modes of communication as much as is feasible. Video calls beat phone calls beat text messages. VR? Sure, why not. If you can find a way to smell a loved one, do that, too. And if you can safely take a socially distant walk in the park with them, that's even better.
 
 ### Make your own social network
 
@@ -44,3 +44,8 @@ The last thing I want to say is something I also said earlier: take it easy.
 I did not write this big long essay because I am worth emulating. The people worth emulating right now are the last people who would ever sit down and spend three hours on a Wednesday afternoon crafting an action item list explaining how important socializing is when you're isolating at home. They would just be doing it, because that's what they know to do instinctively.
 As I said at the start, I wrote this big long essay because I am bad at this. Much like paying the bills, I have tried not doing it and have found that the results do not meet my standard for joy. Hope springs eternal, though, and I keep trying to skip this hard work or forget about it. None of this is obvious to me; if it were, I wouldn't need to write about it.
 That's okay. I do not have to be perfect to get through the day. There will be tough days, but the tough days will come to an end. And if you don't believe that, you'll just have to wait and see to prove me wrong.
+
+### references
+
+Bruce Alexander --- The Globalization of Addiction: A Study in Poverty of the Spirit
+Jaron Lanier --- Ten Arguments for Deleting Your Social Media Accounts Right Now.  I don't think I'm parroting any of his ideas exactly here, but I wouldn't think the way I do today about social media if I hadn't read this book.
