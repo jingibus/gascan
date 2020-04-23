@@ -3,6 +3,7 @@
             [compojure.route :as route]
             [gascan.browser :as browser]
             [gascan.index-view :as index-view]
+            [gascan.images :as images]
             [gascan.post-view :as post-view]
             [gascan.posts-view :as posts-view]
             [gascan.routing :as routing]
@@ -99,25 +100,13 @@
            "And so I decided to create a blog."])
      ]
     ]))
+
 (comment
   (GET "/images/:image-path" [image-path width & query-params]
        (println "gettin an image:" image-path)
        (serve-image image-path width)))
 
-(defn serve-image
-  [image-path width]
-  (let [image-stream (gascan.intern/readable-file (str "images/" image-path))
-        ext (second (re-find #"\.([^.]*)$" image-path))
-        ;; If there's a width, parse it and limit it so that we aren't
-        ;; serving any ginormous images.
-        width (and width (min 500 (Integer/parseInt width)))]
-    (pprint-symbols ext width image-path)
-    (if width
-      (-> image-stream
-          (image-resizer/resize width width)
-          (monitor-> "image" #(str (.getHeight %) " " (.getWidth %)))
-          (image-format/as-stream ext))
-      image-stream)))
+
 
 (defn- translate-prefix-to-root
   [handler prefix]
@@ -125,16 +114,22 @@
     (let [translated-uri (if (.startsWith uri prefix)
                            (subs uri (count prefix))
                            uri)]
-      (pprint-symbols uri prefix translated-uri)
       (handler (assoc request :uri translated-uri)))))
 
+(defn- wrap-not-modified-if-public
+  [router sess]
+  (if (:public sess)
+    (middle-not-modified/wrap-not-modified router)
+    router))
+
 (defn middleware
-  [router]
+  [router session]
   (-> router
       (middle-resource/wrap-resource "images")
       (translate-prefix-to-root "/images")
       (middle-content-type/wrap-content-type)
-      (middle-not-modified/wrap-not-modified)))
+      (images/wrap-image-scale)
+      (wrap-not-modified-if-public session)))
 
 (defn render-success
   [request]
@@ -153,7 +148,7 @@
           :as params}]
   (let [ring-params {:port port :join? join?}]
     (println "Starting jetty:" ring-params)
-    (jty/run-jetty (middleware (handler sess)) ring-params)))
+    (jty/run-jetty (-> (handler sess) (middleware sess)) ring-params)))
 
 (defonce lazy-server (lazy-seq (list (run))))
 
