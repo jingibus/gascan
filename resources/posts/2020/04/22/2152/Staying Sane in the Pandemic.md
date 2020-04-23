@@ -47,5 +47,5 @@ That's okay. I do not have to be perfect to get through the day. There will be t
 
 ### references
 
-Bruce Alexander --- The Globalization of Addiction: A Study in Poverty of the Spirit
-Jaron Lanier --- Ten Arguments for Deleting Your Social Media Accounts Right Now.  I don't think I'm parroting any of his ideas exactly here, but I wouldn't think the way I do today about social media if I hadn't read this book.
+Bruce Alexander --- _The Globalization of Addiction: A Study in Poverty of the Spirit_
+Jaron Lanier --- _Ten Arguments for Deleting Your Social Media Accounts Right Now_.  I don't think I'm parroting any of his ideas exactly here, but I wouldn't think the way I do today about social media if I hadn't read this book.
