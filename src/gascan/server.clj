@@ -1,5 +1,7 @@
 (ns gascan.server
-  (:require [compojure.route :as route]
+  (:require [compojure.handler :as comp-hand]
+            [compojure.route :as route]
+            [gascan.browser :as browser]
             [gascan.index-view :as index-view]
             [gascan.post-view :as post-view]
             [gascan.posts-view :as posts-view]
@@ -11,8 +13,11 @@
             [image-resizer.core :as image-resizer]
             [image-resizer.format :as image-format]
             [ring.adapter.jetty :as jty]
-            [gascan.browser :as browser]
-            [compojure.handler :as comp-hand])
+            [ring.middleware.resource :as middle-resource]
+            [ring.middleware.content-type :as middle-content-type]
+            [ring.middleware.not-modified :as middle-not-modified]
+
+            [clojure.string :as string])
   (:use compojure.core gascan.debug))
 
 (def content-not-found-page
@@ -36,21 +41,6 @@
     (post-view/view-post {:id "5000"})
     content-not-found-page
     (browser/look-at "posts/title/blog-project")))
-
-(defn serve-image
-  [image-path width]
-  (let [image-stream (gascan.intern/readable-file (str "images/" image-path))
-        ext (second (re-find #"\.([^.]*)$" image-path))
-        ;; If there's a width, parse it and limit it so that we aren't
-        ;; serving any ginormous images.
-        width (and width (min 500 (Integer/parseInt width)))]
-    (pprint-symbols ext width image-path)
-    (if width
-      (-> image-stream
-          (image-resizer/resize width width)
-          (monitor-> "image" #(str (.getHeight %) " " (.getWidth %)))
-          (image-format/as-stream ext))
-      image-stream)))
 
 ;; Compojure routing
 (defn all-routes
@@ -83,9 +73,6 @@
     (GET (routing/what-it-is-path) [& query-params]
          (println "route to what it is")
          (what-it-is-view/view sess query-params))
-    (GET "/images/:image-path" [image-path width & query-params]
-         (println "gettin an image:" image-path)
-         (serve-image image-path width))
     (GET "/favicon.ico" []
          (println "it's that favicon")
          {:status 200
@@ -112,6 +99,42 @@
            "And so I decided to create a blog."])
      ]
     ]))
+(comment
+  (GET "/images/:image-path" [image-path width & query-params]
+       (println "gettin an image:" image-path)
+       (serve-image image-path width)))
+
+(defn serve-image
+  [image-path width]
+  (let [image-stream (gascan.intern/readable-file (str "images/" image-path))
+        ext (second (re-find #"\.([^.]*)$" image-path))
+        ;; If there's a width, parse it and limit it so that we aren't
+        ;; serving any ginormous images.
+        width (and width (min 500 (Integer/parseInt width)))]
+    (pprint-symbols ext width image-path)
+    (if width
+      (-> image-stream
+          (image-resizer/resize width width)
+          (monitor-> "image" #(str (.getHeight %) " " (.getWidth %)))
+          (image-format/as-stream ext))
+      image-stream)))
+
+(defn- translate-prefix-to-root
+  [handler prefix]
+  (fn [{uri :uri :as request}]
+    (let [translated-uri (if (.startsWith uri prefix)
+                           (subs uri (count prefix))
+                           uri)]
+      (pprint-symbols uri prefix translated-uri)
+      (handler (assoc request :uri translated-uri)))))
+
+(defn middleware
+  [router]
+  (-> router
+      (middle-resource/wrap-resource "images")
+      (translate-prefix-to-root "/images")
+      (middle-content-type/wrap-content-type)
+      (middle-not-modified/wrap-not-modified)))
 
 (defn render-success
   [request]
@@ -130,7 +153,7 @@
           :as params}]
   (let [ring-params {:port port :join? join?}]
     (println "Starting jetty:" ring-params)
-    (jty/run-jetty (handler sess) ring-params)))
+    (jty/run-jetty (middleware (handler sess)) ring-params)))
 
 (defonce lazy-server (lazy-seq (list (run))))
 
