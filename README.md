@@ -65,11 +65,17 @@ When writing in Scrivener:
 
 * To link to a file from the local file system, create a local file link. This will emit a `file:///...` link in the exported Markdown.
 * Change the title of the exported Markdown to whatever you want the title of the post to be.
+* Use the "Emphasis" style for italics. (Remap Cmd-i to this menu item in Mac's Keyboard settings.)
+* Create a new "Markdown Bold" character style from some bold formatted text. (Remap Cmd-b to this menu item in Mac's Keyboard settings.)
 * Export with the following settings:
     * Plain MultiMarkdown format
     * Check the box marked "Convert links to MultiMarkdown"
     * Create a new MultiMarkdown Format with the following changes:
-        * Under "Styles," select "Code Block". Add a carriage return prefix by typing `Opt-Return` in the prefix/suffix area. (Nothing will appear, but it will work anyway.)
+        * Under "Styles," 
+            * Select "Code Block". Add a carriage return prefix by typing `Opt-Return` in the prefix/suffix area. (Nothing will appear, but it will work anyway.)
+            * Select "Block Quote". Add a carriage return *suffix* by typing `Opt-Return` in the suffix area. (Same as above.)
+            * Add "Emphasis". Add an underline for the prefix and suffix.
+            * Add "Markdown Bold". Add an asterisk for the prefix and suffix.
 
 ### Bugs
 
