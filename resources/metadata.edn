@@ -1,7 +1,9 @@
 ({:title "Staying Sane in the Pandemic",
   :timestamp 1587613781304,
-  :markdown-rel-path "posts/2020/04/22/2152/Staying Sane in the Pandemic.md",
-  :extra-resources-rel (),
+  :markdown-rel-path
+  "posts/2020/04/23/1747/Staying Sane in the Pandemic.md/Staying Sane in the Pandemic.md",
+  :extra-resources-rel
+  ("posts/2020/04/23/1747/Staying Sane in the Pandemic.md/workspaceinlockdown.jpg"),
   :id #uuid "ec3281d1-b53c-4b37-91cb-08a4f0608aee",
   :status :soft-published,
   :filter #{:spiritual},
