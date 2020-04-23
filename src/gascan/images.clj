@@ -11,6 +11,13 @@
       (image-resizer/resize width width)
       (image-format/as-stream ext)))
 
+(defn path->resized-path
+  [path width]
+  (-> path
+      uri/uri
+      (assoc :query (query-string/alist->query-string {"width" width}))
+      uri/map->string))
+
 (defn scale-request-if-necessary
   [{query-string :query-string uri :uri :as request} response]
   (let [query-params (into {} 
@@ -20,7 +27,6 @@
         uri (uri/uri uri)
         content-type (get-in response [:headers "Content-Type"])
         ext (second (re-find #"\.([^.]*)$" (:path uri)))]
-    (pprint-symbols query-params response uri ext content-type width)
     (if (and width (.startsWith content-type "image"))
       (let [new-body (scale-image (:body response) width ext)]
         (-> response

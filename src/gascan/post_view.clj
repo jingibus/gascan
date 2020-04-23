@@ -14,10 +14,11 @@
             [org.bovinegenius.exploding-fish.query-string :as query-string]
             [gascan.view-common :as view-common]
             [gascan.routing :as routing]
-            [hiccup.core :as hc])
+            [hiccup.core :as hc]
+            [gascan.images :as images])
   (:use [gascan.debug]))
 
-(defn link-entry
+(defn image-link-entry
   [loc]
   (let [paragraph? (partial instance? com.vladsch.flexmark.ast.Paragraph)
         linkref? (partial instance? com.vladsch.flexmark.ast.LinkRef)
@@ -41,24 +42,40 @@
             width-and-height (some-> link-string
                                      (string/replace #"^.*? (width=|height=)"
                                                      "$1")
-                                     string/trim)]
-        {reference {:link link :attrs width-and-height}}))))
+                                     string/trim)
+            extract-int
+            (fn [re]
+              (some->> width-and-height 
+                       (re-find re)
+                       second 
+                       Integer/parseInt))
+            width-px (extract-int #"width=([0-9]+)px")
+            height-px (extract-int #"height=([0-9]+)px")]
+        (pprint-symbols width-and-height width-px height-px)
+        {reference {:link link 
+                    :attrs width-and-height
+                    :width-px width-px
+                    :height-px height-px}}))))
 
 (defn extract-image-map
   [[tags scaffold-ast]]
   (loop [image-links {} 
          loc (z/vector-zip scaffold-ast)]
     (if (z/end? loc) [(assoc tags :image-map image-links) (z/root loc)]
-        (let [curr-entry (link-entry loc)]
+        (let [curr-entry (image-link-entry loc)]
           (if curr-entry 
             (recur (into image-links curr-entry) (z/remove loc))
             (recur image-links (z/next loc)))))))
 
 (defn new-image-link
-  [{:keys [link attrs]}]
-  (new com.vladsch.flexmark.ast.HtmlInline 
-       (com.vladsch.flexmark.util.sequence.CharSubSequence/of 
-        (str "<img src=\"" link "\" " attrs " />"))))
+  [{:keys [link attrs width-px height-px]}]
+  (let [resized-link (images/path->resized-path link width-px)]
+    (new com.vladsch.flexmark.ast.HtmlInline 
+         (ast/char-sequence 
+          (hc/html 
+           [:img {:src resized-link 
+                  :width (str width-px "px") 
+                  :height (str height-px "px")}])))))
 
 (defn apply-image-map
   [[tags scaffold-ast]]
