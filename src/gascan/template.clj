@@ -4,6 +4,7 @@
 (defn enframe
   [title body & {:keys [up-link]}]
   (let [main-bg-color "#dcc48d"
+        text-color "#0a0538"
         secondary-bg-color "#dca200"
         secondary-bg-color-but-darker "#a07601"
         accent-color "#1a0aa2"
@@ -25,7 +26,8 @@
        [:link {:href "https://fonts.googleapis.com/css2?family=Domine&display=swap" :rel "stylesheet"}]
        [:style (str  "h1, h2, h3 { font-family: 'Domine', serif; } "
                      "a:link { color: " secondary-bg-color-but-darker "; } "
-                     "a:visited { color: " accent-color "; } ")]
+                     "a:visited { color: " accent-color "; } "
+                     "* { color: " text-color "; }")]
        [:title title]]
       [:body {:style (str "margin: 8px; display: flex; flex-direction: row; ")
               }
