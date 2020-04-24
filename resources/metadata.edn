@@ -1,19 +1,35 @@
-({:title "Staying Sane in the Pandemic",
-  :timestamp 1587613781304,
-  :markdown-rel-path
-  "posts/2020/04/23/1747/Staying Sane in the Pandemic.md/Staying Sane in the Pandemic.md",
-  :extra-resources-rel
-  ("posts/2020/04/23/1747/Staying Sane in the Pandemic.md/workspaceinlockdown.jpg"),
-  :id #uuid "ec3281d1-b53c-4b37-91cb-08a4f0608aee",
-  :status :soft-published,
-  :filter #{:spiritual},
-  :src-path "/Users/bphillips/Documents/Staying Sane in the Pandemic.md"}
+({:title "Focus Loops In Perspective",
+  :timestamp 1586476531813,
+  :markdown-rel-path "posts/2020/04/23/1827/Focus Loops In Perspective.md",
+  :extra-resources-rel (),
+  :id #uuid "7a575e7c-0f78-4794-86b4-049712f37049",
+  :status :published,
+  :filter #{:technical},
+  :src-path "/Users/bphillips/Documents/Focus Loops In Perspective.md"}
+  {:title "Launch Day",
+   :timestamp 1587690450297,
+   :markdown-rel-path "posts/2020/04/23/1816/Launch Day.md",
+   :extra-resources-rel (),
+   :id #uuid "1b451a4c-3fea-4bad-958d-784297299dea",
+   :status :published,
+   :filter #{:meta},
+   :src-path "/Users/bphillips/Documents/Launch Day.md"}
+  {:title "Staying Sane in the Pandemic",
+   :timestamp 1587613781304,
+   :markdown-rel-path
+   "posts/2020/04/23/1747/Staying Sane in the Pandemic.md/Staying Sane in the Pandemic.md",
+   :extra-resources-rel
+   ("posts/2020/04/23/1747/Staying Sane in the Pandemic.md/workspaceinlockdown.jpg"),
+   :id #uuid "ec3281d1-b53c-4b37-91cb-08a4f0608aee",
+   :status :published,
+   :filter #{:spiritual},
+   :src-path "/Users/bphillips/Documents/Staying Sane in the Pandemic.md"}
   {:title "Easter Lament",
    :timestamp 1587185195366,
    :markdown-rel-path "posts/2020/04/17/2240/Easter Lament.md",
    :extra-resources-rel ("posts/2020/04/17/2240/Easter Lament.mp3"),
    :id #uuid "2974a8bd-9282-42f2-bbe8-bf3042de7fbb",
-   :status :soft-published,
+   :status :published,
    :filter #{:music :spiritual},
    :src-path "/Users/bphillips/Documents/Easter Lament.md"}
   {:title "Basic Test",
@@ -41,17 +57,9 @@
      "posts/2020/04/09/0041/Jubilate - Full Score.pdf"
      "posts/2020/04/09/0041/Jubilate.mp3"),
    :id #uuid "23b87584-9f91-46e1-ad00-de0bd3d1457d",
-   :status :draft,
+   :status :published,
    :filter #{:music :spiritual},
    :src-path "/Users/bphillips/Documents/Morning Prayer Settings.md"}
-  {:title "Focus Loops In Perspective",
-   :timestamp 1586476531813,
-   :markdown-rel-path "posts/2020/04/09/0055/Focus Loops In Perspective.md",
-   :extra-resources-rel (),
-   :id #uuid "7a575e7c-0f78-4794-86b4-049712f37049",
-   :status :draft,
-   :filter #{:technical},
-   :src-path "/Users/bphillips/Documents/Focus Loops In Perspective.md"}
   {:title "PDF Link Test",
    :timestamp 1586412570338,
    :markdown-rel-path "posts/2020/04/08/0009/PDF Link Test.md",
