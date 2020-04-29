@@ -16,6 +16,10 @@ Markdown: markdown `code_span`
           original-scaffold-ast (ast/build-scaffold-ast parsed-document)
           expected-scaffold-stringified ["Document{}" "IndentedCodeBlock{}"]
           ]
-      (strip-title-section! parsed-document)
+      (-> original-scaffold-ast
+          ast/scaffold->tagged-scaffold
+          strip-title-section
+          ast/tagged-scaffold->scaffold
+          ast/restitch-scaffold-ast)
       (is (= expected-scaffold-stringified
              (-> parsed-document ast/build-scaffold-ast ast/stringify))))))

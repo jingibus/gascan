@@ -55,15 +55,15 @@
         year (.getYear date-time)]
     (format "%04d/%02d/%02d/%02d%02d" year month day-of-month hour minute)))
 
-(defn strip-title-section!
-  [[tags document]]
-  [tags (-> document 
+(defn strip-title-section
+  [[tags scaffold-ast]]
+  [tags (-> scaffold-ast
             z/vector-zip
             z/down z/right 
             z/remove
             z/root)])
 
-(s/fdef strip-title-section!
+(s/fdef strip-title-section
   :args (s/cat :tagged-scaffold (s/cat :tags map? :scaffold vector?))
   :ret (s/cat :tags map? :scaffold-ast vector?))
 
@@ -177,7 +177,7 @@
         ast/build-scaffold-ast
         (monitorv-> "source AST:" ast/stringify)
         ast/scaffold->tagged-scaffold
-        strip-title-section!
+        strip-title-section
         (translate-links! map-file-url-to-relative-url)
         (monitorv-> "processed AST:" (comp ast/stringify second)))))
 
