@@ -18,7 +18,7 @@
         (recur options-list)
         options))))
 
-(def flexmark-options 
+(def flexmark-options
   (-> (make-options Parser/HEADING_NO_ATX_SPACE true)
       (.setFrom ParserEmulationProfile/MULTI_MARKDOWN)))
 
@@ -62,19 +62,23 @@
     (clojure.string/join "/" [dirpath x])))
 
 (defn parse-multimarkdown-directory
-  [filepath]
-  (parse-multimarkdown-flat (md-filepath-from-dir filepath)))
+  ([filepath]
+   (parse-multimarkdown-directory flexmark-options filepath))
+  ([options filepath]
+   (parse-multimarkdown-flat options (md-filepath-from-dir filepath))))
 
 (defn parse-multimarkdown
   "Yields a parsed flexmark Document instance."
-  [filepath]
-  (let [file-obj (as-file filepath)]
-    (cond (.isDirectory file-obj)
-          (parse-multimarkdown-directory filepath)
-          (.isFile file-obj)
-          (parse-multimarkdown-flat filepath)
-          :else
-          nil)))
+  ([filepath]
+   (parse-multimarkdown flexmark-options filepath))
+  ([options filepath]
+   (let [file-obj (as-file filepath)]
+     (cond (.isDirectory file-obj)
+           (parse-multimarkdown-directory options filepath)
+           (.isFile file-obj)
+           (parse-multimarkdown-flat options filepath)
+           :else
+           nil))))
 
 (defn flatten-iterator
   [iterator]
