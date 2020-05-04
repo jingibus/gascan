@@ -18,14 +18,14 @@
         (recur options-list)
         options))))
 
-(def flexmark-options
+(def multimarkdown-options
   (-> (make-options Parser/HEADING_NO_ATX_SPACE true)
       (.setFrom ParserEmulationProfile/MULTI_MARKDOWN)))
 
 (defn parse-multimarkdown-str
   "Parses a string into a parsed flexmark object"
   ([file-contents]
-   (parse-multimarkdown-str flexmark-options file-contents))
+   (parse-multimarkdown-str multimarkdown-options file-contents))
   ([options file-contents]
    (-> (Parser/builder options)
          (.build)
@@ -34,7 +34,7 @@
 (defn parse-multimarkdown-flat
   "Parses a valid input to reader into a parsed flexmark object"
   ([readable]
-   (parse-multimarkdown-str flexmark-options (slurp readable)))
+   (parse-multimarkdown-str multimarkdown-options (slurp readable)))
   ([options readable]
    (parse-multimarkdown-str options(slurp readable))))
 
@@ -63,14 +63,14 @@
 
 (defn parse-multimarkdown-directory
   ([filepath]
-   (parse-multimarkdown-directory flexmark-options filepath))
+   (parse-multimarkdown-directory multimarkdown-options filepath))
   ([options filepath]
    (parse-multimarkdown-flat options (md-filepath-from-dir filepath))))
 
 (defn parse-multimarkdown
   "Yields a parsed flexmark Document instance."
   ([filepath]
-   (parse-multimarkdown flexmark-options filepath))
+   (parse-multimarkdown multimarkdown-options filepath))
   ([options filepath]
    (let [file-obj (as-file filepath)]
      (cond (.isDirectory file-obj)
@@ -92,7 +92,7 @@
 
 (defn render-markdown
   [document]
-  (let [renderer (-> (Formatter/builder flexmark-options) (.build))]
+  (let [renderer (-> (Formatter/builder multimarkdown-options) (.build))]
     (.render renderer document)))
 
 (defn class-hierarchy
