@@ -5,7 +5,7 @@
             :url "https://www.eclipse.org/legal/epl-2.0/"}
   :dependencies [
                  [clojure.java-time "0.3.2"]
-                 [com.vladsch.flexmark/flexmark-all "0.60.2"]
+                 [com.vladsch.flexmark/flexmark-all "0.61.24"]
                  [compojure "1.6.1"]
                  [environ "1.1.0"]
                  [etaoin "0.3.6"]
