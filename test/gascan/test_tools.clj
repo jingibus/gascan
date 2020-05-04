@@ -1,7 +1,6 @@
 (ns gascan.test-tools
   (:require [clojure.string :refer [join]] 
             [gascan.multimarkdown :refer [parse-multimarkdown-flat 
-                                          flexmark-options 
                                           make-options]]
 ))
 
