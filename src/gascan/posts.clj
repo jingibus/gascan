@@ -4,7 +4,7 @@
    [clojure.zip :as z]
    [gascan.ast :as ast]
    [gascan.intern :as intern :refer [read-edn intern-file! readable-file]]
-   [gascan.multimarkdown :as mm :refer [parse-multimarkdown-flat]]
+   [gascan.multimarkdown :as mm :refer [parse-readable]]
    [gascan.post-spec :as post-spec]
    [gascan.remote-posts :as remote]
    [java-time :refer [local-date-time instant]]
@@ -133,7 +133,7 @@
         intern/readable-file
         slurp
         (monitor-> "raw md")
-        mm/parse-multimarkdown-str
+        mm/parse-str
         ast/build-scaffold-ast))
   (-> (test-ast)
       ast/scaffold->tagged-scaffold
@@ -402,5 +402,5 @@ done on the basis of kebab casing.
     (let [relpath (:markdown-rel-path interned-record)
           readable-markdown (readable-file relpath)]
       (assoc interned-record 
-             :parsed-markdown (parse-multimarkdown-flat readable-markdown)))))
+             :parsed-markdown (parse-readable readable-markdown)))))
 

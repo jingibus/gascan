@@ -14,7 +14,7 @@ Author: Bill Phillips
 Call me Ishmael."
           ]
       (testing "Title can successfully be read from a multimarkdown example"
-        (let [parsed-flexmark (mm/parse-multimarkdown-str example-multimarkdown-text)]
+        (let [parsed-flexmark (mm/parse-str example-multimarkdown-text)]
           (is (= (get-title parsed-flexmark) "Blog Project"))))))
 
 

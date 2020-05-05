@@ -6,6 +6,15 @@
   (:require [clojure.java.io :refer [as-file]])
   (:use [gascan.debug]))
 
+(defn make-options
+  [& options-list]
+  (let [options (new MutableDataSet)]
+    (loop [[key value & options-list] options-list]
+      (.set options key value)
+      (if options-list
+        (recur options-list)
+        options))))
+
 (defn parse-str
   "Parses a string into a parsed flexmark object"
   [options file-contents]

@@ -12,7 +12,7 @@ Markdown: markdown `code_span`
 
 \tcode
 "
-          parsed-document (mm/parse-multimarkdown-str example-markdown)
+          parsed-document (mm/parse-str example-markdown)
           original-scaffold-ast (ast/build-scaffold-ast parsed-document)
           expected-scaffold-stringified ["Document{}" "IndentedCodeBlock{}"]
           ]

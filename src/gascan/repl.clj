@@ -10,12 +10,7 @@
             [gascan.ast :refer [deep-map-vec
                                 build-scaffold-ast
                                 stringify]]
-            [gascan.multimarkdown :refer [parse-multimarkdown-flat 
-                                          flexmark-options 
-                                          make-options]]
-            [gascan.post-view :as post-view]
-            [gascan.server :as svr]
-            [gascan.browser :as browser]
+            [gascan.multimarkdown :refer [parse-readable]]
             [clojure.tools.trace :refer [trace-ns untrace-ns trace-forms]])
   (:use [gascan.debug] [gascan.test-tools] [gascan.browser])
   (:gen-class))
@@ -39,13 +34,13 @@
 (defn test-parse-with-options
   [options test-case]
   (let [path (:path test-case)
-        new-contents (parse-multimarkdown-flat options path)]
+        new-contents (parse-readable options path)]
     (decrapinate-flexmark new-contents)))
 
 (defn test-parse-with-postprocessor
   [postprocessor test-case]
   (let [path (:path test-case)
-        new-contents (-> path (monitorv-> "path") parse-multimarkdown-flat (monitorv-> "parsed") postprocessor)]
+        new-contents (-> path (monitorv-> "path") parse-readable (monitorv-> "parsed") postprocessor)]
     (assoc test-case 
            :path path 
            :contents new-contents)))

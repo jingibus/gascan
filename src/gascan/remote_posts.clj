@@ -1,10 +1,24 @@
 (ns gascan.remote-posts
   (:require [clojure.java.io :refer [as-file]]
             [clojure.spec.alpha :as s]
+            [clojure.string :as string]
             [clojure.zip :as z]
             [gascan.ast :as ast]
-            [gascan.multimarkdown :as mm :refer [parse-multimarkdown-flat md-filepath-from-dir]]
+            [gascan.multimarkdown :as mm]
             [gascan.post-spec :as post-spec]))
+
+(defn md-filepath-from-dir
+  "Within a Markdown directory, yields the markdown file within it.
+  ```
+  user=> (md-filepath-from-dir \"src/sample/Basic Test.md\")
+  \"src/sample/Basic Test.md/Basic Test.md\"
+  ```"
+  [dirpath]
+  (as-> dirpath x
+    (string/split x #"/")
+    (filter #(not (empty? (string/trim %))) x)
+    (last x)
+    (string/join "/" [dirpath x])))
 
 (defn get-title
   [document]
@@ -13,15 +27,14 @@
         title-text (-> scaffold-ast z/vector-zip z/down z/right z/down z/right z/node)]
     (some-> title-text
             (.getChars)
-            (clojure.string/replace-first "Title:" "")
-            clojure.string/trim)))
+            (string/replace-first "Title:" "")
+            string/trim)))
 
 (defn record-from-mm-dir
   [dirpath]
-  (let [file-obj (as-file dirpath)
-        md-filepath (md-filepath-from-dir dirpath)
+  (let [md-filepath (md-filepath-from-dir dirpath)
         md-file-obj (as-file md-filepath)
-        parsed-markdown (parse-multimarkdown-flat md-filepath)
+        parsed-markdown (mm/parse-readable md-filepath)
         extra-resources (->> (as-file dirpath)
                              (.listFiles)
                              (filter #(not (.equals md-file-obj %))))]
@@ -38,7 +51,7 @@
 
 (defn record-from-mm-flat
   [filepath]
-  (let [parsed-markdown (parse-multimarkdown-flat filepath)]
+  (let [parsed-markdown (mm/parse-readable filepath)]
     {:markdown-abs-path (.getAbsolutePath (as-file filepath))
      :title (get-title parsed-markdown)
      :timestamp (System/currentTimeMillis)

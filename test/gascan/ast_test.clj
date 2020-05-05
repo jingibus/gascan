@@ -9,7 +9,7 @@
   (let [testpath (:path test-case-basic)]
     (testing "If you scaffold and restitch, you can get the same scaffold out"
       (let [original-scaffold (-> testpath
-                                  mm/parse-multimarkdown-flat 
+                                  mm/parse-readable 
                                   sut/build-scaffold-ast)
             restitched (sut/restitch-scaffold-ast original-scaffold)
             new-scaffold (sut/build-scaffold-ast restitched)]
@@ -17,7 +17,7 @@
     (testing "The scaffold of an edited scaffold is identical to the edited scaffold"
       (let [testpath (:path test-case-basic)
             original-scaffold (-> testpath
-                                  mm/parse-multimarkdown-flat
+                                  mm/parse-readable
                                   sut/build-scaffold-ast)
             edited-scaffold (-> original-scaffold
                                 z/vector-zip
@@ -36,7 +36,7 @@ Markdown: markdown `code_span`
 \tcode
 "
             original-scaffold (-> example-markdown
-                                  mm/parse-multimarkdown-str
+                                  mm/parse-str
                                   sut/build-scaffold-ast)
             edited-scaffold (sut/split-line-breaks original-scaffold)
             expected-scaffold-stringified 

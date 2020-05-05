@@ -8,7 +8,7 @@
   (let [rerender-with-transform
         (fn [text txform]
           (-> text
-              mm/parse-multimarkdown-str
+              mm/parse-str
               ast/build-scaffold-ast
               ast/scaffold->tagged-scaffold
               txform

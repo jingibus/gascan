@@ -1,7 +1,6 @@
 (ns gascan.test-tools
   (:require [clojure.string :refer [join]] 
-            [gascan.multimarkdown :refer [parse-multimarkdown-flat 
-                                          make-options]]
+            [gascan.multimarkdown :refer [parse-readable]]
 ))
 
 (def project-folder (System/getProperty "user.dir"))
@@ -15,7 +14,7 @@
 (defn test-case
   [relpath]
   (let [absolute-path (sample-path relpath)
-        parsed-contents (parse-multimarkdown-flat absolute-path)]
+        parsed-contents (parse-readable absolute-path)]
     {:path absolute-path
      :contents parsed-contents
      :raw-contents (clojure.string/split (slurp absolute-path) #"\n")}))

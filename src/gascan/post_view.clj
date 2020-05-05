@@ -281,7 +281,7 @@
   [relpath]
   (let [md-contents (some-> (intern/readable-file relpath) slurp)
         massaged-mm (some-> md-contents
-                            mm/parse-multimarkdown-str
+                            mm/parse-str
                             ast/build-scaffold-ast
                             transform-ast
                             ast/restitch-scaffold-ast)]
@@ -311,7 +311,7 @@
         (-> subject
             filter-lines
             (monitor-> "raw md:")
-            mm/parse-multimarkdown-str
+            mm/parse-str
             ast/build-scaffold-ast)))
 
     (defn find-node
