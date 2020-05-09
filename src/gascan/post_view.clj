@@ -4,18 +4,19 @@
             [clojure.zip :as z]
             [gascan.ast :as ast]
             [gascan.ast :as ast]
+            [gascan.images :as images]
             [gascan.intern :as intern]
-            [gascan.multimarkdown :as mm]
+            [gascan.multi-to-intern-markdown :as mm->im]
             [gascan.multimarkdown :as mm]
             [gascan.posts :as posts]
+            [gascan.routing :as routing]
             [gascan.session :as session]
             [gascan.template :as tmpl]
+            [gascan.view-common :as view-common]
+            [hiccup.core :as hc]
             [org.bovinegenius.exploding-fish :as uri]
             [org.bovinegenius.exploding-fish.query-string :as query-string]
-            [gascan.view-common :as view-common]
-            [gascan.routing :as routing]
-            [hiccup.core :as hc]
-            [gascan.images :as images])
+            [gascan.intern-markdown :as im])
   (:use [gascan.debug]))
 
 (defn image-link-entry
@@ -265,11 +266,12 @@
               (string/replace #"---" "\u2014")
               (string/replace #"--" "\u2013")))]
     (-> ast 
+        mm->im/multimarkdown->internmarkdown
         ast/split-line-breaks
         ast/scaffold->tagged-scaffold
-        extract-image-map
+        ;extract-image-map
         extract-audio-links
-        apply-image-map
+        ;apply-image-map
         (apply-simple-text-replacements text-replacements)
         apply-audio-links
         ast/tagged-scaffold->scaffold)))
@@ -283,7 +285,7 @@
                             transform-ast
                             ast/restitch-scaffold-ast)]
     (when md-contents
-      (mm/render-html massaged-mm))))
+      (im/render-html massaged-mm))))
 
 (comment
   (do

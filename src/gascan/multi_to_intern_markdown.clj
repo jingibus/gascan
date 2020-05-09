@@ -38,6 +38,9 @@ into:
           (vec (cons (im/attrs-node) attr-nodes))]))))
 
 (defn multimarkdown->internmarkdown
+  "Converts an AST parsed as multimarkdown into a CommonMark style format
+with extensions. This will translate unmanageable MultiMarkdown elements 
+(like dimensions on image references) into elements that are at least parseable."
   [scaffold-ast]
   (let [is-mm-imageref
          (fn [loc]
@@ -50,7 +53,8 @@ into:
           (-> scaffold-ast
               ast/restitch-scaffold-ast
               im/render-markdown
-              im/parse-str))]
+              im/parse-str
+              ast/build-scaffold-ast))]
     (loop [loc (-> scaffold-ast zip/vector-zip)]
       (cond (z/end? loc)
             (-> loc z/root reparse-as-intern-markdown)
@@ -61,6 +65,14 @@ into:
 
 (comment
   (require ['gascan.ast :as 'ast])
+  (-> "
+[![][ScreenShot2020-04-28at41856PM]](https://twitter.com/johnroderick/status/1255271397393346561)
+
+
+[ScreenShot2020-04-28at41856PM]: ScreenShot2020-04-28at41856PM.png width=414px height=76px"
+      mm/parse-str
+      ast/build-scaffold-ast
+      multimarkdown->internmarkdown)
   (-> "
 Paragraph 1.1
 ![][post-creation-workflow]
