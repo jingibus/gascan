@@ -20,15 +20,12 @@
 
 (defn image-link-entry
   [loc]
-  (let [paragraph? (partial instance? com.vladsch.flexmark.ast.Paragraph)
-        linkref? (partial instance? com.vladsch.flexmark.ast.LinkRef)
-        text? (partial instance? com.vladsch.flexmark.ast.Text)
-        zip-to-linkref #(some-> % z/down z/right z/down z/node)
+  (let [zip-to-linkref #(some-> % z/down z/right z/down z/node)
         zip-to-linktext #(some-> % z/down z/right z/right z/node)
         ]
-    (when (and (some-> loc z/down z/node paragraph?)
-               (some-> loc zip-to-linkref linkref?)
-               (some-> loc zip-to-linktext text?))
+    (when (and (some-> loc z/down z/node ast/paragraph?)
+               (some-> loc zip-to-linkref ast/linkref?)
+               (some-> loc zip-to-linktext ast/text?))
       (let [reference (some-> loc 
                               zip-to-linkref
                               .getReference

@@ -1,7 +1,7 @@
 (ns gascan.ast
   (:require [clojure.zip :as z])
   (:import [com.vladsch.flexmark.util.sequence BasedSequence CharSubSequence]
-           [com.vladsch.flexmark.ast Link])
+           [com.vladsch.flexmark.ast Link Paragraph LinkRef Text])
   (:use [gascan.debug]))
 
 (defn getNodeChildren
@@ -30,6 +30,12 @@
 (defn char-sequence
   [s]
   (CharSubSequence/of s))
+
+(def paragraph? (partial instance? com.vladsch.flexmark.ast.Paragraph))
+
+(def linkref? (partial instance? com.vladsch.flexmark.ast.LinkRef))
+
+(def text? (partial instance? com.vladsch.flexmark.ast.Text))
 
 (defn z-skip-subtree
   "Fast-forward a zipper to skip the subtree at `loc`."
