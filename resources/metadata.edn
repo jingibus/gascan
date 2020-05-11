@@ -1,12 +1,12 @@
 ({:title "Scaring People Is Easy",
   :timestamp 1588141621615,
   :markdown-rel-path
-  "posts/2020/04/28/2332/Scaring People Is Easy.md/Scaring People Is Easy.md",
+  "posts/2020/05/10/2140/Scaring People Is Easy.md/Scaring People Is Easy.md",
   :extra-resources-rel
-  ("posts/2020/04/28/2332/Scaring People Is Easy.md/ScreenShot2020-04-28at41856PM.png"),
+  ("posts/2020/05/10/2140/Scaring People Is Easy.md/ScreenShot2020-04-28at41856PM.png"),
   :id #uuid "83377ef7-4216-4742-ab72-cc96124da303",
-  :status :draft,
-  :filter #{},
+  :status :published,
+  :filter #{:spiritual},
   :src-path "/Users/bphillips/Documents/Scaring People Is Easy.md"}
   {:title "Focus Loops In Perspective",
    :timestamp 1586476531813,

@@ -26,10 +26,10 @@ So if there's anything that we can safely do that will bring some of the spirit 
 ### Going Outside
 
 Which brings me to the topic of going outside. Which, believe or not, was what motivated me to put pen to paper in the first place.
-As a lay person, going outside seems like a great idea to me. You get some sun, which is always good for the mood, and the air circulates much better than any place indoors. If there's any foul miasma in the air you breathe out, it seems obvious to me that it will disperse to a safe level much more rapidly out on Ocean Beach than it would in the recirculated air of Safeway.
+As a lay person, going outside seems like a great idea to me. You get some sun, which is always good for the mood, and the air circulates much better than any place indoors. If there's any foul miasma of viral load in the air you breathe out, it seems obvious to me that it will disperse to a safe level much more rapidly out on Ocean Beach than it would in the recirculated air of Safeway.
 But I know a lot of people who are just as terrified of encountering other people at Alamo Square as they are waiting to pick up food inside their local burrito joint. I have a friend who won't even go walking outside --- they run on a treadmill inside. All because of the 6 foot distance restriction!
-Why do our recommendations for personal distancing inside exactly mirror the recommendations outside? There's no smoking section on the Golden Gate Bridge. You can't so much as light a cigarette on the bridge many days, but if you go up there today you'll see half the cyclists with masks on. Why are people so scared of disease transmission in this environment? If you covered a paper airplane with COVID-19, you couldn't hit a friend 5 feet away with it.
-This has consequences. There are good and useful activities that people are avoiding because they want to be good citizens and follow these rules. But are the rules right? Is there any evidence that the risk of contagion goes up much at all because a jogger happened to skirt a little more closely to me than I was comfortable with?
+Why do our recommendations for personal distancing inside exactly mirror the recommendations outside? There's no smoking section on the Golden Gate Bridge. You can't so much as light a cigarette on the bridge many days, but if you go up there today you'll see half the cyclists with masks on. Why are people so scared of disease transmission in this environment?
+This has consequences. There are good and beneficial activities that people are avoiding because they want to be good citizens and follow these rules. But are the rules right? Is there any evidence that the risk of contagion goes up much at all because a jogger happened to skirt a little more closely to me than I was comfortable with?
 
 ### Easy To Create, Hard To Destroy
 
@@ -40,7 +40,12 @@ That's what I imagine will happen to all those protestors out there insisting th
 
 [![][ScreenShot2020-04-28at41856PM]](https://twitter.com/johnroderick/status/1255271397393346561)
 There are good reasons that fears are difficult to smother.  We spent a long time not wearing masks, believing it didn't help. And that wasn't true. Maybe the next fear we give up will also be a case of false optimism appearing real, and we'll end up paying for it.
-I'm not sure where this essay leaves me. I started writing it because I sincerely believe that a lot of people out there need to lighten up and take some of that good soul medicine that comes from seeing someone, anyone you know live and in the flesh, even if you have to keep six feet away from each other at a public park. Where's the evidence, though? Where is it? For the disease, we could be so certain that what we did at first wasn't working, and that at least what they did in Wuhan _was_ working.
+I'm not sure where this essay leaves me. I started writing it because I sincerely believe that a lot of people out there need to lighten up and take some of that good soul medicine that comes from seeing someone, anyone you know live and in the flesh, even if you have to keep six feet away from each other at a public park. Where's the evidence, though? Where is it? For the disease, we could be so certain that what we did at first wasn't working, and that at least what they did in Wuhan _was_ working. And we also know that any unwise loosening of our discipline could just prolong our collective pain that much longer.
 I'm stymied. It was a lot easier to get people scared.
 
-[ScreenShot2020-04-28at41856PM]: ScreenShot2020-04-28at41856PM.png width=414px height=76px
+### postscript: 5/10/2020
+
+Posting this was belated by a week or so due to technical matters. But even a week later, this post looks much different. I'm sure that as the facts evolve it will look even more different down the line.
+I think the only thing I want to say as of this addendum writing is that people's reactions to fear vary dramatically. I've seen some who are bolder than the warnings suggest is wise; I've seen others who add on enough caution to avoid toeing the edge of those warnings in the slightest. The experience is something to think about, I guess.
+
+[ScreenShot2020-04-28at41856PM]: ScreenShot2020-04-28at41856PM.png width=311px height=57px
