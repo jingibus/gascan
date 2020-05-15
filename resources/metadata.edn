@@ -1,13 +1,23 @@
-({:title "Scaring People Is Easy",
-  :timestamp 1588141621615,
+({:title "My Clojure Vacation",
+  :timestamp 1589519847097,
   :markdown-rel-path
-  "posts/2020/05/10/2140/Scaring People Is Easy.md/Scaring People Is Easy.md",
+  "posts/2020/05/14/2236/My Clojure Vacation.md/My Clojure Vacation.md",
   :extra-resources-rel
-  ("posts/2020/05/10/2140/Scaring People Is Easy.md/ScreenShot2020-04-28at41856PM.png"),
-  :id #uuid "83377ef7-4216-4742-ab72-cc96124da303",
-  :status :published,
-  :filter #{:spiritual},
-  :src-path "/Users/bphillips/Documents/Scaring People Is Easy.md"}
+  ("posts/2020/05/14/2236/My Clojure Vacation.md/ScreenShot2020-05-03at92816AM.png"),
+  :id #uuid "3f2f5d74-945a-4632-b1fb-7e9f2a50622e",
+  :status :soft-published,
+  :filter #{:technical},
+  :src-path "/Users/bphillips/Documents/My Clojure Vacation.md"}
+  {:title "Scaring People Is Easy",
+   :timestamp 1588141621615,
+   :markdown-rel-path
+   "posts/2020/05/10/2140/Scaring People Is Easy.md/Scaring People Is Easy.md",
+   :extra-resources-rel
+   ("posts/2020/05/10/2140/Scaring People Is Easy.md/ScreenShot2020-04-28at41856PM.png"),
+   :id #uuid "83377ef7-4216-4742-ab72-cc96124da303",
+   :status :published,
+   :filter #{:spiritual},
+   :src-path "/Users/bphillips/Documents/Scaring People Is Easy.md"}
   {:title "Focus Loops In Perspective",
    :timestamp 1586476531813,
    :markdown-rel-path "posts/2020/04/23/1827/Focus Loops In Perspective.md",
