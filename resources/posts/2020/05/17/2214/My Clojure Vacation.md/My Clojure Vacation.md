@@ -33,47 +33,63 @@ And as maligned as the parens are in Lisps like Clojure, their unwavering struct
 Clojure is not a side-effect free world. Learning Clojure effectively requires one to understand a mutable runtime. As a Clojure application is brought into a running state, every single function definition mutates a namespace's bindings to a new configuration.
 Once the app is up and running, the steady state is indeed by and large immutable. All the best tools in the toolbox work with immutable values, and additional effort has to be expended to make a piece of the program work in a stateful manner. Mutability is reserved for those parts of the system that demand it (like the network, services that must be started and stopped, or library dependences that are stateful).
 The reliance on mutability to wire up the system rather than get work done makes it possible to tinker with the system as it's running. This is a drawback to lexical bindings: if you lexically bind a large piece of machinery and hand it off, it's no longer possible to tinker with it in this way. You have to build a whole new large piece of machinery and hand that off. In my case, I ended up needing to reboot the web server to change the routing table.
-At runtime, tinkering is terrible. The program must never be allowed to tinker with itself. But when you've built something non-trivial --- oh, tinkering is heaven. It is a powerful way to get shit done.
+At runtime, tinkering is terrible. The program must never be allowed to tinker with itself. But when you've built something with some inertia, that can't be rebuilt and rerun as a whole at small cost --- oh, tinkering is heaven. It is a powerful way to get shit done.
 
 ### Primacy of the data itself
 
 When I first started working on my project, I knew that I would be in for a values-first system. I diagrammed out my idea of where data would flow through the system, and gave a name to the kinds of values that I would have. "Hmm," I thought, "how can I use Clojure to give a name to this class of value?"
 That's what I'd do in Java, after all: I'd define a class called `RemotePost` with the fields I want, and use that as my immutable value object.
 Clojure has a tool called the Record that seems to match this concept. After some time spent with it, though, I realized that I was fighting the APIs.
-See, I wanted to attach a name to this idea of a `RemotePost`. By and large, though, Clojure-y abstractions don't care what the name is. They only care about the shape of the data: if it's a map with keys for `:title,` `:timestamp`, and so on, then it will serve as a `RemotePost`.
-I found this deeply disconcerting. I did some work early in my career with Python where I didn't rely on strict typing; the resulting mess was bad enough that I have cast wards against for the rest of my life. But this is indeed the best practice in Clojure.
+See, I wanted to attach a name to this idea of a `RemotePost`. By and large, though, Clojure-y abstractions don't care what the name is. They only care about the shape of the data. Say I created a map with keys for the keywords `:title,` `:timestamp-ms`, and so on, mappening them to appropriate values:
+
+        {:title "My Clojure Vacation" 
+         :timestamp-ms 1589777804391}
+
+As long as the keys have appropriate values, then it will serve as a `RemotePost`.
+I found this disconcerting. I did some work early in my career with Python where I didn't rely on strict typing; the resulting mess was bad enough that I have cast wards against it for the rest of my life. But this is indeed the best practice in Clojure.
 
 ### Structure-oriented data discipline
 
 There is a spirit of discipline about it all, though, if an unfamiliar one. The `spec` framework provides a common toolset for establishing the shape of data objects, and a lot can be learned about Clojure design sensibilities from understanding it.
-`spec` has a way of working with keys that surprised me. In `spec`, if you want to ensure that `:timestamp-ms` is bound to a valid millisecond timestamp, you bind the data spec to the key name. Here is a construct that uses the `s/and` function to create a data spec and bind it to the `::timestamp-ms` key:
+`spec` has a way of working with keywords that surprised me. In `spec`, if you want to ensure that the keyword `:timestamp-ms` is bound to a valid millisecond timestamp, you bind a data spec to the keyword. Here is a construct that uses the `s/and` function to create a data spec and the `s/def` macro to bind it to the `::timestamp-ms` keyword:
 
         (s/def ::timestamp-ms 
           (s/and int? 
                  can-be-converted-to-instant? 
-                 is-semi-plausibly-within-bills-lifespan?))
+                 is-plausibly-within-bills-lifespan?))
 
+(The extra `:` on `::timestamp-ms` means that this is a keyword in a local namespace --- an important precaution, since binding to a global namespace would result in all kinds of unfortunate clobbering.)
 The names ending in `?` all refer to predicates: functions that take in a value and yield either true or false. So this spec says that a valid `::timestamp-ms` is described by the given three predicate functions, all of which will return true for a valid timestamp.
 Within this namespace, the name `::timestamp-ms always` refers to the same kind of data wherever it is seen. How interesting is that? It's not what I expected, but now that I've seen it I think it would be confusing to treat names differently in my own codebase.
-So if I want to describe a data structure that has a timestamp in it, I can define it by using `s/keys` to define a data spec on maps. Then I use `def` to assign that data spec to a regular old variable:
+So let's say I want to describe a data structure that has a timestamp in it. I can define that description by using the function `s/keys`, which builds a data spec that matches a map with particular keys. Then I use `def` to assign that data spec to a regular old variable:
 
         (def timestamped-map
           "A map with a timestamp in it."
-          (s/keys :req-un [::timestamp-ms])
+          (s/keys :req [::timestamp-ms])
 
-So if I mapped a value to the `:timestamp-ms` key (`:req-un` allows me to use the non-namespace-qualified `:timestamp-ms` instead):
+So if I mapped a value to the `::timestamp-ms` key (`:req-un` allows me to use the non-namespace-qualified `:timestamp-ms` instead):
 
-        {:timestamp-ms (System/currentTimeMillis)}
+        {::timestamp-ms (System/currentTimeMillis)}
 
 I could use `timestamped-map` to validate it:
 
         > (s/valid? timestamped-map 
-                    {:timestamp-ms (System/currentTimeMillis)})
+                    {::timestamp-ms 
+                     (System/currentTimeMillis)})
         true
         > (s/valid? timestamped-map {:timestamp-ms 15})
         false 
 
-This is a simplified view of spec, which is capable of more than this. But in some ways, this is still less than what a more typical type system does. There's no strictness provided: there's no way to know exactly what sort of object came into your system, nor is there a way to tell from an instance where it was defined, as you can in Java.
+And because I used spec's tools for defining my data spec, I can also get some simple error reporting:
+
+        > (s/explain timestamped-map {:timestamp-ms 15})
+        15 - failed: 
+        is-plausibly-within-bills-lifespan? 
+        in: [::timestamp-ms] at: [::timestamp-ms] 
+        spec: :gascan.post-spec/timestamp-ms
+
+This is a simplified view of spec. Since spec describes the shape of data, it can be made to serve in a wide variety of other scenarios, like generating test data.
+Yet in some other ways, this is still less than what a typical type system does. There's no strictness provided: there's no way to know exactly what sort of object came into your system. There's no way to tell from an instance where it was defined, as you can in Java.
 In return, though, with even this small scenario you get a validatable guardrail that maintains flexibility and dynamicism in the system, and retains the ability to create value objects with the standard REPL tools that can be consumed anywhere, without needing to refer to a particular classpath and a particular implementation. As a result, most of the things that drive the app live in an interoperable _lingua franca_.
 This is a serious trade-off. As a hobbyist I love the flexibility, but as a professional the idea of being unable to find where my data was constructed in an unfamiliar codebase is a little terrifying. There's a mechanism to namespace keys that would fix this, but it's not in common usage.
 
