@@ -67,7 +67,7 @@ So let's say I want to describe a data structure that has a timestamp in it. I c
           "A map with a timestamp in it."
           (s/keys :req [::timestamp-ms])
 
-So if I mapped a value to the `::timestamp-ms` key (`:req-un` allows me to use the non-namespace-qualified `:timestamp-ms` instead):
+So if I mapped a value to the `::timestamp-ms` key:
 
         {::timestamp-ms (System/currentTimeMillis)}
 
@@ -91,7 +91,7 @@ And because I used spec's tools for defining my data spec, I can also get some s
 This is a simplified view of spec. Since spec describes the shape of data, it can be made to serve in a wide variety of other scenarios, like generating test data.
 Yet in some other ways, this is still less than what a typical type system does. There's no strictness provided: there's no way to know exactly what sort of object came into your system. There's no way to tell from an instance where it was defined, as you can in Java.
 In return, though, with even this small scenario you get a validatable guardrail that maintains flexibility and dynamicism in the system, and retains the ability to create value objects with the standard REPL tools that can be consumed anywhere, without needing to refer to a particular classpath and a particular implementation. As a result, most of the things that drive the app live in an interoperable _lingua franca_.
-This is a serious trade-off. As a hobbyist I love the flexibility, but as a professional the idea of being unable to find where my data was constructed in an unfamiliar codebase is a little terrifying. There's a mechanism to namespace keys that would fix this, but it's not in common usage.
+This is a serious trade-off. As a hobbyist I love the flexibility, but as a professional the idea of being unable to find where my data was constructed in an unfamiliar codebase is a little terrifying. The mechanism of namespace keys would fix this to an extent, but they are not in common usage.
 
 ### Distinction between data and functions
 
