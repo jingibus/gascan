@@ -14,7 +14,7 @@
         left-accent-strip-left-margin "50px"
         left-accent-strip-width "10px"
         left-accent-strip-right-margin "20px"
-        main-content-width "400px"
+        main-content-width "430px"
         main-content-right-margin "50px"
         main-content-bottom-padding "50px"]
     (hc/html
