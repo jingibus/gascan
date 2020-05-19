@@ -4,7 +4,7 @@ My vacation, though, brought up a lot of fun new things. So at the risk of writi
 
 ### Small server; team of one
 
-In my vacation I built something in Clojure: a small web server that dynamically serves content from a hacky little data back end I wrote. It was a great experience that changed how I viewed the way I'd been writing code for all these years.
+In my vacation I built something in Clojure: a small web server that dynamically serves content from a hacky little data backend I wrote. It was a great experience that changed how I viewed the way I'd been writing code for all these years.
 So what made it so different?
 
 ### Programming for fun
@@ -15,37 +15,46 @@ I was only trying to kill time. But I wasn't programming to make someone else ha
 
 ### Programming as a creative impulse
 
-Even then, sitting down as a lark to write some code wouldn't have lasted long. What's the point?
-It did last, though, because the root was a creative impulse. And it wasn't a creative impulse in the sense of a project I wanted to accomplish, a standard of performance I wanted to meet. It was escape: escape from the television, from YouTube, from video games, Facebook, Twitter, Slack and all the attention loops that lay scattered about my life like antipersonnel mines.
-Once I cut those out, what was I left with? I had a huge empty space in my life. And out of a desire to fill that space, up came the creative impulse.
-I loved it. I felt invigorated. I don't know that Clojure has anything to do with that, but when you're in that mood you just have to roll with whatever sates your desire.
+Even then, sitting down as a lark to write some code wouldn't have lasted long. What's the point? And sitting down seeking to accomplish some project as a standard of performance I wanted to meet or a feather in my cap was excruciating. I have a horrible ego, and can't go down that path without being crippled by self-criticism.
+But I already felt crippled. Without even trying, I was constantly doing whatever I could to get out of my own head. I wanted to scape all of that: escape from the television, from YouTube, from video games, Facebook, Twitter, Slack and all the attention loops that lay scattered about my life like anti-personnel mines.
+So I cut them out.
+Where did that leave me? Alone in an empty field, that's where. And that was where the creative impulse put up shoots.
+I loved it. I felt invigorated. I don't know that Clojure has anything to do with that, but when you're in that mood you just have to roll with what works.
 
 ### Immediacy!
 
 Programming in Clojure was immediate! Everything that I wanted to do could be accomplished right there, instantly.
 People use the acronym "REPL" (short for Read-Eval-Print-Loop) to refer to these immediate environments. I had fired up command line REPL interpreters for Python, Ruby, and so on, but I didn't get it.
-But I worked through [Clojure For the Brave and True](https://www.braveclojure.com/clojure-for-the-brave-and-true/), I started using Emacs, and I followed instructions from other people about what to do. When I got up to speed, I found that from within my editor I could use the language and runtime to write code and investigate its behavior within the running system.
-I could tinker!  Soon my runtime became a running web server with quite a bit of overhead and startup time. I found that I could jack straight in to the server and patch it live with new and altered code, never needing to wait to recompile and redeploy.
+But I worked through _[Clojure For the Brave and True](https://www.braveclojure.com/clojure-for-the-brave-and-true/)_, I started using Emacs, and I followed instructions from other people about what to do. When I got up to speed, I found that from within my editor I could use the language and runtime to write code and investigate its behavior within the running system.
+I could tinker!  Soon my runtime became a running web server with non-zero overhead and startup time. I found that I could jack straight in to the server and patch it live with new and altered code, never needing to wait to recompile and redeploy.
 And as maligned as the parens are in Lisps like Clojure, their unwavering structure gave the same immediacy to evaluating and observing each piece of my program. Bind the right names to the right values, and any piece of any function can be run on its own.
 
 ### A different model of mutability
 
-Clojure is not a side-effect free world. Learning Clojure effectively requires one to understand a mutable runtime. As a Clojure application is brought into a running state, every single function definition mutates a namespace's bindings to a new configuration.
-Once the app is up and running, the steady state is indeed by and large immutable. All the best tools in the toolbox work with immutable values, and additional effort has to be expended to make a piece of the program work in a stateful manner. Mutability is reserved for those parts of the system that demand it (like the network, services that must be started and stopped, or library dependences that are stateful).
-The reliance on mutability to wire up the system rather than get work done makes it possible to tinker with the system as it's running. This is a drawback to lexical bindings: if you lexically bind a large piece of machinery and hand it off, it's no longer possible to tinker with it in this way. You have to build a whole new large piece of machinery and hand that off. In my case, I ended up needing to reboot the web server to change the routing table.
-At runtime, tinkering is terrible. The program must never be allowed to tinker with itself. But when you've built something with some inertia, that can't be rebuilt and rerun as a whole at small cost --- oh, tinkering is heaven. It is a powerful way to get shit done.
+Clojure is not a side-effect-free world. Even writing purely functional code, learning Clojure effectively requires one to understand the workings of a mutable runtime. As a Clojure application is brought into a running state, the useful mental model is that every single function definition mutates a namespace's bindings to a new configuration.
+Once the app is up and running, the steady state is indeed by and large immutable. All the best tools in the toolbox work with immutable values, and additional effort has to be expended to make a piece of the program work in a stateful manner. Mutability is reserved for those parts of the system that demand it (like the network, services that must be started and stopped, or library dependences that have stateful APIs).
+The reliance on mutability to do the work of wiring up the system makes it possible to tinker with the system as it's running. This is a drawback to lexical bindings: if you lexically bind a large piece of machinery and hand it off, it's no longer possible to tinker with it in this way. You have to build a whole new large piece of machinery and hand that off. In my case, I ended up needing to reboot the web server to change the routing table.
+At runtime, tinkering can be a formidable complication, particularly if the program tinkers with itself. But when you've built something with some inertia, that can't be rebuilt and rerun as a whole at small cost --- oh, tinkering is heaven. It is a powerful way to get shit done.
 
 ### Primacy of the data itself
 
-When I first started working on my project, I knew that I would be in for a values-first system. I diagrammed out my idea of where data would flow through the system, and gave a name to the kinds of values that I would have. "Hmm," I thought, "how can I use Clojure to give a name to this class of value?"
+I had watched a few Rich Hickey talks before I got started on this project, so I had seen him use the phrase "value-oriented programming." So when I first started out, I diagrammed my idea of where data would flow through the system, and gave a name to the kinds of values that I would have. "Hmm," I thought, "how can I use Clojure to define a type for this class of value?"
 That's what I'd do in Java, after all: I'd define a class called `RemotePost` with the fields I want, and use that as my immutable value object.
 Clojure has a tool called the Record that seems to match this concept. After some time spent with it, though, I realized that I was fighting the APIs.
-See, I wanted to attach a name to this idea of a `RemotePost`. By and large, though, Clojure-y abstractions don't care what the name is. They only care about the shape of the data. Say I created a map with keys for the keywords `:title,` `:timestamp-ms`, and so on, mappening them to appropriate values:
+See, I wanted to create a `RemotePost` type. By and large, though, Clojure-y abstractions frequently don't care what type of data is passed in. They usually care about the shape of that data, what sort of values may be accessed with it.
+Here's what I mean by the "shape" of the data. Imagine I defined a `RemotePost` type in Kotlin:
+
+        data class RemotePost(
+          val title: String,
+          val timestampMs: Long)
+
+This is generally how I'd pass data around in Java or Kotlin: as instances of a concrete type with properties.
+In Clojure, I would instead create a map with keys for the keywords `:title,` `:timestamp-ms`, and so on, mapping them to appropriate values:
 
         {:title "My Clojure Vacation" 
          :timestamp-ms 1589777804391}
 
-As long as the keys have appropriate values, then it will serve as a `RemotePost`.
+For processes that consume this data, the only important thing about it is that it has a string value at `:`title and a millisecond timestamp value at `:timestamp-`ms. This is the equivalent to a `RemotePost`: a piece of data with the right shape in these aspects. (And yes, Clojure calls the `:title` construct a keyword. Don't ask me, I just work here.)
 I found this disconcerting. I did some work early in my career with Python where I didn't rely on strict typing; the resulting mess was bad enough that I have cast wards against it for the rest of my life. But this is indeed the best practice in Clojure.
 
 ### Structure-oriented data discipline
@@ -96,14 +105,18 @@ This is a serious trade-off. As a hobbyist I love the flexibility, but as a prof
 ### Distinction between data and functions
 
 From a design perspective, I appreciated that data and functions lived separate lives. There were certain entities that did live an object-y life of keeping track of a changing bit of state, but this was the exception rather than the rule.
-This was at its best in a design context. The lack of expressivity in objects had started to wear thin on me:
+This was at its best in a design context. In the past few years, the lack of expressivity in objects had started to wear thin on me. As a design tool, it no longer felt like it was revealing edges. All the edges were elective: a single responsibility in one context would be an overgrown monstrosity in another.
 [![][ScreenShot2020-05-03at92816AM]](https://twitter.com/billjings/status/1254364892653424641)
-The inability to express different roles in any way other than to put different words on things had gotten old. Drawing a distinction between functions and data and denying capabilities to one or the other makes a lot of sense! This restriction forces a lot of things to be teased out that would otherwise stay put.
+I was unable to express different roles in any way other than to put different words on things, and I was tired of it. Drawing a distinction between functions and data and denying capabilities to one or the other makes a lot of sense! This restriction forces a lot of things to be teased out that would otherwise stay put.
 
 ### The vacation is over
 
 I recently started working at Cash, so my vacation is at an end. I'm once again working on a big client, with big build times. Sigh.
 There are some nice things: we have a firmer line between processes and data than any other codebase I've worked on. But is it possible to tinker with it?
 I've got lots of real work to do now. But maybe...
+
+### references
+
+Thanks to Nick Black and Joe Lafiosca for their feedback. One of them also sent me a quote of a wonderful passage from  _Infinite Jest_, for which I am also grateful.
 
 [ScreenShot2020-05-03at92816AM]: ScreenShot2020-05-03at92816AM.png width=377px height=152px
