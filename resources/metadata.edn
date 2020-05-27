@@ -5,7 +5,7 @@
   :extra-resources-rel
   ("posts/2020/05/18/2141/My Clojure Vacation.md/ScreenShot2020-05-03at92816AM.png"),
   :id #uuid "3f2f5d74-945a-4632-b1fb-7e9f2a50622e",
-  :status :soft-published,
+  :status :published,
   :filter #{:technical},
   :src-path "/Users/bphillips/Documents/My Clojure Vacation.md"}
   {:title "Scaring People Is Easy",
