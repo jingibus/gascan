@@ -242,6 +242,10 @@
     (when pieces 
       (string/join "-" pieces))))
 
+(defn title->locator-string
+  [s]
+  (string/replace (to-kebab-case s) #"[?/=&]" ""))
+
 (defn update-if
   "Updates only if pred is truthy."
   [m pred k f & xs]
@@ -261,7 +265,7 @@
   (let [locator (into {} (filter #(second %) locator))
         canonicalize (fn [post] 
                        (-> post
-                           (update-if :title :title to-kebab-case)
+                           (update-if :title :title title->locator-string)
                            (update-if :id :id string/lower-case)))]
     (fn [post] 
       (= (select-keys (canonicalize post) (keys locator))

@@ -41,7 +41,7 @@
    (post->title-path post nil))
   ([post parent-criteria]
    (let [uri (uri/uri 
-              (str "/posts/title/" (posts/to-kebab-case (:title post)) "/"))
+              (str "/posts/title/" (posts/title->locator-string (:title post)) "/"))
          joined-criteria (some->> parent-criteria (map name) (string/join ","))
          query-params (when joined-criteria 
                         (query-string/alist->query-string 
