@@ -1,13 +1,21 @@
-({:title "My Clojure Vacation",
-  :timestamp 1589519847097,
-  :markdown-rel-path
-  "posts/2020/05/18/2141/My Clojure Vacation.md/My Clojure Vacation.md",
-  :extra-resources-rel
-  ("posts/2020/05/18/2141/My Clojure Vacation.md/ScreenShot2020-05-03at92816AM.png"),
-  :id #uuid "3f2f5d74-945a-4632-b1fb-7e9f2a50622e",
+({:title "Who Wrote Conway's Law?",
+  :timestamp 1592243496411,
+  :markdown-rel-path "posts/2020/06/15/1114/Who Wrote Conway's Law?.md",
+  :extra-resources-rel (),
+  :id #uuid "df022c12-c46e-43dc-af38-46b59a09fd99",
   :status :published,
   :filter #{:technical},
-  :src-path "/Users/bphillips/Documents/My Clojure Vacation.md"}
+  :src-path "/Users/bphillips/Documents/Who Wrote Conway's Law?.md"}
+  {:title "My Clojure Vacation",
+   :timestamp 1589519847097,
+   :markdown-rel-path
+   "posts/2020/05/18/2141/My Clojure Vacation.md/My Clojure Vacation.md",
+   :extra-resources-rel
+   ("posts/2020/05/18/2141/My Clojure Vacation.md/ScreenShot2020-05-03at92816AM.png"),
+   :id #uuid "3f2f5d74-945a-4632-b1fb-7e9f2a50622e",
+   :status :published,
+   :filter #{:technical},
+   :src-path "/Users/bphillips/Documents/My Clojure Vacation.md"}
   {:title "Scaring People Is Easy",
    :timestamp 1588141621615,
    :markdown-rel-path
