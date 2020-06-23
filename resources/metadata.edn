@@ -1,11 +1,19 @@
-({:title "Who Wrote Conway's Law?",
-  :timestamp 1592243496411,
-  :markdown-rel-path "posts/2020/06/15/1233/Who Wrote Conway's Law?.md",
+({:title "Tell Them What You're Doing",
+  :timestamp 1592934704080,
+  :markdown-rel-path "posts/2020/06/23/1051/Tell Them What You're Doing.md",
   :extra-resources-rel (),
-  :id #uuid "df022c12-c46e-43dc-af38-46b59a09fd99",
+  :id #uuid "8cca2299-f97c-421b-ba7d-ad2b6b7b653d",
   :status :published,
   :filter #{:technical},
-  :src-path "/Users/bphillips/Documents/Who Wrote Conway's Law?.md"}
+  :src-path "/Users/bphillips/Documents/Tell Them What You're Doing.md"}
+  {:title "Who Wrote Conway's Law?",
+   :timestamp 1592243496411,
+   :markdown-rel-path "posts/2020/06/15/1233/Who Wrote Conway's Law?.md",
+   :extra-resources-rel (),
+   :id #uuid "df022c12-c46e-43dc-af38-46b59a09fd99",
+   :status :published,
+   :filter #{:technical},
+   :src-path "/Users/bphillips/Documents/Who Wrote Conway's Law?.md"}
   {:title "My Clojure Vacation",
    :timestamp 1589519847097,
    :markdown-rel-path
