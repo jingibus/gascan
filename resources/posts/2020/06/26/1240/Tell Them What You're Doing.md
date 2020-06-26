@@ -1,4 +1,4 @@
-There's an evergreen bit of advice that circulates in the tech world. Maybe it circulates elsewhere, to. It goes like this:
+There's an evergreen bit of advice that circulates in the tech world. Maybe it circulates elsewhere, too. It goes like this:
 Guard your schedule fiercely. If you feel a meeting is a waste of your time, stop going to it.
 This is great advice. I believe there is a corollary to it that I don't hear expressed often, though:
 If you stop going to a meeting, tell the person running the meeting why you aren't going anymore.
