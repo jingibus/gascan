@@ -408,3 +408,14 @@ done on the basis of kebab casing.
       (assoc interned-record 
              :parsed-markdown (parse-readable readable-markdown)))))
 
+(comment
+  ;; Here's how to import a post from the Documents folder:
+  (import-and-add-post! 
+   (remote/read-from-documents-md "Sample Projects.md"))
+
+  ;; Here's how to refresh it once it's been tweaked.
+  (refresh-post! {:title "sample projects"})
+
+  ;; And here's how to validate that it's up.
+  (gascan.browser/look-at "/")
+  )
