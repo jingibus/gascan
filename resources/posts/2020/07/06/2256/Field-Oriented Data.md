@@ -18,8 +18,8 @@ If I define the type as a generic record, I'll have to manually check the value 
 How could we define the type? One way would be an object-y way of doing it: define a type of record called `Person`, and use `person1` as our model: a `Person` has a `name` field that is a string, a `birthday` field that is a date, and a `favorite color` field that is a color. All of these can be implemented in a POJO fashion, with getters and setters.
 Now I can declare my function like so:
 
-        `def colorBirthday(cells: CalendarCells, person: Person):` 
-          `...` 
+        def colorBirthday(cells: CalendarCells, person: Person): 
+          ... 
 
 ...and I can be sure I'll get what I need to paint this person's birthday cell their favorite color.
 Unfortunately, this overspecifies our type. `colorBirthday` doesn't actually need the `name` field from `Person`. Due to the way our type works, though, the name has to come along for the ride.
