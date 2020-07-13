@@ -1,11 +1,20 @@
-({:title "Field-Oriented Data",
-  :timestamp 1594058610888,
-  :markdown-rel-path "posts/2020/07/06/2256/Field-Oriented Data.md",
+({:title "The Problem of Technical Society",
+  :timestamp 1594664093236,
+  :markdown-rel-path
+  "posts/2020/07/13/1123/The Problem of Technical Society.md",
   :extra-resources-rel (),
-  :id #uuid "52837abb-c893-492e-adb4-27fdd8853067",
+  :id #uuid "c340cf3b-8f6d-405f-906d-916d44cf316e",
   :status :published,
   :filter #{:technical},
-  :src-path "/Users/bphillips/Documents/Field-Oriented Data.md"}
+  :src-path "/Users/bphillips/Documents/The Problem of Technical Society.md"}
+  {:title "Field-Oriented Data",
+   :timestamp 1594058610888,
+   :markdown-rel-path "posts/2020/07/06/2256/Field-Oriented Data.md",
+   :extra-resources-rel (),
+   :id #uuid "52837abb-c893-492e-adb4-27fdd8853067",
+   :status :published,
+   :filter #{:technical},
+   :src-path "/Users/bphillips/Documents/Field-Oriented Data.md"}
   {:title "Sample Apps",
    :timestamp 1593455374069,
    :markdown-rel-path "posts/2020/06/29/1154/Sample Projects.md",
