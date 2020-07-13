@@ -416,6 +416,12 @@ done on the basis of kebab casing.
   ;; Here's how to refresh it once it's been tweaked.
   (refresh-post! {:title "sample projects"})
 
+  ;; Update check; this will validate the change, 
+  ;; use assoc-posts! to commit it
+  (assoc-posts-check {:title "The Problem of Technical Society"} 
+                     :status :published 
+                     :filter #{:technical})
+
   ;; And here's how to validate that it's up.
   (gascan.browser/look-at "/")
   )
