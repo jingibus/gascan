@@ -1,13 +1,21 @@
-({:title "Client Error Handling: Kinds of Errors",
-  :timestamp 1595270515168,
-  :markdown-rel-path
-  "posts/2020/07/20/1254/Client Error Handling- Kinds of Errors.md",
-  :extra-resources-rel (),
-  :id #uuid "1e38eb2d-a8ee-4071-8289-04473a9e7eac",
+({:title "My Heart's Slowing Down",
+  :timestamp 1595824122906,
+  :markdown-rel-path "posts/2020/07/26/2132/My Heart's Slowing Down.md",
+  :extra-resources-rel ("posts/2020/07/26/2132/My Heart's Slowing Down.mp3"),
+  :id #uuid "465fc932-9050-4b33-ae81-60fda510a100",
   :status :published,
-  :filter #{:technical},
-  :src-path
-  "/Users/bphillips/Documents/Client Error Handling- Kinds of Errors.md"}
+  :filter #{:music},
+  :src-path "/Users/bphillips/Documents/My Heart's Slowing Down.md"}
+  {:title "Client Error Handling: Kinds of Errors",
+   :timestamp 1595270515168,
+   :markdown-rel-path
+   "posts/2020/07/20/1254/Client Error Handling- Kinds of Errors.md",
+   :extra-resources-rel (),
+   :id #uuid "1e38eb2d-a8ee-4071-8289-04473a9e7eac",
+   :status :published,
+   :filter #{:technical},
+   :src-path
+   "/Users/bphillips/Documents/Client Error Handling- Kinds of Errors.md"}
   {:title "The Problem of Technical Society",
    :timestamp 1594664093236,
    :markdown-rel-path
