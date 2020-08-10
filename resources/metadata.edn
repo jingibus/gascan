@@ -1,11 +1,20 @@
-({:title "A Programmer's Ego",
-  :timestamp 1596477922158,
-  :markdown-rel-path "posts/2020/08/03/1119/A Programmer's Ego.md",
-  :extra-resources-rel (),
-  :id #uuid "ab62aa24-f8f2-4fc1-a2ea-20ad7260e753",
+({:title "How Can I Keep From Singing?",
+  :timestamp 1597033738826,
+  :markdown-rel-path "posts/2020/08/09/2139/How Can I Keep From Singing?.md",
+  :extra-resources-rel
+  ("posts/2020/08/09/2139/How Can I Keep From Singing.pdf"),
+  :id #uuid "7404fa17-075c-4686-b4ba-9ffd42c09931",
   :status :published,
-  :filter #{:technical},
-  :src-path "/Users/bphillips/Documents/A Programmer's Ego.md"}
+  :filter #{:music :technical :spiritual},
+  :src-path "/Users/bphillips/Documents/How Can I Keep From Singing?.md"}
+  {:title "A Programmer's Ego",
+   :timestamp 1596477922158,
+   :markdown-rel-path "posts/2020/08/03/1119/A Programmer's Ego.md",
+   :extra-resources-rel (),
+   :id #uuid "ab62aa24-f8f2-4fc1-a2ea-20ad7260e753",
+   :status :published,
+   :filter #{:technical},
+   :src-path "/Users/bphillips/Documents/A Programmer's Ego.md"}
   {:title "Hierarchy",
    :timestamp 1595875145359,
    :markdown-rel-path "posts/2020/07/27/1139/Hierarchy.md",
