@@ -1,5 +1,5 @@
 I'm not usually a lurker. I like to find a stance that I think is God's own truth, and argue about it.
-Like a lot of other things, more experience has shown me that just because I like doing something doesn't mean that my friends and I will be happier for my having done it. And so it is that I find myself lurking in our internal discussions about Contour.
+Experience has shown me that just because I like doing something doesn't mean that my friends and I will be happier for my having done it. And so it is that I find myself acting against type and lurking in our internal discussions about Contour.
 What's Contour, you ask? It's a layout tool some of my colleagues are working on. You can find the project [here](https://github.com/cashapp/contour) on GitHub. It's not quite to a 1.0 release, but it is used by many of us internally. As I've become familiar with building layouts in code, Contour has been second only to Kotlin in making that a pleasant experience.
 And while I didn't do much user interface work at my previous job, my background from prior to that left me with a few strong opinions. And, as much as I want to share them, I find myself holding my tongue.
 Why? Because I want to listen!
@@ -23,7 +23,7 @@ I've been rapt watching the discussion around Contour unfold because their job -
 Hah hah. No, not all done. What happens when the implementer doesn't follow the clear path? Who are they going to go to for help? You! You built the thing! Let's call your job the road builder.
 So where the trailblazer only points where to go, the road builder constructs a system for general use. The road builder will have some concrete examples in mind like the trailblazer does, but they will not be so laser focused on them.
 Instead, they will be thinking far more about support costs. After all, if it's not clear how to use the thing correctly, they'll come to someone for answers. As a user or as a trailblazer, I may be horrified and offended that my tools will prevent me from getting from point A to B in a way that I think is the clearest. But as a road builder, this is civilization itself: if you could get off the highway anywhere you like, you wouldn't have a highway.
-And that's what's key about the perspective: when building roads, one is really defining a whole playing field. If one can use the tool your building and fail to stay within the playing field you're defining, that's a bad thing. That's still your playing field, in spite of the fact that you didn't design it, because people built on it using your tool. If you change how it works, you impact them, and you end up being on the hook for supporting it.
+And that's what's key about the perspective: when building roads, one is really defining a whole playing field. If one can use the tool you're building and fail to stay within the playing field you're defining, that's a bad thing. That's still your playing field, in spite of the fact that you didn't design it, because people built on it using your tool. If you change how it works, you impact them, and you end up being on the hook for supporting it.
 
 ### Situations For Each
 
