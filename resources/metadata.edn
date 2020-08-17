@@ -1,14 +1,22 @@
-({:title "Old Books Old Poetry",
-  :timestamp 1597647249487,
-  :markdown-rel-path
-  "posts/2020/08/17/0104/Old Books, Old Poetry.md/Old Books, Old Poetry.md",
-  :extra-resources-rel
-  ("posts/2020/08/17/0104/Old Books, Old Poetry.md/parisnearrhyme.jpg"
-    "posts/2020/08/17/0104/Old Books, Old Poetry.md/popeshomersiliad.jpg"),
-  :id #uuid "bf91a42d-f066-4eb8-b5ba-14d152668e63",
+({:title "Trailblazing vs Process",
+  :timestamp 1597689516751,
+  :markdown-rel-path "posts/2020/08/17/1144/Trailblazing vs Process.md",
+  :extra-resources-rel (),
+  :id #uuid "cabf3824-8d48-4fcf-946d-71aa75b65f9a",
   :status :published,
-  :filter #{},
-  :src-path "/Users/bphillips/Documents/Old Books, Old Poetry.md"}
+  :filter #{:technical},
+  :src-path "/Users/bphillips/Documents/Trailblazing vs Process.md"}
+  {:title "Old Books Old Poetry",
+   :timestamp 1597647249487,
+   :markdown-rel-path
+   "posts/2020/08/17/0104/Old Books, Old Poetry.md/Old Books, Old Poetry.md",
+   :extra-resources-rel
+   ("posts/2020/08/17/0104/Old Books, Old Poetry.md/parisnearrhyme.jpg"
+     "posts/2020/08/17/0104/Old Books, Old Poetry.md/popeshomersiliad.jpg"),
+   :id #uuid "bf91a42d-f066-4eb8-b5ba-14d152668e63",
+   :status :published,
+   :filter #{},
+   :src-path "/Users/bphillips/Documents/Old Books, Old Poetry.md"}
   {:title "First Thoughts on VR",
    :timestamp 1597123588752,
    :markdown-rel-path "posts/2020/08/10/2238/First Thoughts on VR.md",
