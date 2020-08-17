@@ -24,7 +24,7 @@ Soon I found that I wasn't having much of a good time reciting these words aloud
 ![][parisnearrhyme]
 There's no rhyme there. There's not even a near rhyme: "His silence here, with blushes, Paris brakes, 'Tis just my brother what your anger speeks."
 Not doing any research of any kind, I cast about for other ways to hold my mouth and wend my tongue through the vowels that would bring this into a close rhyme. And so now I'm speaking it in a vaguely Irish way, and it makes much more sense.
-Is it accurate? I have no idea... it sounds nice, though. It's hypnotizing. And sometimes, swept up in the poetic reverie, I find yourself vulnerable to passages that suddenly grip me with a feeling.
+Is it accurate? I have no idea... it sounds nice, though. It's hypnotizing. And sometimes, swept up in poetic reverie, I find myself transported to an unanticipated feeling.
 Take this one from Book 3, for example. Paris, famous lover/kidnapper of Helen, has spent the entirety of the book taking it on the chin from everyone. Neither the Greeks nor the Trojans are particularly happy with him having taken Helen away, he fights a pitiful duel with a Greek king that ends in a cowardly divine rescue, Helen is asking about her dead brothers... it's a bad scene for handsome boy Paris.
 And then I reach the following passage:
 
