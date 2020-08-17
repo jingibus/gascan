@@ -1,11 +1,22 @@
-({:title "First Thoughts on VR",
-  :timestamp 1597123588752,
-  :markdown-rel-path "posts/2020/08/10/2238/First Thoughts on VR.md",
-  :extra-resources-rel (),
-  :id #uuid "1a2d1e68-7709-40b7-8f81-5bdc5763e1a5",
+({:title "Old Books Old Poetry",
+  :timestamp 1597647249487,
+  :markdown-rel-path
+  "posts/2020/08/17/0012/Old Books, Old Poetry.md/Old Books, Old Poetry.md",
+  :extra-resources-rel
+  ("posts/2020/08/17/0012/Old Books, Old Poetry.md/parisnearrhyme.jpg"
+    "posts/2020/08/17/0012/Old Books, Old Poetry.md/popeshomersiliad.jpg"),
+  :id #uuid "bf91a42d-f066-4eb8-b5ba-14d152668e63",
   :status :published,
-  :filter #{:technical},
-  :src-path "/Users/bphillips/Documents/First Thoughts on VR.md"}
+  :filter #{},
+  :src-path "/Users/bphillips/Documents/Old Books, Old Poetry.md"}
+  {:title "First Thoughts on VR",
+   :timestamp 1597123588752,
+   :markdown-rel-path "posts/2020/08/10/2238/First Thoughts on VR.md",
+   :extra-resources-rel (),
+   :id #uuid "1a2d1e68-7709-40b7-8f81-5bdc5763e1a5",
+   :status :published,
+   :filter #{:technical},
+   :src-path "/Users/bphillips/Documents/First Thoughts on VR.md"}
   {:title "Trailblazing vs Road Building",
    :timestamp 1597085156582,
    :markdown-rel-path "posts/2020/08/10/1233/Trailblazing vs Road Building.md",
