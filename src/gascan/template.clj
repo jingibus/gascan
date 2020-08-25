@@ -3,8 +3,8 @@
 
 (defn enframe
   [title body & {:keys [up-link]}]
-  (let [main-bg-color "#dcc48d"
-        text-color "#0a0538"
+  (let [main-bg-color "#dcc48d66"
+        text-color "#241b75"
         secondary-bg-color "#dca200"
         secondary-bg-color-but-darker "#a07601"
         accent-color "#1a0aa2"
