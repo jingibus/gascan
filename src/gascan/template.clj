@@ -35,7 +35,7 @@
               }
        [:div {:style (str "flex: 1 50000 " left-accent-strip-left-margin "; "
                           "display: flex; flex-direction: column; "
-                          "background-color: " main-bg-color )}
+                          )}
         [:div {:style (str "flex: 0 0 " top-banner-height "; "
                            "margin-top: " top-banner-top-margin "; "
                            "background-color: " secondary-bg-color "; ")}]]
@@ -44,22 +44,21 @@
        
        [:div {:style (str "flex: 0 1 " main-content-width "; "
                           "display: flex; flex-direction: column; "
-                          "background-color: " main-bg-color "; ")}
+                          )}
         [:div {:style (str "flex: 0 0 " top-banner-height "; "
                            "margin-top: " top-banner-top-margin "; "
                            "background-color: " secondary-bg-color "; ")}]
         [:div {:style (str "padding-left: " left-accent-strip-right-margin "; "
                            "padding-right: " left-accent-strip-right-margin "; "
                            "padding-top: 0px; "
-                           "padding-bottom: " main-content-bottom-padding "; ")}
+                           "padding-bottom: " main-content-bottom-padding "; "
+                           "background-color: " main-bg-color "; ")}
          [:h1 title]
          body
          (when up-link 
            [:div {:style "justify-content:center; display: flex"} up-link])]]
        [:div {:style (str "flex: 2 500 " main-content-right-margin "; "
-                          "display: flex; flex-direction: column; "
-                          "background-color: " main-bg-color)}
+                          "display: flex; flex-direction: column; ")}
         [:div {:style (str "flex: 0 0 " top-banner-height "; "
-                           "margin-top: " top-banner-top-margin "; "
-                           "background-color: " secondary-bg-color "; ")}]        ]
+                           "margin-top: " top-banner-top-margin "; ")}]]
        ]])))
