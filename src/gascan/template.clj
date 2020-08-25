@@ -24,10 +24,12 @@
                :content "width=device-width, initial-scale=1"}]
 
        [:link {:href "https://fonts.googleapis.com/css2?family=Domine&display=swap" :rel "stylesheet"}]
+       [:link {:href "https://fonts.googleapis.com/css2?family=Nanum+Myeongjo&display=swap" :rel "stylesheet"}]
+       
        [:style (str  "h1, h2, h3 { font-family: 'Domine', serif; } "
                      "a:link { color: " secondary-bg-color-but-darker "; } "
                      "a:visited { color: " accent-color "; } "
-                     "* { color: " text-color "; }")]
+                     "* { color: " text-color "; font-family: 'Nanum Myeongjo', serif}")]
        [:title title]]
       [:body {:style (str "margin: 8px; display: flex; flex-direction: row; ")
               }
