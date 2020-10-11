@@ -1,11 +1,21 @@
-({:title "Reactionary Brain Damage",
-  :timestamp 1601317904042,
-  :markdown-rel-path "posts/2020/09/28/1138/Reactionary Brain Damage.md",
+({:title "A response to a hot take on Myanmar on Facebook",
+  :timestamp 1602446438144,
+  :markdown-rel-path
+  "posts/2020/10/11/1305/A response to a hot take on Myanmar on Facebook.md",
   :extra-resources-rel (),
-  :id #uuid "109dd742-6332-4cda-9880-ae6a81c9d9d9",
+  :id #uuid "d9cf099a-ad4a-4058-bf2f-87edbc5edac7",
   :status :published,
-  :filter #{:technical},
-  :src-path "/Users/bphillips/Documents/Reactionary Brain Damage.md"}
+  :filter #{},
+  :src-path
+  "/Users/bphillips/Documents/A response to a hot take on Myanmar on Facebook.md"}
+  {:title "Reactionary Brain Damage",
+   :timestamp 1601317904042,
+   :markdown-rel-path "posts/2020/09/28/1138/Reactionary Brain Damage.md",
+   :extra-resources-rel (),
+   :id #uuid "109dd742-6332-4cda-9880-ae6a81c9d9d9",
+   :status :published,
+   :filter #{:technical},
+   :src-path "/Users/bphillips/Documents/Reactionary Brain Damage.md"}
   {:title "Navigation",
    :timestamp 1600670954241,
    :markdown-rel-path "posts/2020/09/21/0006/Navigation.md",
