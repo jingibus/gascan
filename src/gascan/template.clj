@@ -1,5 +1,6 @@
 (ns gascan.template
-  (:require [hiccup.core :as hc]))
+  (:require [hiccup.core :as hc]
+            [clojure.string :as string]))
 
 (defn enframe
   [title body & {:keys [up-link]}]
@@ -16,20 +17,36 @@
         left-accent-strip-right-margin "20px"
         main-content-width "430px"
         main-content-right-margin "50px"
-        main-content-bottom-padding "50px"]
+        main-content-bottom-padding "50px"
+        header-font "Domine"
+        main-text-font "Nanum Myeongjo"
+        code-font "Nanum Gothic Coding"]
     (hc/html
      [:html
       [:head
        [:meta {:name "viewport"
                :content "width=device-width, initial-scale=1"}]
 
-       [:link {:href "https://fonts.googleapis.com/css2?family=Domine&display=swap" :rel "stylesheet"}]
-       [:link {:href "https://fonts.googleapis.com/css2?family=Nanum+Myeongjo&display=swap" :rel "stylesheet"}]
+; <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100&family=Syne+Mono&display=swap" rel="stylesheet">
+       (let [fonts [header-font main-text-font code-font]]
+         [:link 
+          {:href 
+           (str 
+            "https://fonts.googleapis.com/css2?"
+             (->> fonts
+                  (map #(str "family=" (hc/h %)))
+                  (string/join "&")
+                  )
+             "&display=swap")
+           :rel "stylesheet"
+           }])
        
-       [:style (str  "h1, h2, h3 { font-family: 'Domine', serif; } "
+       [:style (str  "h1, h2, h3 { font-family: '" header-font "', serif; } "
                      "a:link { color: " secondary-bg-color-but-darker "; } "
                      "a:visited { color: " accent-color "; } "
-                     "* { color: " text-color "; font-family: 'Nanum Myeongjo', serif}")]
+                     "code { font-family: '" code-font "'} "
+                     "* { color: " text-color "; font-family: '" main-text-font "', serif} "
+                     )]
        [:title title]]
       [:body {:style (str "margin: 8px; display: flex; flex-direction: row; ")
               }
