@@ -8,7 +8,7 @@ My right arm occludes the IV access on his leg that they will use in a few minut
 Now here is Sam.
 ![][IMG_1850]
 Sam is eight weeks old. I did not pick him up from a pickup truck by Shoney's in Commerce, GA; I picked him up by a Wal-Mart in Brookhaven, MS. I can say for sure that Sam does have papers; they are from the Continental Kennel Club. This does not seem to be a reputable organization. His coat, however, is neither short nor long nor AKC admissible. It will probably be a good compromise between the San Francisco chill and my own refusal to own a longhair, which I consider effete. (They lack the reckless courage of the shorthair.)
-The morning I picked up Sam, I felt sure that when I met him my feelings would get the best of me and I would fall apart at my seams. That is what happened after Chauncey left, and I felt sure that meeting this new puppy would collapse the years and electrify the wrinkles Chauncey left in my brain.
+The morning I picked up Sam, I felt sure that when I met him my feelings would get the best of me and I would fall apart at my seams. That is what happened after Chauncey left, and so I thought that meeting this new puppy would collapse the years and electrify the wrinkles Chauncey left in my brain.
 But that did not happen, because he is not Chauncey. He is Sam.
 Sam is somehow already something like 11 out of 14 for pooping outside. He's attached to me, but does not cry overlong for a dog his age like Chauncey did. He prefers to know that I am around, but he does not want to sleep under the covers right next to me, like Chauncey did.
 And maybe that's a sign that I'm a different dog owner, too. I am now the owner of two wiener dogs. Sequentially.
