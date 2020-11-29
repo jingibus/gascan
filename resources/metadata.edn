@@ -1,13 +1,23 @@
-({:title "A response to a hot take on Myanmar on Facebook",
-  :timestamp 1602446438144,
-  :markdown-rel-path
-  "posts/2020/10/11/1305/A response to a hot take on Myanmar on Facebook.md",
-  :extra-resources-rel (),
-  :id #uuid "d9cf099a-ad4a-4058-bf2f-87edbc5edac7",
+({:title "Wiener Dogs",
+  :timestamp 1606621203384,
+  :markdown-rel-path "posts/2020/11/28/1947/Wiener Dogs.md/Wiener Dogs.md",
+  :extra-resources-rel
+  ("posts/2020/11/28/1947/Wiener Dogs.md/IMG_20200118_1840561.jpg"
+    "posts/2020/11/28/1947/Wiener Dogs.md/IMG_1850.jpg"),
+  :id #uuid "47c27acb-ac40-4d91-9bee-9d38f1c8511e",
   :status :published,
   :filter #{},
-  :src-path
-  "/Users/bphillips/Documents/A response to a hot take on Myanmar on Facebook.md"}
+  :src-path "/Users/bphillips/Documents/Wiener Dogs.md"}
+  {:title "A response to a hot take on Myanmar on Facebook",
+   :timestamp 1602446438144,
+   :markdown-rel-path
+   "posts/2020/10/11/1305/A response to a hot take on Myanmar on Facebook.md",
+   :extra-resources-rel (),
+   :id #uuid "d9cf099a-ad4a-4058-bf2f-87edbc5edac7",
+   :status :published,
+   :filter #{},
+   :src-path
+   "/Users/bphillips/Documents/A response to a hot take on Myanmar on Facebook.md"}
   {:title "Reactionary Brain Damage",
    :timestamp 1601317904042,
    :markdown-rel-path "posts/2020/09/28/1138/Reactionary Brain Damage.md",
