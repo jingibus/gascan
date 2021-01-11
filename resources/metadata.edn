@@ -1,13 +1,21 @@
-({:title "Wiener Dogs",
-  :timestamp 1606621203384,
-  :markdown-rel-path "posts/2020/11/28/2010/Wiener Dogs.md/Wiener Dogs.md",
-  :extra-resources-rel
-  ("posts/2020/11/28/2010/Wiener Dogs.md/IMG_20200118_1840561.jpg"
-    "posts/2020/11/28/2010/Wiener Dogs.md/IMG_1850.jpg"),
-  :id #uuid "47c27acb-ac40-4d91-9bee-9d38f1c8511e",
+({:title "Common Knowledge",
+  :timestamp 1610394448043,
+  :markdown-rel-path "posts/2021/01/11/1150/Common Knowledge.md",
+  :extra-resources-rel (),
+  :id #uuid "87f20600-3abd-4724-be31-3225092af288",
   :status :published,
-  :filter #{},
-  :src-path "/Users/bphillips/Documents/Wiener Dogs.md"}
+  :filter #{:technical},
+  :src-path "/Users/bphillips/Documents/Common Knowledge.md"}
+  {:title "Wiener Dogs",
+   :timestamp 1606621203384,
+   :markdown-rel-path "posts/2020/11/28/2010/Wiener Dogs.md/Wiener Dogs.md",
+   :extra-resources-rel
+   ("posts/2020/11/28/2010/Wiener Dogs.md/IMG_20200118_1840561.jpg"
+     "posts/2020/11/28/2010/Wiener Dogs.md/IMG_1850.jpg"),
+   :id #uuid "47c27acb-ac40-4d91-9bee-9d38f1c8511e",
+   :status :published,
+   :filter #{},
+   :src-path "/Users/bphillips/Documents/Wiener Dogs.md"}
   {:title "A response to a hot take on Myanmar on Facebook",
    :timestamp 1602446438144,
    :markdown-rel-path
