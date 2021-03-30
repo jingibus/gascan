@@ -1,11 +1,21 @@
-({:title "Avoid launchIn",
-  :timestamp 1616871044120,
-  :markdown-rel-path "posts/2021/03/27/1154/Avoid launchIn.md",
+({:title "The Great Debate: Reactive Versus SC",
+  :timestamp 1617126574632,
+  :markdown-rel-path
+  "posts/2021/03/30/1058/The Great Debate- Reactive Versus SC.md",
   :extra-resources-rel (),
-  :id #uuid "ba93cec6-75c5-4efb-a9b7-59c9e65c8314",
+  :id #uuid "3c9b0736-7b6f-4586-968c-c9beb1562b92",
   :status :published,
   :filter #{:technical},
-  :src-path "/Users/bphillips/Documents/Avoid launchIn.md"}
+  :src-path
+  "/Users/bphillips/Documents/The Great Debate- Reactive Versus SC.md"}
+  {:title "Avoid launchIn",
+   :timestamp 1616871044120,
+   :markdown-rel-path "posts/2021/03/27/1154/Avoid launchIn.md",
+   :extra-resources-rel (),
+   :id #uuid "ba93cec6-75c5-4efb-a9b7-59c9e65c8314",
+   :status :published,
+   :filter #{:technical},
+   :src-path "/Users/bphillips/Documents/Avoid launchIn.md"}
   {:title "Common Knowledge",
    :timestamp 1610394448043,
    :markdown-rel-path "posts/2021/01/11/1150/Common Knowledge.md",
