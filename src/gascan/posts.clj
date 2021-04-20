@@ -409,6 +409,9 @@ done on the basis of kebab casing.
              :parsed-markdown (parse-readable readable-markdown)))))
 
 (comment
+  ;; Oh god, have you forgotten everything?
+  ;; M-x cider-jack-in
+  ;; https://docs.cider.mx/cider/usage/cider_mode.html
   ;; Here's how to import a post from the Documents folder:
   (import-and-add-post! 
    (remote/read-from-documents-md "Sample Projects.md"))
