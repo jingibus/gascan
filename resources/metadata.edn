@@ -1,13 +1,23 @@
-({:title "The Great Debate: Reactive Versus SC",
-  :timestamp 1617126574632,
+({:title "CoroutineScope and coroutineContexts",
+  :timestamp 1618901892817,
   :markdown-rel-path
-  "posts/2021/03/30/1058/The Great Debate- Reactive Versus SC.md",
+  "posts/2021/04/20/0006/CoroutineScope and coroutineContexts.md",
   :extra-resources-rel (),
-  :id #uuid "3c9b0736-7b6f-4586-968c-c9beb1562b92",
+  :id #uuid "21c01154-5697-463a-9afa-a68e8df6d799",
   :status :published,
   :filter #{:technical},
   :src-path
-  "/Users/bphillips/Documents/The Great Debate- Reactive Versus SC.md"}
+  "/Users/bphillips/Documents/CoroutineScope and coroutineContexts.md"}
+  {:title "The Great Debate: Reactive Versus SC",
+   :timestamp 1617126574632,
+   :markdown-rel-path
+   "posts/2021/03/30/1058/The Great Debate- Reactive Versus SC.md",
+   :extra-resources-rel (),
+   :id #uuid "3c9b0736-7b6f-4586-968c-c9beb1562b92",
+   :status :published,
+   :filter #{:technical},
+   :src-path
+   "/Users/bphillips/Documents/The Great Debate- Reactive Versus SC.md"}
   {:title "Avoid launchIn",
    :timestamp 1616871044120,
    :markdown-rel-path "posts/2021/03/27/1154/Avoid launchIn.md",
