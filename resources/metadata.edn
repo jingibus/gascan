@@ -1,13 +1,26 @@
-({:title "CoroutineScope and coroutineContexts",
-  :timestamp 1618901892817,
+({:title "Awesome VC Audio For Not Too Much",
+  :timestamp 1618976238164,
   :markdown-rel-path
-  "posts/2021/04/20/0006/CoroutineScope and coroutineContexts.md",
-  :extra-resources-rel (),
-  :id #uuid "21c01154-5697-463a-9afa-a68e8df6d799",
+  "posts/2021/04/20/2047/Awesome VC Audio For Not Too Much.md/Awesome VC Audio For Not Too Much.md",
+  :extra-resources-rel
+  ("posts/2021/04/20/2047/Awesome VC Audio For Not Too Much.md/20210419_105323.jpg"
+    "posts/2021/04/20/2047/Awesome VC Audio For Not Too Much.md/marcmaron-obama-sm7.jpg"
+    "posts/2021/04/20/2047/Awesome VC Audio For Not Too Much.md/howardstern-headphones.jpg"
+    "posts/2021/04/20/2047/Awesome VC Audio For Not Too Much.md/20210419_131458.jpg"),
+  :id #uuid "888a776c-e3bc-43b1-af10-4d9da767e671",
   :status :published,
-  :filter #{:technical},
-  :src-path
-  "/Users/bphillips/Documents/CoroutineScope and coroutineContexts.md"}
+  :filter #{:audio},
+  :src-path "/Users/bphillips/Documents/Awesome VC Audio For Not Too Much.md"}
+  {:title "CoroutineScope and coroutineContexts",
+   :timestamp 1618901892817,
+   :markdown-rel-path
+   "posts/2021/04/20/0006/CoroutineScope and coroutineContexts.md",
+   :extra-resources-rel (),
+   :id #uuid "21c01154-5697-463a-9afa-a68e8df6d799",
+   :status :published,
+   :filter #{:technical},
+   :src-path
+   "/Users/bphillips/Documents/CoroutineScope and coroutineContexts.md"}
   {:title "The Great Debate: Reactive Versus SC",
    :timestamp 1617126574632,
    :markdown-rel-path
