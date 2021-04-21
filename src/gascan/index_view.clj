@@ -10,6 +10,7 @@
   [["technical" #{:technical}]
    ["spiritual" #{:spiritual}]
    ["music" #{:music}]
+   ["audio" #{:audio}]
    ["clojure" #{:clojure}]
    ["meta" #{:meta}]
    ["the firehose" #{}]])
