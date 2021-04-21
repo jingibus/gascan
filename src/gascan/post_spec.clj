@@ -55,7 +55,7 @@
         (java.util.UUID/fromString v)
         (catch Exception e false))))
 
-(s/def ::filter (s/every #{:meta :technical :clojure :spiritual :music}))
+(s/def ::filter (s/every #{:meta :technical :clojure :spiritual :music :audio}))
 (s/def ::status #{
                   :draft           ;; Drafts aren't visible at all publicly.
                   :published       ;; Published are totally visible.
