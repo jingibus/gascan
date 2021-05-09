@@ -1,16 +1,25 @@
-({:title "Awesome VC Audio For Not Too Much",
-  :timestamp 1618976238164,
+({:title "Foot Marksmanship With runBlocking",
+  :timestamp 1620583751421,
   :markdown-rel-path
-  "posts/2021/04/20/2047/Awesome VC Audio For Not Too Much.md/Awesome VC Audio For Not Too Much.md",
-  :extra-resources-rel
-  ("posts/2021/04/20/2047/Awesome VC Audio For Not Too Much.md/20210419_105323.jpg"
-    "posts/2021/04/20/2047/Awesome VC Audio For Not Too Much.md/marcmaron-obama-sm7.jpg"
-    "posts/2021/04/20/2047/Awesome VC Audio For Not Too Much.md/howardstern-headphones.jpg"
-    "posts/2021/04/20/2047/Awesome VC Audio For Not Too Much.md/20210419_131458.jpg"),
-  :id #uuid "888a776c-e3bc-43b1-af10-4d9da767e671",
+  "posts/2021/05/09/1312/Foot Marksmanship With runBlocking.md",
+  :extra-resources-rel (),
+  :id #uuid "e27c2332-62c7-4855-a63f-17df3b928e07",
   :status :published,
-  :filter #{:audio},
-  :src-path "/Users/bphillips/Documents/Awesome VC Audio For Not Too Much.md"}
+  :filter #{:technical},
+  :src-path "/Users/bphillips/Documents/Foot Marksmanship With runBlocking.md"}
+  {:title "Awesome VC Audio For Not Too Much",
+   :timestamp 1618976238164,
+   :markdown-rel-path
+   "posts/2021/04/20/2047/Awesome VC Audio For Not Too Much.md/Awesome VC Audio For Not Too Much.md",
+   :extra-resources-rel
+   ("posts/2021/04/20/2047/Awesome VC Audio For Not Too Much.md/20210419_105323.jpg"
+     "posts/2021/04/20/2047/Awesome VC Audio For Not Too Much.md/marcmaron-obama-sm7.jpg"
+     "posts/2021/04/20/2047/Awesome VC Audio For Not Too Much.md/howardstern-headphones.jpg"
+     "posts/2021/04/20/2047/Awesome VC Audio For Not Too Much.md/20210419_131458.jpg"),
+   :id #uuid "888a776c-e3bc-43b1-af10-4d9da767e671",
+   :status :published,
+   :filter #{:audio},
+   :src-path "/Users/bphillips/Documents/Awesome VC Audio For Not Too Much.md"}
   {:title "CoroutineScope and coroutineContexts",
    :timestamp 1618901892817,
    :markdown-rel-path
