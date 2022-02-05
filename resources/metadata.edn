@@ -1,12 +1,21 @@
-({:title "Foot Marksmanship With runBlocking",
-  :timestamp 1620583751421,
-  :markdown-rel-path
-  "posts/2021/05/09/1312/Foot Marksmanship With runBlocking.md",
+({:title "Testing StateFlow Is Annoying",
+  :timestamp 1644022189916,
+  :markdown-rel-path "posts/2022/02/04/1730/Testing StateFlow Is Annoying.md",
   :extra-resources-rel (),
-  :id #uuid "e27c2332-62c7-4855-a63f-17df3b928e07",
+  :id #uuid "4db7606f-67f5-450d-a707-d4f78d20b17f",
   :status :published,
   :filter #{:technical},
-  :src-path "/Users/bphillips/Documents/Foot Marksmanship With runBlocking.md"}
+  :src-path "/Users/bphillips/Documents/Testing StateFlow Is Annoying.md"}
+  {:title "Foot Marksmanship With runBlocking",
+   :timestamp 1620583751421,
+   :markdown-rel-path
+   "posts/2021/05/09/1312/Foot Marksmanship With runBlocking.md",
+   :extra-resources-rel (),
+   :id #uuid "e27c2332-62c7-4855-a63f-17df3b928e07",
+   :status :published,
+   :filter #{:technical},
+   :src-path
+   "/Users/bphillips/Documents/Foot Marksmanship With runBlocking.md"}
   {:title "Awesome VC Audio For Not Too Much",
    :timestamp 1618976238164,
    :markdown-rel-path
