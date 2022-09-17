@@ -79,6 +79,7 @@ When writing in Scrivener:
             * Select "Block Quote". Add a carriage return *suffix* by typing `Opt-Return` in the suffix area. (Same as above.)
             * Add "Emphasis". Add an underline for the prefix and suffix.
             * Add "Markdown Bold". Add an asterisk for the prefix and suffix.
+            * Add "Heading 2". Add a prefix of carriage return, then "## ", and a suffix of a carriage return.
 
 ### Bugs
 
