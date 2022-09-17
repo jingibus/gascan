@@ -20,7 +20,8 @@
         main-content-bottom-padding "50px"
         header-font "Montserrat"
         main-text-font "Quicksand"
-        code-font "Inconsolata"]
+        code-font "Inconsolata"
+        code-color "#4f35c5"]
     (hc/html
      [:html
       [:head
@@ -44,7 +45,7 @@
        [:style (str  "h1, h2, h3 { font-family: '" header-font "', serif; } "
                      "a:link { color: " secondary-bg-color-but-darker "; } "
                      "a:visited { color: " accent-color "; } "
-                     "code { font-family: '" code-font "'} "
+                     "code { font-family: '" code-font "'; color: " code-color "; } "
                      "* { color: " text-color "; font-family: '" main-text-font "', serif} "
                      )]
        [:title title]]
