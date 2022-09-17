@@ -1,11 +1,21 @@
-({:title "Testing StateFlow Is Annoying",
-  :timestamp 1644022189916,
-  :markdown-rel-path "posts/2022/02/04/1730/Testing StateFlow Is Annoying.md",
+({:title "Sharp Edges On Shared Flows And Hidden Coroutines",
+  :timestamp 1663447178002,
+  :markdown-rel-path
+  "posts/2022/09/17/1427/Sharp Edges On Shared Flows And Hidden Coroutines.md",
   :extra-resources-rel (),
-  :id #uuid "4db7606f-67f5-450d-a707-d4f78d20b17f",
+  :id #uuid "1b8bf564-0b4c-406f-b778-db4a5e653aee",
   :status :published,
   :filter #{:technical},
-  :src-path "/Users/bphillips/Documents/Testing StateFlow Is Annoying.md"}
+  :src-path
+  "/Users/wphillips/Documents/Sharp Edges On Shared Flows And Hidden Coroutines.md"}
+  {:title "Testing StateFlow Is Annoying",
+   :timestamp 1644022189916,
+   :markdown-rel-path "posts/2022/02/04/1730/Testing StateFlow Is Annoying.md",
+   :extra-resources-rel (),
+   :id #uuid "4db7606f-67f5-450d-a707-d4f78d20b17f",
+   :status :published,
+   :filter #{:technical},
+   :src-path "/Users/bphillips/Documents/Testing StateFlow Is Annoying.md"}
   {:title "Foot Marksmanship With runBlocking",
    :timestamp 1620583751421,
    :markdown-rel-path
