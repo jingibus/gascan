@@ -67,10 +67,13 @@ When writing in Scrivener:
 * Change the title of the exported Markdown to whatever you want the title of the post to be.
 * Use the "Emphasis" style for italics. (Remap Cmd-i to this menu item in Mac's Keyboard settings.)
 * Create a new "Markdown Bold" character style from some bold formatted text. (Remap Cmd-b to this menu item in Mac's Keyboard settings.)
-* Export with the following settings:
-    * Plain MultiMarkdown format
-    * Check the box marked "Convert links to MultiMarkdown"
-    * Create a new MultiMarkdown Format with the following changes:
+* Create a new export format for your project:
+    1. Export project
+    2. Check the box marked "Convert links to MultiMarkdown"
+    3. Compile for "MultiMarkdown"
+    4. Select "Basic MultiMarkdown" under "Scrivener Formats"
+    5. Right click, "Duplicate & Edit Format"
+    6. Editing the new format, make the following changes:
         * Under "Styles," 
             * Select "Code Block". Add a carriage return prefix by typing `Opt-Return` in the prefix/suffix area. (Nothing will appear, but it will work anyway.)
             * Select "Block Quote". Add a carriage return *suffix* by typing `Opt-Return` in the suffix area. (Same as above.)
