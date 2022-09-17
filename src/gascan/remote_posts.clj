@@ -71,7 +71,7 @@
           (.isFile file-obj)
           (record-from-mm-flat filepath)
           :else
-          (throw (new java.io.IOException (str "Unknown file type: " 
+          (throw (new java.io.IOException (str "Unknown file: "
                                                filepath "::" file-obj))))))
 
 (s/fdef read-remote-post
@@ -85,6 +85,6 @@
 
 (defn read-from-documents-md
   [relpath]
-  (let [filepath (str "/Users/bphillips/Documents/" relpath
+  (let [filepath (str (System/getProperty "user.home") "/Documents/" relpath
                       (when-not (.endsWith relpath ".md") ".md"))]
     (read-remote-post filepath)))
