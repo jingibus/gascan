@@ -18,9 +18,9 @@
         main-content-width "430px"
         main-content-right-margin "50px"
         main-content-bottom-padding "50px"
-        header-font "Domine"
-        main-text-font "Nanum Myeongjo"
-        code-font "Nanum Gothic Coding"]
+        header-font "Montserrat"
+        main-text-font "Quicksand"
+        code-font "Inconsolata"]
     (hc/html
      [:html
       [:head
