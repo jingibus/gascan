@@ -3,7 +3,7 @@ Here's the code in question:
 
         val eventsChannel = Channel<UiEvent>(BUFFERED)
         lateinit var events : Flow<UiEvent>
-        val job = launch { 
+        val job = launch(start = UNDISPATCHED) { 
           events = eventsChannel.consumeAsFlow()
             .shareIn(this, SharingStarted.Lazily) 
         }
@@ -114,7 +114,7 @@ Which brings us all the way back to the beginning of the post:
 
         val eventsChannel = Channel<UiEvent>(BUFFERED)
         lateinit var events : Flow<UiEvent>
-        val job = launch { 
+        val job = launch(start = UNDISPATCHED) { 
           events = eventsChannel.consumeAsFlow()
             .shareIn(this, SharingStarted.Lazily) 
         }
