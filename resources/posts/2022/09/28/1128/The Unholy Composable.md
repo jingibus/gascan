@@ -4,15 +4,15 @@ A while back posed the following question to a group of Compose obsessives I par
 
 We had some fun with this little code golfing problem. It turns out that it is, in fact, possible. I liked my solution the best, and so that's the one I've remembered. Here it is:
 
-        @Composable
-        fun <R, T : R> previous(current: T, initial: R): R {
-          val lastValue = remember { mutableStateOf(initial) }
-          return remember(current) {
-            val previous = lastValue.value
-            lastValue.value = current
-            previous
-          }
-        }
+    @Composable
+    fun <R, T : R> previous(current: T, initial: R): R {
+      val lastValue = remember { mutableStateOf(initial) }
+      return remember(current) {
+        val previous = lastValue.value
+        lastValue.value = current
+        previous
+      }
+    }
 
 I like to bring this composable up every now and again, partly because it irritates the Jetpack Compose team (I hope Jim Sproch will forgive my delight when he replied "This will likely end very very poorly for you"). Probably for that reason I've settled on calling it The Unholy Composable.
 
@@ -22,86 +22,86 @@ Good question. And, while I have an answer for it, I'd like to prove that the Un
 First, what if we don't want to stop at the previous value? What about looking back 3, or even 4 or 5 values? 50 values?
 No problem:
 
-          @Composable
-          fun <T : Any> nthPrevious(n: Int, current: T): T? = 
-            nthPreviousInternal(n, current)
+    @Composable
+    fun <T : Any> nthPrevious(n: Int, current: T): T? = 
+      nthPreviousInternal(n, current)
 
-          @Composable
-          tailrec fun <T : Any> nthPreviousInternal(
-              n: Int, 
-              current: T?,
-          ): T? {
-            return when (n) {
-              0 -> current
-              1 -> previous(current, null)
-              else -> nthPreviousInternal(
-                n - 1, 
-                previous(current, null),
-              )
-            }
-          }
+    @Composable
+    tailrec fun <T : Any> nthPreviousInternal(
+        n: Int, 
+        current: T?,
+    ): T? {
+      return when (n) {
+        0 -> current
+        1 -> previous(current, null)
+        else -> nthPreviousInternal(
+          n - 1, 
+          previous(current, null),
+        )
+      }
+    }
 
 What if I want a list of the last 4 values? The last 50 values?
 Easily done:
 
-        @Composable
-        fun <T : Any> takeLast(n: Int, current: T): List<T> =
-          (0 until n).map { i ->
-            nthPrevious(i, current)
-          }.takeWhile { it != null }
-            .filterNotNull()
+    @Composable
+    fun <T : Any> takeLast(n: Int, current: T): List<T> =
+      (0 until n).map { i ->
+        nthPrevious(i, current)
+      }.takeWhile { it != null }
+        .filterNotNull()
 
 ## Limits To The Unholy Composable
 
 The Unholy Composable is not all-powerful. It can't magically look into the past: it has to `remember` previous compositions. So e.g. if you conditionally invoke `previous`, it won't always work:
 
-          @Test
-          fun previousIsntMagic(): Unit = runBlocking {
-            val values = Channel<Pair<Int, Int?>>(1)
-            var input by mutableStateOf(1)
+    @Test
+    fun previousIsntMagic(): Unit = runBlocking {
+      val values = Channel<Pair<Int, Int?>>(1)
+      var input by mutableStateOf(1)
 
-            val job = launch {
-              moleculeFlow(RecompositionClock.Immediate) {
-                if (input > 1) input to previous(input, null)
-                else input to null
-              }.distinctUntilChanged().collect { values.send(it) }
-            }
-            assertEquals(1 to null, values.awaitValue())
-            input = 2
-            assertEquals(2 to null, values.awaitValue())
-            job.cancel()
-          }
+      val job = launch {
+        moleculeFlow(RecompositionClock.Immediate) {
+          if (input > 1) input to previous(input, null)
+          else input to null
+        }.distinctUntilChanged().collect { values.send(it) }
+      }
+      assertEquals(1 to null, values.awaitValue())
+      input = 2
+      assertEquals(2 to null, values.awaitValue())
+      job.cancel()
+    }
 
 For the same reason, you can't use the approach in `takeLast` to build a function that gives you the entire history of a value off of `previous` or `nthPrevious`:
 
-          @Composable
-          fun <T : Any> historyInternal(
-              index: Int, 
-              current: T,
-          ): List<T> {
-            val oldValue = nthPrevious(index, current)
-            return when (oldValue) {
-              null -> emptyList()
-              else -> listOf(oldValue) + 
-                historyInternal(index + 1, current)
-            }
-          }
+    @Composable
+    fun <T : Any> historyInternal(
+        index: Int, 
+        current: T,
+    ): List<T> {
+      val oldValue = nthPrevious(index, current)
+      return when (oldValue) {
+        null -> emptyList()
+        else -> listOf(oldValue) + 
+          historyInternal(index + 1, current)
+      }
+    }
 
-          @Composable
-          fun <T : Any> history(current: T): List<T> = 
-            historyInternal(0, current)
+    @Composable
+    fun <T : Any> history(current: T): List<T> = 
+      historyInternal(0, current)
 
 This will fail to "record" new values the first time they are seen, because storage for those past values hasn't yet been allocated.
 Of course, you can get around that...
 
-        @Composable
-        fun <T> history(current: T): List<T> {
-          val history = remember { mutableListOf<T>() }
-          return remember(current) {
-            history.add(0, current)
-            history.toList()
-          }
-        }
+    @Composable
+    fun <T> history(current: T): List<T> {
+      val history = remember { mutableListOf<T>() }
+      return remember(current) {
+        history.add(0, current)
+        history.toList()
+      }
+    }
 
 ## A Difficult Badness
 
