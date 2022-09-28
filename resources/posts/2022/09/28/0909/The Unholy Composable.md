@@ -1,4 +1,4 @@
-A while back someone in Android Study Group posed the following question:
+A while back posed the following question to a group of Compose obsessives I participate in:
 
 > Can anyone tell me how to get a value from a previous composition?
 
@@ -129,7 +129,9 @@ This is also why the unholy composable is unholy: it opens the door again to the
 ## Discipline Is Power
 
 In programming, discipline is power. Discipline means being _capable_ of doing something, but _not_ doing it.
-The reason this grants us power is that complexity saps us. Great programmers do have the ability to hold huge systems in their heads, but even they are limited at the end of the day by the complexity they create. Once it's too complex to understand and modify, they have to move on to something else to keep building.
+In this post, I have intentionally not explained how any of the code works. I've got my good reasons for that, but buried between them is a less good reason: I take a bit of pride in having figured this code out. It shows that I'm capable of building something that does something its creators did not intend.
+But if I were to use this code in practice, I would add a completely unnecessary complexity. Rich Hickey calls this "complecting" - adding one more concept to our program.
+Over time, repeated complections creates complexity, which saps us. Great programmers do have the ability to hold huge systems in their heads, but even they are limited at the end of the day by the complexity they create. Once it's too complex to understand and modify, they have to move on to something else to keep building.
 Good disciplines remove options. They cut connections, they untangle webs. And if they're good disciplines, they do not reduce your capabilities one bit. So if you find a good discipline, it's worth holding firm to.
 
 ## One Recomposition At A Time
