@@ -129,10 +129,10 @@ This is also why the unholy composable is unholy: it opens the door again to the
 ## Discipline Is Power
 
 In programming, discipline is power. Discipline means being _capable_ of doing something, but _not_ doing it.
-In this post, I have intentionally not explained how any of the code works. I've got my good reasons for that, but buried between them is a less good reason: I take a bit of pride in having figured this code out. It shows that I'm capable of building something that does something its creators did not intend.
-But if I were to use this code in practice, I would add a completely unnecessary complexity. Rich Hickey calls this "complecting" - adding one more concept to our program.
-Over time, repeated complections creates complexity, which saps us. Great programmers do have the ability to hold huge systems in their heads, but even they are limited at the end of the day by the complexity they create. Once it's too complex to understand and modify, they have to move on to something else to keep building.
-Good disciplines remove options. They cut connections, they untangle webs. And if they're good disciplines, they do not reduce your capabilities one bit. So if you find a good discipline, it's worth holding firm to.
+In this post, I have intentionally not explained how any of the code works. I've got my good reasons for that, but buried between them is a less good reason: I'm kinda proud that I figured this code out. It shows that I'm capable of using Compose to build something its creators did not intend. And that's a fun little hack.
+But if I were to use this code in practice, I would add a completely unnecessary complexity, a whole new dimension that its reader must consider. Rich Hickey calls this "complecting" - adding one more concept to our program.
+Over time, repeated complections creates complexity. And for our era of software engineering, particularly on the client side, complexity --- not CPU speed, not memory, not persistent storage capacity --- is the primary physical limitation we are working around. Having a high performing team that can understand a more complicated codebase opens up bigger possibilities, but even a high performing team can only do so much. Eventually the system will become too complex to understand and modify, and the team will have three choices: deal with it (and probably make things worse), simplify it (which is extremely hard), or abandon it (which is risky).
+Good disciplines remove options, which simplifies your analysis and removes complexity. They cut connections, they untangle webs. And if they're good disciplines, they do not reduce your capabilities one bit. If you find one, hold fast to it.
 
 ## One Recomposition At A Time
 
