@@ -1,11 +1,20 @@
-({:title "The Unholy Composable",
-  :timestamp 1664304632505,
-  :markdown-rel-path "posts/2022/09/28/1128/The Unholy Composable.md",
+({:title "Fakes Are Great, But Mocks I Hate",
+  :timestamp 1664596319773,
+  :markdown-rel-path
+  "posts/2022/09/30/2106/Fakes Are Great, But Mocks I Hate.md",
   :extra-resources-rel (),
-  :id #uuid "f7536407-b97e-44bd-b79e-0f1a91b03bb1",
+  :id #uuid "15750052-51e3-4165-9450-56bb5e40686b",
   :status :published,
   :filter #{:technical},
-  :src-path "/Users/wphillips/Documents/The Unholy Composable.md"}
+  :src-path "/Users/wphillips/Documents/Fakes Are Great, But Mocks I Hate.md"}
+  {:title "The Unholy Composable",
+   :timestamp 1664304632505,
+   :markdown-rel-path "posts/2022/09/28/1128/The Unholy Composable.md",
+   :extra-resources-rel (),
+   :id #uuid "f7536407-b97e-44bd-b79e-0f1a91b03bb1",
+   :status :published,
+   :filter #{:technical},
+   :src-path "/Users/wphillips/Documents/The Unholy Composable.md"}
   {:title "Sharp Edges On Shared Flows And Hidden Coroutines",
    :timestamp 1663447178002,
    :markdown-rel-path
