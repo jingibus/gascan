@@ -244,7 +244,7 @@
 
 (defn title->locator-string
   [s]
-  (string/replace (to-kebab-case s) #"[?/=&]" ""))
+  (string/replace (to-kebab-case s) #"[?/=&,]" ""))
 
 (defn update-if
   "Updates only if pred is truthy."
