@@ -85,6 +85,8 @@ When writing in Scrivener:
 
 It's ugly, and the workflow with Scrivener is finicky.
 
+Also, I really don't like the markdown dependency I'm using.
+
 ## License
 
 Copyright © 2020 Bill Phillips
