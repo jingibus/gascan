@@ -1,12 +1,20 @@
-({:title "Fakes Are Great, But Mocks I Hate",
-  :timestamp 1664596319773,
-  :markdown-rel-path
-  "posts/2022/09/30/2106/Fakes Are Great, But Mocks I Hate.md",
+({:title "Tech Talks Are Calls To Action",
+  :timestamp 1670271814359,
+  :markdown-rel-path "posts/2022/12/05/1334/Tech Talks Are Calls To Action.md",
   :extra-resources-rel (),
-  :id #uuid "15750052-51e3-4165-9450-56bb5e40686b",
+  :id #uuid "0303bd03-9d89-4862-b904-4f0add414d0e",
   :status :published,
   :filter #{:technical},
-  :src-path "/Users/wphillips/Documents/Fakes Are Great, But Mocks I Hate.md"}
+  :src-path "/Users/wphillips/Documents/Tech Talks Are Calls To Action.md"}
+  {:title "Fakes Are Great, But Mocks I Hate",
+   :timestamp 1664596319773,
+   :markdown-rel-path
+   "posts/2022/09/30/2106/Fakes Are Great, But Mocks I Hate.md",
+   :extra-resources-rel (),
+   :id #uuid "15750052-51e3-4165-9450-56bb5e40686b",
+   :status :published,
+   :filter #{:technical},
+   :src-path "/Users/wphillips/Documents/Fakes Are Great, But Mocks I Hate.md"}
   {:title "The Unholy Composable",
    :timestamp 1664304632505,
    :markdown-rel-path "posts/2022/09/28/1128/The Unholy Composable.md",
