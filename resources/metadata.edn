@@ -1,11 +1,20 @@
-({:title "Tech Talks Are Calls To Action",
-  :timestamp 1670271814359,
-  :markdown-rel-path "posts/2022/12/05/1334/Tech Talks Are Calls To Action.md",
+({:title "New College",
+  :timestamp 1673502496500,
+  :markdown-rel-path "posts/2023/01/11/2157/New College.md",
   :extra-resources-rel (),
-  :id #uuid "0303bd03-9d89-4862-b904-4f0add414d0e",
+  :id #uuid "293f7759-6133-416a-be42-67e1759e0741",
   :status :published,
-  :filter #{:technical},
-  :src-path "/Users/wphillips/Documents/Tech Talks Are Calls To Action.md"}
+  :filter #{},
+  :src-path "/Users/wphillips/Documents/New College.md"}
+  {:title "Tech Talks Are Calls To Action",
+   :timestamp 1670271814359,
+   :markdown-rel-path
+   "posts/2022/12/05/1334/Tech Talks Are Calls To Action.md",
+   :extra-resources-rel (),
+   :id #uuid "0303bd03-9d89-4862-b904-4f0add414d0e",
+   :status :published,
+   :filter #{:technical},
+   :src-path "/Users/wphillips/Documents/Tech Talks Are Calls To Action.md"}
   {:title "Fakes Are Great, But Mocks I Hate",
    :timestamp 1664596319773,
    :markdown-rel-path
