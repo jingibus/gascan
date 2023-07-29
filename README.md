@@ -23,7 +23,7 @@ $ lein run run
 
 ## Importing new content
 
-To import new content, you will first need to create some in Scrivener. See below for strictures on Scrivener composition and export; Scrivener is finicky, and so am I. 
+To import new content, you will first need to create some in Scrivener. See below for strictures on Scrivener composition and export; Scrivener is finicky, and maybe I regret the decision to rely on it so heavily now.
 
 Having exported to, say, `/Users/bphillips/Documents/Focus Loops In Perspective.md`, content is managed at the REPL. First convert it to a remote post:
 
