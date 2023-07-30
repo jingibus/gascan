@@ -68,6 +68,9 @@
     (GET (routing/posts-by-date-path) [& query-params]
          (println "route to all posts")
          (posts-view/posts-by-date-view sess query-params))
+    (GET (routing/posts-rss) [& query-params]
+         (println "route to rss")
+         (posts-view/posts-view-rss sess query-params))
     (GET (routing/posts-by-date-path "") [& query-params]
          (println "route to all posts")
          (posts-view/posts-by-date-view sess query-params))

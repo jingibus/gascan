@@ -25,6 +25,58 @@
       (list "#==" link "==#")
       link)))
 
+(defn posts-view-rss-internal
+  "Yields an RSS view of posts by date, possibly with criteria.
+
+  (posts-by-date-rss-view ... #{:meta :programming}) is equivalent to
+  (posts-by-date-rss-view ... \"meta-programming\").
+"
+  ([sess query-params]
+   (posts-view-rss-internal sess query-params #{}))
+  ([sess query-params criteria]
+   (let [{from-post-id :from-post-id} (routing/posts-query-params->map query-params)
+         zone (java-time/zone-id "America/Los_Angeles")
+         criteria (if (string? criteria)
+                    (into #{} (map keyword (clojure.string/split criteria #"-")))
+                    criteria)
+         key-fn #(day-key (:timestamp %) zone)
+         visible? (partial posts/visible-to-session? sess)
+         matches-criteria #(or (empty? criteria)
+                               (seq (clojure.set/intersection
+                                     criteria
+                                     (:filter %))))
+         route-to-self #(str "https://www.billjings.com" %)
+         self-link (route-to-self (routing/posts-rss))
+         posts (posts/posts)]
+     (when (seq posts)
+       (str
+        "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
+        (hc/html
+         {:mode :xml}
+         [:rss
+          {:version "2.0"
+           :xmlns:atom "http://www.w3.org/2005/Atom"}
+
+          [:channel
+           [:atom:link
+            {:href self-link
+             :rel "self"
+             :type "application/rss+xml"}]
+           [:title "The Gas Can"]
+           [:link self-link]
+           [:description "Bill Phillips' personal blog"]
+           (map #(vec [:item
+                       [:title (:title %)]
+                       [:link
+                        (route-to-self
+                         (routing/post->title-path % criteria))]])
+                posts)]]))))))
+
+(defn posts-view-rss
+  "Indirection for dynamic debugging"
+  ([& args]
+   (apply posts-view-rss-internal args)))
+
 (defn posts-by-date-view
   "Yields a view of posts by date, possibly with criteria.
 

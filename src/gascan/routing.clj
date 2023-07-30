@@ -13,6 +13,10 @@
          criteria-kebab (clojure.string/join "-" (map name criteria))]
      (str "/posts/criteria/" criteria-kebab))))
 
+(defn posts-rss
+  ([]
+   "/rss"))
+
 (defn posts-by-date-from-post-id-path
   [post-id & base-path-args]
   (let [base-uri (uri/uri (apply posts-by-date-path base-path-args))
