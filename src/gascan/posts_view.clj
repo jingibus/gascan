@@ -6,9 +6,17 @@
             [gascan.view-common :as view-common]
             [hiccup.core :as hc]
             [gascan.routing :as routing])
+  (:import [java.time.format DateTimeFormatter])
   (:use gascan.debug))
 
 (def sorting-formatter (java-time/formatter "YYYY/MM/dd"))
+
+(defn rfc-1123-format
+  [timestamp]
+  (let [as-date-time (-> timestamp
+                         java-time/instant
+                         (java-time/zoned-date-time (java-time/zone-id "GMT")))]
+    (java-time/format DateTimeFormatter/RFC_1123_DATE_TIME as-date-time)))
 
 (defn day-key
   [timestamp zone]
@@ -32,22 +40,15 @@
   (posts-by-date-rss-view ... \"meta-programming\").
 "
   ([sess query-params]
-   (posts-view-rss-internal sess query-params #{}))
-  ([sess query-params criteria]
    (let [{from-post-id :from-post-id} (routing/posts-query-params->map query-params)
          zone (java-time/zone-id "America/Los_Angeles")
-         criteria (if (string? criteria)
-                    (into #{} (map keyword (clojure.string/split criteria #"-")))
-                    criteria)
          key-fn #(day-key (:timestamp %) zone)
          visible? (partial posts/visible-to-session? sess)
-         matches-criteria #(or (empty? criteria)
-                               (seq (clojure.set/intersection
-                                     criteria
-                                     (:filter %))))
          route-to-self #(str "https://www.billjings.com" %)
          self-link (route-to-self (routing/posts-rss))
-         posts (posts/posts)]
+         posts (->> (posts/posts)
+                    (filter visible?)
+                    (sort-by #(- (:timestamp %))))]
      (when (seq posts)
        (str
         "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
@@ -67,9 +68,10 @@
            [:description "Bill Phillips' personal blog"]
            (map #(vec [:item
                        [:title (:title %)]
+                       [:pubDate (->> % (:timestamp) (rfc-1123-format))]
                        [:link
                         (route-to-self
-                         (routing/post->title-path % criteria))]])
+                         (routing/post->title-path %))]])
                 posts)]]))))))
 
 (defn posts-view-rss
