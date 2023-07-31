@@ -49,7 +49,12 @@
        [:p
         "..."
         [:a {:href (routing/what-it-is-path)}
-         "what is it?"]]])
+         "what is it?"]]]
+      [:div {:style "justify-content:flex-end; display: flex"}
+       [:p
+        [:a {:href (routing/posts-rss)}
+         "rss"]]]
+)
      )))
 
 (comment
