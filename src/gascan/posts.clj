@@ -426,5 +426,6 @@ done on the basis of kebab casing.
                      :filter #{:technical})
 
   ;; And here's how to validate that it's up.
+  ;; Check and make sure that your chromedriver is up-to-date!
   (gascan.browser/look-at "/")
   )
