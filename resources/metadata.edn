@@ -1,11 +1,19 @@
-({:title "New College",
-  :timestamp 1673502496500,
-  :markdown-rel-path "posts/2023/01/11/2157/New College.md",
+({:title "Yo La Tengo: You've Got It",
+  :timestamp 1696302013213,
+  :markdown-rel-path "posts/2023/10/02/2000/Yo La Tengo: You've Got It.md",
   :extra-resources-rel (),
-  :id #uuid "293f7759-6133-416a-be42-67e1759e0741",
+  :id #uuid "4c113503-adc7-4082-be43-e789a1575419",
   :status :published,
-  :filter #{},
-  :src-path "/Users/wphillips/Documents/New College.md"}
+  :filter #{:technical},
+  :src-path "/Users/wphillips/Documents/Yo La Tengo: You've Got It.md"}
+  {:title "New College",
+   :timestamp 1673502496500,
+   :markdown-rel-path "posts/2023/01/11/2157/New College.md",
+   :extra-resources-rel (),
+   :id #uuid "293f7759-6133-416a-be42-67e1759e0741",
+   :status :published,
+   :filter #{},
+   :src-path "/Users/wphillips/Documents/New College.md"}
   {:title "Tech Talks Are Calls To Action",
    :timestamp 1670271814359,
    :markdown-rel-path
