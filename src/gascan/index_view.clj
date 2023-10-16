@@ -8,6 +8,7 @@
 
 (def post-filters
   [["technical" #{:technical}]
+   ["wphillips weekly" #{:wphillips-weekly}]
    ["spiritual" #{:spiritual}]
    ["music" #{:music}]
    ["audio" #{:audio}]
