@@ -1,11 +1,21 @@
-({:title "Code Gravity",
-  :timestamp 1697416434159,
-  :markdown-rel-path "posts/2023/10/15/1740/Code Gravity.md",
+({:title "Experiments Aren't Expressions Of Customer Desire",
+  :timestamp 1698641844906,
+  :markdown-rel-path
+  "posts/2023/10/29/2159/Experiments Aren't Expressions Of Customer Desire.md",
   :extra-resources-rel (),
-  :id #uuid "f71b7df9-fbc8-4508-8bc0-744910684750",
+  :id #uuid "3fe5e225-b7b8-457d-aac5-1d61096c2ec9",
   :status :published,
   :filter #{:wphillips-weekly},
-  :src-path "/Users/wphillips/Documents/Code Gravity.md"}
+  :src-path
+  "/Users/wphillips/Documents/Experiments Aren't Expressions Of Customer Desire.md"}
+  {:title "Code Gravity",
+   :timestamp 1697416434159,
+   :markdown-rel-path "posts/2023/10/15/1740/Code Gravity.md",
+   :extra-resources-rel (),
+   :id #uuid "f71b7df9-fbc8-4508-8bc0-744910684750",
+   :status :published,
+   :filter #{:wphillips-weekly},
+   :src-path "/Users/wphillips/Documents/Code Gravity.md"}
   {:title "Yo La Tengo: You've Got It",
    :timestamp 1696302013213,
    :markdown-rel-path "posts/2023/10/02/2000/Yo La Tengo: You've Got It.md",
