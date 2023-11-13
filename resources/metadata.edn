@@ -1,13 +1,21 @@
-({:title "Experiments Aren't Expressions Of Customer Desire",
-  :timestamp 1698641844906,
-  :markdown-rel-path
-  "posts/2023/10/29/2159/Experiments Aren't Expressions Of Customer Desire.md",
+({:title "Why Unit Test?",
+  :timestamp 1699848180306,
+  :markdown-rel-path "posts/2023/11/12/2006/Why Unit Test?.md",
   :extra-resources-rel (),
-  :id #uuid "3fe5e225-b7b8-457d-aac5-1d61096c2ec9",
+  :id #uuid "4b1f9130-3f89-4a39-9066-8619e72b0373",
   :status :published,
-  :filter #{:wphillips-weekly},
-  :src-path
-  "/Users/wphillips/Documents/Experiments Aren't Expressions Of Customer Desire.md"}
+  :filter #{:technical :wphillips-weekly},
+  :src-path "/Users/wphillips/Documents/Why Unit Test?.md"}
+  {:title "Experiments Aren't Expressions Of Customer Desire",
+   :timestamp 1698641844906,
+   :markdown-rel-path
+   "posts/2023/10/29/2159/Experiments Aren't Expressions Of Customer Desire.md",
+   :extra-resources-rel (),
+   :id #uuid "3fe5e225-b7b8-457d-aac5-1d61096c2ec9",
+   :status :published,
+   :filter #{:wphillips-weekly},
+   :src-path
+   "/Users/wphillips/Documents/Experiments Aren't Expressions Of Customer Desire.md"}
   {:title "Code Gravity",
    :timestamp 1697416434159,
    :markdown-rel-path "posts/2023/10/15/1740/Code Gravity.md",
