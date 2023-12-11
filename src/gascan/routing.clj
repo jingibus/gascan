@@ -10,7 +10,7 @@
    "/posts")
   ([criteria]
    (let [criteria (if (string? criteria) #{(keyword criteria)} criteria)
-         criteria-kebab (clojure.string/join "-" (map name criteria))]
+         criteria-kebab (clojure.string/join "." (map name criteria))]
      (str "/posts/criteria/" criteria-kebab))))
 
 (defn posts-rss

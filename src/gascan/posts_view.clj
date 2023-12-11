@@ -83,7 +83,7 @@
   "Yields a view of posts by date, possibly with criteria.
 
   (posts-by-date-view ... #{:meta :programming}) is equivalent to
-  (posts-by-date-view ... \"meta-programming\").
+  (posts-by-date-view ... \"meta.programming\").
 "
   ([sess query-params]
    (posts-by-date-view sess query-params #{}))
@@ -91,7 +91,7 @@
    (let [{from-post-id :from-post-id} (routing/posts-query-params->map query-params)
          zone (java-time/zone-id "America/Los_Angeles")
          criteria (if (string? criteria)
-                    (into #{} (map keyword (clojure.string/split criteria #"-")))
+                    (into #{} (map keyword (clojure.string/split criteria #".")))
                     criteria)
          key-fn #(day-key (:timestamp %) zone)
          visible? (partial posts/visible-to-session? sess)
