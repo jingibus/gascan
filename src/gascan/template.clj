@@ -3,7 +3,7 @@
             [clojure.string :as string]))
 
 (defn enframe
-  [title body & {:keys [up-link]}]
+  [title body & {:keys [up-link date] :or {date nil}}]
   (let [main-bg-color "#dcc48d66"
         text-color "#241b75"
         secondary-bg-color "#dca200"
@@ -18,6 +18,7 @@
         main-content-width "430px"
         main-content-right-margin "50px"
         main-content-bottom-padding "50px"
+        date-bottom-padding "10px"
         header-font "Montserrat"
         main-text-font "Quicksand"
         code-font "Inconsolata"
@@ -73,6 +74,10 @@
                            "background-color: " main-bg-color "; ")}
          [:h1 title]
          body
+         (when date
+           [:div {:style (str "justify-content:center; display: flex; margin-bottom: " date-bottom-padding "; "
+                              "font-style: italic;") 
+} date])
          (when up-link 
            [:div {:style "justify-content:center; display: flex"} up-link])]]
        [:div {:style (str "flex: 2 500 " main-content-right-margin "; "

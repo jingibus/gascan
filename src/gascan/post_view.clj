@@ -3,12 +3,12 @@
             [clojure.string :as string]
             [clojure.zip :as z]
             [gascan.ast :as ast]
-            [gascan.ast :as ast]
             [gascan.images :as images]
             [gascan.intern :as intern]
             [gascan.multi-to-intern-markdown :as mm->im]
             [gascan.multimarkdown :as mm]
             [gascan.posts :as posts]
+            [gascan.posts-view :as posts-view]
             [gascan.routing :as routing]
             [gascan.session :as session]
             [gascan.template :as tmpl]
@@ -373,6 +373,7 @@
         ]
     (when rendered
       (tmpl/enframe (list title title-warning) rendered
+                    :date (posts-view/day-key timestamp (java-time/zone-id "America/Los_Angeles"))
                     :up-link (view-common/up-link up-target)))))
 
 (comment
