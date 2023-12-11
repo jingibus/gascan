@@ -1,11 +1,19 @@
-({:title "Why Unit Test?",
-  :timestamp 1699848180306,
-  :markdown-rel-path "posts/2023/11/12/2006/Why Unit Test?.md",
+({:title "Discipline Equals Speed",
+  :timestamp 1702258849922,
+  :markdown-rel-path "posts/2023/12/10/1740/Discipline Equals Speed.md",
   :extra-resources-rel (),
-  :id #uuid "4b1f9130-3f89-4a39-9066-8619e72b0373",
+  :id #uuid "8a82cfd2-594b-46f5-acb2-0089fcb42eda",
   :status :published,
   :filter #{:technical :wphillips-weekly},
-  :src-path "/Users/wphillips/Documents/Why Unit Test?.md"}
+  :src-path "/Users/wphillips/Documents/Discipline Equals Speed.md"}
+  {:title "Why Unit Test?",
+   :timestamp 1699848180306,
+   :markdown-rel-path "posts/2023/11/12/2006/Why Unit Test?.md",
+   :extra-resources-rel (),
+   :id #uuid "4b1f9130-3f89-4a39-9066-8619e72b0373",
+   :status :published,
+   :filter #{:technical :wphillips-weekly},
+   :src-path "/Users/wphillips/Documents/Why Unit Test?.md"}
   {:title "Experiments Aren't Expressions Of Customer Desire",
    :timestamp 1698641844906,
    :markdown-rel-path
