@@ -66,13 +66,14 @@
   (s/and int? 
          can-be-converted-to-instant? 
          is-semi-plausibly-within-bills-lifespan?))
+(s/def ::src-path string?)
 (s/def ::markdown-rel-path
   (s/and string? markdown-filename? valid-resource-path?))
 (s/def ::extra-resources-rel
   (s/every (s/and string? valid-resource-path?)))
 
-(def intern-post
-  "A post inside of gascan."
+(def persisted-intern-post
+  "A post as stored in metadata.edn."
   (s/keys :req-un [::id 
                    ::title 
                    ::timestamp 
@@ -80,7 +81,19 @@
                    ::extra-resources-rel
                    ::filter
                    ::status]
-          :opt-un [::parsed-markdown])) 
+          :opt-un [::src-path]))
+
+(def intern-post
+  "A post inside of gascan, possibly enriched with transient parsed markdown."
+  (s/keys :req-un [::id 
+                   ::title 
+                   ::timestamp 
+                   ::markdown-rel-path 
+                   ::extra-resources-rel
+                   ::filter
+                   ::status]
+          :opt-un [::src-path
+                   ::parsed-markdown])) 
 
 (s/def ::parsed-markdown flexmark-document?)
 (s/def ::markdown-abs-path valid-file?)

@@ -32,7 +32,16 @@
 
 (defn intern-abs-filepath
   [intern-rel-filepath]
-  (string/join "/" [resources-folder intern-rel-filepath]))
+  (let [fileobj (as-file intern-rel-filepath)]
+    (if (.isAbsolute fileobj)
+      (.getAbsolutePath fileobj)
+      (string/join "/" [resources-folder intern-rel-filepath]))))
+
+(defn- file-stream
+  [path]
+  (let [fileobj (as-file path)]
+    (when (.exists fileobj)
+      (io/input-stream fileobj))))
 
 (defn intern-file!
   ([filepath reldest folder-depth]
@@ -71,9 +80,8 @@
   "Reads in EDN from the given path. Opts is passed in to edn/read."
   [opts relpath]
   (some->>
-   relpath
-   resource
-   (.openStream)
+   (or (some-> relpath resource .openStream)
+       (some-> relpath intern-abs-filepath file-stream))
    reader
    (java.io.PushbackReader.)
    (edn/read opts)))
@@ -81,10 +89,8 @@
 (defn readable-file
   "Yields a readable file at relative filepath."
   [relpath]
-  (some->>
-   relpath
-   resource
-   (.openStream)))
+  (or (some-> relpath resource .openStream)
+      (some-> relpath intern-abs-filepath file-stream)))
 
 (defn delete-file
   [relpath]

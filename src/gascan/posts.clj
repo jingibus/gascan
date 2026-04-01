@@ -18,13 +18,38 @@
 (def toplevel-post-contents-folder "posts")
 (def post-metadata-edn "metadata.edn")
 
+(defn- spec-error-data
+  [spec value]
+  (with-out-str
+    (s/explain spec value)))
+
+(defn- validate-post!
+  [spec post context]
+  (when-not (s/valid? spec post)
+    (throw (ex-info (str "Invalid post metadata while " context)
+                    {:context context
+                     :post post
+                     :explain (spec-error-data spec post)})))
+  post)
+
+(defn- validate-posts!
+  [spec posts context]
+  (doall
+   (map-indexed
+    (fn [idx post]
+      (validate-post! spec post (str context " (entry " idx ")")))
+    posts))
+  posts)
+
 (defn fetch-posts
   []
-  {:post [(every? #(s/assert post-spec/intern-post %) %)]}
-  (or (read-edn {} post-metadata-edn) []))
+  (let [loaded-posts (or (read-edn {} post-metadata-edn) [])]
+    (validate-posts! post-spec/persisted-intern-post
+                     loaded-posts
+                     (str "reading " post-metadata-edn))))
 
 (s/fdef fetch-posts
-  :ret (s/every post-spec/intern-post))
+  :ret (s/every post-spec/persisted-intern-post))
 
 (defn reset-posts
   []
@@ -38,12 +63,14 @@
 
 (defn put-posts!
   [posts]
-  {:pre [(every? #(s/valid? post-spec/intern-post %) posts)]}
+  (validate-posts! post-spec/persisted-intern-post
+                   posts
+                   (str "writing " post-metadata-edn))
   (intern/intern-edn! post-metadata-edn posts)
   (reset-posts))
 
 (s/fdef put-posts!
-  :args (s/cat :posts (s/every post-spec/intern-post)))
+  :args (s/cat :posts (s/every post-spec/persisted-intern-post)))
 
 (defn to-yyyy-mm-dd-mmmm
   [timestamp]
