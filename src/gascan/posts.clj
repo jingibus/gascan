@@ -70,7 +70,7 @@
 (defn visible-to-session?
   [session post]
   (if (:public session)
-    (#{:published} (:status post))
+    (boolean (#{:published} (:status post)))
     true))
 
 (defn transformed-link
