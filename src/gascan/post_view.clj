@@ -360,13 +360,11 @@
         {title             :title
          timestamp         :timestamp
          path              :markdown-rel-path
-         status            :status
          id                :id
          :as post} 
         (posts/find-post locator)
         {up-criteria :up} (routing/post-query-params->map query-params)
-        visible? (posts/soft-visible-to-session? sess post) 
-        rendered (and visible? (render-markdown-to-html path))
+        rendered (and post (render-markdown-to-html path))
         up-target (routing/posts-by-date-from-post-id-path id up-criteria)
         ]
     (when rendered

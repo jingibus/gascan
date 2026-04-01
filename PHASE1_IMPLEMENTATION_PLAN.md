@@ -139,7 +139,6 @@ Protect the behavioral rules around published and soft-published posts before mo
 
 - Add tests for:
   - `visible-to-session?`
-  - `soft-visible-to-session?`
   - title slug lookup behavior
   - ID lookup behavior
   - criteria filtering behavior

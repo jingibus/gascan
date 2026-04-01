@@ -67,12 +67,6 @@
   :args (s/cat :tagged-scaffold (s/cat :tags map? :scaffold vector?))
   :ret (s/cat :tags map? :scaffold-ast vector?))
 
-(defn soft-visible-to-session?
-  [session post]
-  (if (:public session)
-    (#{:published :soft-published} (:status post))
-    true))
-
 (defn visible-to-session?
   [session post]
   (if (:public session)
