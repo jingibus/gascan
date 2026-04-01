@@ -337,7 +337,7 @@ Work:
 
 Recommendation:
 
-Start by generating platform-specific draft text locally before attempting direct publish APIs.
+Start by generating platform-specific candidate post text locally before attempting direct publish APIs.
 
 That staged rollout should be:
 
@@ -419,7 +419,7 @@ One reasonable shape:
          :url "https://..."
          :remote-id "..."
          :published-at 1710000000000}
-  :mastodon {:status :draft-generated}
+  :mastodon {:status :generated}
   :substack {:status :failed
              :last-error "401 unauthorized"}}}
 ```
@@ -429,7 +429,6 @@ One reasonable shape:
 The CLI is the key usability win. A good first cut would support:
 
 - `gascan import <path>`
-- `gascan list drafts`
 - `gascan set-meta --title <title> --status published --filter technical,wphillips-weekly`
 - `gascan build`
 - `gascan preview`
@@ -510,7 +509,7 @@ If only a few things happen, they should happen in this order:
 2. Add a CLI for import/build/publish
 3. Move hosting to static infrastructure
 4. Add native non-Scrivener authoring support
-5. Add POSSE draft generation
+5. Add POSSE content generation
 6. Add direct POSSE publishing
 
 This order produces value early:

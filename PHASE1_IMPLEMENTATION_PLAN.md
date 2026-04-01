@@ -133,7 +133,7 @@ Phase 1 will refactor call paths around rendering. These tests tell us whether t
 
 ### Goal
 
-Protect the behavioral rules around draft, published, and soft-published posts before moving code around.
+Protect the behavioral rules around published and soft-published posts before moving code around.
 
 ### Work
 
