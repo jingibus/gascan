@@ -400,14 +400,6 @@
    :status :published,
    :filter #{:music :spiritual},
    :src-path "/Users/bphillips/Documents/Easter Lament.md"}
-  {:title "Basic Test",
-   :timestamp 1586899730533,
-   :markdown-rel-path "posts/2020/04/14/1558/Basic Test.md",
-   :extra-resources-rel (),
-   :id #uuid "67b51156-747d-432c-a10e-ff4a908a0b45",
-   :status :draft,
-   :filter #{},
-   :src-path "samples/Basic Test.md"}
   {:title "Initial Conception",
    :timestamp 1586577082502,
    :markdown-rel-path "posts/2020/04/10/0010/Initial Conception.md",
@@ -428,21 +420,4 @@
    :status :published,
    :filter #{:music :spiritual},
    :src-path "/Users/bphillips/Documents/Morning Prayer Settings.md"}
-  {:title "PDF Link Test",
-   :timestamp 1586412570338,
-   :markdown-rel-path "posts/2020/04/08/0009/PDF Link Test.md",
-   :extra-resources-rel ("posts/2020/04/08/0009/Jubilate - Full Score.pdf"),
-   :id #uuid "aee66f62-f6d6-43a2-91fb-3e580689c2e8",
-   :status :draft,
-   :filter #{},
-   :src-path "samples/PDF Link Test.md"}
-  {:title "Image Test",
-   :timestamp 1586308214903,
-   :markdown-rel-path "posts/2020/04/07/0010/Image Test.md/Image Test.md",
-   :extra-resources-rel
-   ("posts/2020/04/07/0010/Image Test.md/ScreenShot2020-03-30at110216PM.png"
-     "posts/2020/04/07/0010/Image Test.md/post-creation-workflow.jpg"),
-   :id #uuid "2c33bb72-72b0-481d-840f-096b9b56780a",
-   :status :draft,
-   :filter #{},
-   :src-path "samples/Image Test.md"})
+  )

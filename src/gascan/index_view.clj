@@ -30,16 +30,13 @@
                                          post-visible-in-session
                                          post-matches-filter))
                                 (sort-by (comp - :timestamp))
-                                first)
-                draft-warning (when-not (#{:published} (:status first-post)) 
-                                [:font {:color "red"} " (DRAFT) "])]
+                                first)]
             (when first-post
               [:p 
                title " - \""
                [:a {:href (routing/post->title-path first-post)}
                 (:title first-post) ]
                "\""
-               draft-warning
                " -[" [:a {:href (routing/posts-by-date-path post-filter)}
                       "index"] "]-"])))]
     (template/enframe

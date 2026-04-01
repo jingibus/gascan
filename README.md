@@ -49,7 +49,7 @@ user> (gascan.remote-posts/read-remote-post
  :src-path "/Users/bphillips/Documents/Focus Loops In Perspective.md"}
 ```
 
-Then intern it as a draft and add the interned post to the post store:
+Then intern it and add the post to the post store:
 
 ```
 user> (gascan.posts/import-and-add-post! 
@@ -65,7 +65,7 @@ user> (gascan.browser/look-at
  (post->title-path (posts/find-post {:title "Focus Loops In Perspective"})))
 ```
 
-The `gascan.posts` module has more tools for updating posts. Usually you will want to update the filter keys to pick one or more sections the post will appear in, and then update `:status` to `:published` to serve the post publicly.
+The `gascan.posts` module has more tools for updating posts. Usually you will want to update the filter keys to pick one or more sections the post will appear in.
 
 ## Writing and exporting in Scrivener
 

@@ -57,7 +57,6 @@
 
 (s/def ::filter (s/every #{:meta :technical :clojure :spiritual :music :audio :wphillips-weekly}))
 (s/def ::status #{
-                  :draft           ;; Drafts aren't visible at all publicly.
                   :published       ;; Published are totally visible.
                   :soft-published  ;; Soft published don't show up in indices.
                   })
@@ -96,4 +95,3 @@
                    ::markdown-abs-path
                    ::extra-resources
                    ::dir-depth]))
-

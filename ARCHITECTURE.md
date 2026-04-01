@@ -68,7 +68,7 @@ This flag controls which posts are visible:
 
 - Public sessions show only `:published` posts in indexes
 - Individual post rendering allows `:soft-published` posts in public mode
-- Private sessions effectively expose drafts and other unpublished content for author use
+- Private sessions effectively expose all posts for author use
 
 That makes "preview vs public" a runtime concern rather than a separate environment or content store.
 
@@ -144,7 +144,7 @@ The main workflow is:
    - rewrites file links to local relative resource names
    - strips the title block from the rendered body
    - copies markdown and extra files into `resources/posts/YYYY/MM/DD/HHmm/...`
-   - creates an interned metadata record with a new UUID and `:draft` status
+   - creates an interned metadata record with a new UUID and `:published` status
 3. `gascan.posts/import-and-add-post!`
    - appends the new post to `metadata.edn`
 

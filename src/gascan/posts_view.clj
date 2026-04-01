@@ -107,9 +107,7 @@
                            (partition-by key-fn)
                            (map (juxt #(key-fn (first %)) identity)))
          status-warning #(let [status (:status %)]
-                           (cond (#{:draft} status) 
-                                 [:font {:color "red"} " (DRAFT)"]
-                                 (#{:soft-published} status)
+                           (cond (#{:soft-published} status)
                                  [:font {:color "orange"} " (SOFT)"]
                                  (not (#{:published} status))
                                  [:font {:color "purple"} 

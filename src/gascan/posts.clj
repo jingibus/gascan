@@ -223,7 +223,7 @@
           :markdown-rel-path interned-markdown-path
           :extra-resources-rel interned-resources
           :id (java.util.UUID/randomUUID)
-          :status :draft
+          :status :published
           :filter #{}
           :src-path src-path
           }

@@ -367,12 +367,10 @@
         {up-criteria :up} (routing/post-query-params->map query-params)
         visible? (posts/soft-visible-to-session? sess post) 
         rendered (and visible? (render-markdown-to-html path))
-        title-warning (when (#{:draft} status) 
-                        [:font {:color "red"} " (DRAFT)"])
         up-target (routing/posts-by-date-from-post-id-path id up-criteria)
         ]
     (when rendered
-      (tmpl/enframe (list title title-warning) rendered
+      (tmpl/enframe title rendered
                     :date (posts-view/day-key timestamp (java-time/zone-id "America/Los_Angeles"))
                     :up-link (view-common/up-link up-target)))))
 
