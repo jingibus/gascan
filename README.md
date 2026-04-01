@@ -21,6 +21,14 @@ To serve content, try this:
 $ lein run run
 ```
 
+## Running tests
+
+Run the current automated test suite with:
+
+```
+$ lein test
+```
+
 ## Importing new content
 
 To import new content, you will first need to create some in Scrivener. See below for strictures on Scrivener composition and export; Scrivener is finicky, and maybe I regret the decision to rely on it so heavily now.
