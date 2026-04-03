@@ -98,7 +98,7 @@
 (s/def ::parsed-markdown flexmark-document?)
 (s/def ::markdown-abs-path valid-file?)
 (s/def ::extra-resources (s/every valid-file?))
-(s/def ::dir-depth #(and (int? %) (<= 0 % 1)))
+(s/def ::directory-post? boolean?)
 
 (def remote-post
   "Some markdown file outside of gascan that may be imported."
@@ -107,4 +107,4 @@
                    ::parsed-markdown
                    ::markdown-abs-path
                    ::extra-resources
-                   ::dir-depth]))
+                   ::directory-post?]))

@@ -216,7 +216,7 @@
               parsed-markdown :parsed-markdown
               markdown-abs-path :markdown-abs-path
               extra-resources :extra-resources
-              dir-depth :dir-depth
+              directory-post? :directory-post?
               src-path :src-path} remote-post
              timestamp-subfolders (to-yyyy-mm-dd-mmmm timestamp)
              [tags scaffold-ast] (remote-post->processed-tagged-scaffold remote-post)
@@ -231,12 +231,12 @@
                                    (monitorv-> "rendered md:"))
              post-contents-folder (string/join "/" [toplevel-post-contents-folder 
                                                     timestamp-subfolders])
-             intern-copied-file! #(intern-file! % post-contents-folder dir-depth)
+             intern-copied-file! #(intern-file! % post-contents-folder directory-post?)
              interned-resources (map intern-copied-file! (concat extra-resources
                                                                  other-files-to-import))
              interned-markdown-path (intern-file! markdown-abs-path 
                                                   post-contents-folder 
-                                                  dir-depth 
+                                                  directory-post? 
                                                   rendered-markdown)]
          {
           :title title

@@ -42,7 +42,7 @@
      :title (get-title parsed-markdown)
      :timestamp (System/currentTimeMillis)
      :extra-resources extra-resources
-     :dir-depth 1
+     :directory-post? true
      :parsed-markdown parsed-markdown
      :src-path dirpath}))
 
@@ -56,7 +56,7 @@
      :title (get-title parsed-markdown)
      :timestamp (System/currentTimeMillis)
      :extra-resources []
-     :dir-depth 0
+     :directory-post? false
      :parsed-markdown parsed-markdown
      :src-path filepath}))
 

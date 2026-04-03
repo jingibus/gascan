@@ -44,18 +44,19 @@
       (io/input-stream fileobj))))
 
 (defn intern-file!
-  ([filepath reldest folder-depth]
+  ([filepath reldest directory-post?]
    (let [fileobj (as-file filepath)]
      (if (.isFile fileobj)
        (intern-file! 
         filepath
         reldest
-        folder-depth
+        directory-post?
         (clojure.java.io/input-stream fileobj))
        (throw (new java.io.IOException 
                    (str "Cannot intern a non-file: " fileobj))))))
-  ([filepath reldest folder-depth contents]
-   (let [intern-rel-filepath (interned-filepath filepath reldest folder-depth)
+  ([filepath reldest directory-post? contents]
+   (let [folder-depth (if directory-post? 1 0)
+         intern-rel-filepath (interned-filepath filepath reldest folder-depth)
          intern-abs-filepath (intern-abs-filepath intern-rel-filepath)
          intern-fileobj (as-file intern-abs-filepath)]
      (do 
