@@ -10,6 +10,7 @@
             [gascan.posts :as posts]
             [gascan.posts-view :as posts-view]
             [gascan.routing :as routing]
+            [gascan.site :as site]
             [gascan.session :as session]
             [gascan.template :as tmpl]
             [gascan.view-common :as view-common]
@@ -347,7 +348,7 @@
 (defn post-resources-view
   [sess {:keys [id title] :as locator} res-name]
   (let [{resources :extra-resources-rel
-         :as post} (posts/find-post locator)]
+         :as post} (site/find-post locator)]
     (when post
       (some->> resources
                (filter #(= res-name (last (clojure.string/split % #"/"))))
@@ -362,7 +363,7 @@
          path              :markdown-rel-path
          id                :id
          :as post} 
-        (posts/find-post locator)
+        (site/find-post locator)
         {up-criteria :up} (routing/post-query-params->map query-params)
         rendered (and post (render-markdown-to-html path))
         up-target (routing/posts-by-date-from-post-id-path id up-criteria)

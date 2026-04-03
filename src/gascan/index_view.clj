@@ -1,8 +1,8 @@
 (ns gascan.index-view
   (:require [gascan.posts-view :as posts-view]
+            [gascan.site :as site]
             [gascan.template :as template]
             [hiccup.core :as hc]
-            [gascan.posts :as posts]
             [gascan.routing :as routing])
   )
 
@@ -18,19 +18,10 @@
 
 (defn index-view
   [sess]
-  (let [post-visible-in-session (partial posts/visible-to-session? sess)
-        post-filter-para 
+  (let [post-filter-para 
         (fn
           [[title post-filter]]
-          (let [post-matches-filter #(or (empty? post-filter)
-                                         (seq (clojure.set/intersection 
-                                               post-filter (:filter %)))) 
-                first-post (->> (posts/posts)
-                                (filter (every-pred
-                                         post-visible-in-session
-                                         post-matches-filter))
-                                (sort-by (comp - :timestamp))
-                                first)]
+          (let [first-post (site/newest-visible-post-by-criteria sess post-filter)]
             (when first-post
               [:p 
                title " - \""

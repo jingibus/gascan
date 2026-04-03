@@ -1,6 +1,7 @@
 (ns gascan.posts-view
   (:require [gascan.browser :as browser]
             [gascan.posts :as posts]
+            [gascan.site :as site]
             [gascan.session :as session]
             [gascan.template :as template]
             [gascan.view-common :as view-common]
@@ -43,11 +44,9 @@
    (let [{from-post-id :from-post-id} (routing/posts-query-params->map query-params)
          zone (java-time/zone-id "America/Los_Angeles")
          key-fn #(day-key (:timestamp %) zone)
-         visible? (partial posts/visible-to-session? sess)
          route-to-self #(str "https://www.billjings.com" %)
          self-link (route-to-self (routing/posts-rss))
-         posts (->> (posts/posts)
-                    (filter visible?)
+         posts (->> (site/visible-posts sess)
                     (sort-by #(- (:timestamp %))))]
      (when (seq posts)
        (str
@@ -90,19 +89,11 @@
   ([sess query-params criteria]
    (let [{from-post-id :from-post-id} (routing/posts-query-params->map query-params)
          zone (java-time/zone-id "America/Los_Angeles")
-         criteria (if (string? criteria)
-                    (into #{} (map keyword (clojure.string/split criteria #".")))
-                    criteria)
+         criteria (site/criteria->set criteria)
          key-fn #(day-key (:timestamp %) zone)
-         visible? (partial posts/visible-to-session? sess)
-         matches-criteria #(or (empty? criteria)
-                               (seq (clojure.set/intersection
-                                     criteria
-                                     (:filter %))))
          ;; Create a list of ("YYYY/MM/dd" (posts...)) pairs 
          ;; ordered by day descending.
-         posts-by-day (->> (posts/posts)
-                           (filter (every-pred visible? matches-criteria))
+         posts-by-day (->> (site/visible-posts-by-criteria sess criteria)
                            (sort-by #(- (:timestamp %)))
                            (partition-by key-fn)
                            (map (juxt #(key-fn (first %)) identity)))
