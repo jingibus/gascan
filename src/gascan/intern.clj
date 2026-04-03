@@ -16,11 +16,11 @@
    [clojure.string :as string])
   (:gen-class))
 
-(def project-folder (System/getProperty "user.dir"))
+(def ^:private project-folder (System/getProperty "user.dir"))
 
 (def resources-folder (string/join "/" [project-folder "resources"]))
 
-(defn interned-filepath
+(defn- interned-filepath
   [filepath reldest folder-depth]
   (let [fileobj (as-file filepath)
         trimmed-filepath (string/replace filepath #"/*$" "")
@@ -30,7 +30,7 @@
         ]
     intern-rel-filepath))
 
-(defn intern-abs-filepath
+(defn- intern-abs-filepath
   [intern-rel-filepath]
   (let [fileobj (as-file intern-rel-filepath)]
     (if (.isAbsolute fileobj)
@@ -63,7 +63,7 @@
        (copy contents intern-fileobj)
        intern-rel-filepath))))
 
-(defn edn-repr
+(defn- edn-repr
   [structure]
   (with-out-str
     (binding [pprint/*print-right-margin* 80]
