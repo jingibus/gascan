@@ -3,17 +3,17 @@
             [clojure.test :refer :all]
             [gascan.index-view :as index-view]
             [gascan.post-view :as post-view]
-            [gascan.posts :as posts]
             [gascan.posts-view :as posts-view]
             [gascan.routing :as routing]
-            [gascan.session :as session]))
+            [gascan.session :as session]
+            [gascan.site :as site]))
 
 (def los-angeles-zone
   (java-time/zone-id "America/Los_Angeles"))
 
 (defn public-posts
   []
-  (filter #(posts/visible-to-session? session/public-session %) (posts/posts)))
+  (site/visible-posts session/public-session))
 
 (defn newest-public-post
   [pred]
@@ -55,7 +55,7 @@
       (is (not (string/includes? html soft-published-title))))))
 
 (deftest published-post-detail-renders-title-date-and-body
-  (let [post (posts/find-post {:title "Please Crash!"})
+  (let [post (site/find-post {:title "Please Crash!"})
         html (post-view/post-view session/public-session {:title "Please Crash!"})
         expected-date (posts-view/day-key (:timestamp post) los-angeles-zone)
         expected-up-target (routing/posts-by-date-from-post-id-path (:id post) nil)]
@@ -68,7 +68,7 @@
       (is (string/includes? html expected-up-target)))))
 
 (deftest audio-post-renders-inline-player
-  (let [post (posts/find-post {:title "My Heart's Slowing Down"})
+  (let [post (site/find-post {:title "My Heart's Slowing Down"})
         html (post-view/post-view session/public-session {:title "My Heart's Slowing Down"})]
     (testing "audio post includes the inline audio control and asset link"
       (is (some? post))

@@ -1,19 +1,19 @@
 (ns gascan.posts-visibility-lookup-test
   (:require [clojure.string :as string]
             [clojure.test :refer :all]
-            [gascan.posts :as posts]
             [gascan.posts-view :as posts-view]
-            [gascan.session :as session]))
+            [gascan.session :as session]
+            [gascan.site :as site]))
 
 (deftest visible-to-session-rules
   (let [published-post {:status :published}
         soft-published-post {:status :soft-published}]
     (testing "public sessions only see published posts in indexes"
-      (is (true? (posts/visible-to-session? session/public-session published-post)))
-      (is (false? (posts/visible-to-session? session/public-session soft-published-post))))
+      (is (true? (site/visible-to-session? session/public-session published-post)))
+      (is (false? (site/visible-to-session? session/public-session soft-published-post))))
     (testing "private sessions see all posts"
-      (is (true? (posts/visible-to-session? session/private-session published-post)))
-      (is (true? (posts/visible-to-session? session/private-session soft-published-post))))))
+      (is (true? (site/visible-to-session? session/private-session published-post)))
+      (is (true? (site/visible-to-session? session/private-session soft-published-post))))))
 
 (deftest title-locator-lookup-normalizes-to-slugs
   (let [sample-posts [{:title "Hello, World?"
@@ -28,15 +28,15 @@
                        :timestamp 1690000000000
                        :status :published
                        :filter #{:spiritual}}]]
-    (with-redefs [posts/posts (fn [] sample-posts)]
+    (with-redefs [site/all-posts (fn [] sample-posts)]
       (testing "find-post matches a kebab-cased route slug against the title"
         (is (= "Hello, World?"
-               (:title (posts/find-post {:title "hello-world"})))))
+               (:title (site/find-post {:title "hello-world"})))))
       (testing "find-post still works with the literal title"
         (is (= "Hello, World?"
-               (:title (posts/find-post {:title "Hello, World?"})))))
+               (:title (site/find-post {:title "Hello, World?"})))))
       (testing "unknown slugs return nil"
-        (is (nil? (posts/find-post {:title "not-here"})))))))
+        (is (nil? (site/find-post {:title "not-here"})))))))
 
 (deftest id-locator-lookup-matches-string-and-case-insensitively
   (let [target-id (java.util.UUID/fromString "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee")
@@ -51,13 +51,13 @@
                        :timestamp 1690000000000
                        :status :published
                        :filter #{:technical}}]]
-    (with-redefs [posts/posts (fn [] sample-posts)]
+    (with-redefs [site/all-posts (fn [] sample-posts)]
       (testing "string locators match UUID-backed post ids"
         (is (= "By Id"
-               (:title (posts/find-post {:id (str target-id)})))))
+               (:title (site/find-post {:id (str target-id)})))))
       (testing "id lookup is case-insensitive"
         (is (= "By Id"
-               (:title (posts/find-post {:id (string/upper-case (str target-id))}))))))))
+               (:title (site/find-post {:id (string/upper-case (str target-id))}))))))))
 
 (deftest criteria-filtering-respects-session-visibility
   (let [sample-posts [{:title "Newest Technical"
@@ -78,7 +78,7 @@
                        :timestamp 1690000000000
                        :status :published
                        :filter #{:spiritual}}]]
-    (with-redefs [posts/posts (fn [] sample-posts)]
+    (with-redefs [site/all-posts (fn [] sample-posts)]
       (let [public-html (posts-view/posts-by-date-view
                          session/public-session nil #{:technical})
             private-html (posts-view/posts-by-date-view

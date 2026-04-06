@@ -1,6 +1,5 @@
 (ns gascan.site-test
   (:require [clojure.test :refer :all]
-            [gascan.posts :as posts]
             [gascan.session :as session]
             [gascan.site :as site]))
 
@@ -22,7 +21,7 @@
     :filter #{:spiritual}}])
 
 (deftest site-model-wraps-read-only-post-access
-  (with-redefs [posts/posts (fn [] sample-posts)]
+  (with-redefs [site/all-posts (fn [] sample-posts)]
     (testing "all-posts returns the catalog"
       (is (= sample-posts (vec (site/all-posts)))))
     (testing "visible-posts applies the session visibility rule"

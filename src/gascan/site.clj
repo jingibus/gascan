@@ -1,22 +1,54 @@
 (ns gascan.site
-  (:require [clojure.string :as string]
-            [gascan.posts :as posts]))
+  (:require [clojure.string :as string]))
 
 (defn all-posts
   []
-  (posts/posts))
+  ((resolve 'gascan.posts/posts)))
 
-(defn visible-posts
-  [session]
-  (filter #(posts/visible-to-session? session %) (all-posts)))
+(defn visible-to-session?
+  [session post]
+  (if (:public session)
+    (boolean (#{:published} (:status post)))
+    true))
+
+(defn- update-if
+  [m pred k f & xs]
+  (if (pred m)
+    (apply update (concat [m k f] xs))
+    m))
+
+(defn to-kebab-case
+  [s]
+  (let [pieces (some-> s
+                       string/lower-case
+                       string/trim
+                       (string/split #" +"))]
+    (when pieces
+      (string/join "-" pieces))))
+
+(defn title->locator-string
+  [s]
+  (string/replace (to-kebab-case s) #"[?/=&,]" ""))
+
+(defn locator-matcher
+  [locator]
+  (let [locator (into {} (filter #(second %) locator))
+        canonicalize (fn [post]
+                       (-> post
+                           (update-if :title :title title->locator-string)
+                           (update-if :id :id string/lower-case)))]
+    (fn [post]
+      (= (select-keys (canonicalize post) (keys locator))
+         (canonicalize locator)))))
 
 (defn find-posts
   [locator]
-  (posts/find-posts locator))
+  (->> (all-posts)
+       (filter (locator-matcher locator))))
 
 (defn find-post
   [locator]
-  (posts/find-post locator))
+  (first (find-posts locator)))
 
 (defn criteria->set
   [criteria]
@@ -30,6 +62,10 @@
   (let [criteria (criteria->set criteria)]
     (or (empty? criteria)
         (seq (clojure.set/intersection criteria (:filter post))))))
+
+(defn visible-posts
+  [session]
+  (filter #(visible-to-session? session %) (all-posts)))
 
 (defn visible-posts-by-criteria
   [session criteria]

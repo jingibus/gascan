@@ -7,6 +7,7 @@
    [gascan.multimarkdown :as mm :refer [parse-readable]]
    [gascan.post-spec :as post-spec]
    [gascan.remote-posts :as remote]
+   [gascan.site :as site]
    [java-time :refer [local-date-time instant]]
    [clojure.string :as string]
    [gascan.intern :as intern]
@@ -16,7 +17,7 @@
            ))
 
 (def toplevel-post-contents-folder "posts")
-(def post-metadata-edn "metadata.edn")
+(def ^:private post-metadata-edn "metadata.edn")
 
 (defn- spec-error-data
   [spec value]
@@ -93,12 +94,6 @@
 (s/fdef strip-title-section
   :args (s/cat :tagged-scaffold (s/cat :tags map? :scaffold vector?))
   :ret (s/cat :tags map? :scaffold-ast vector?))
-
-(defn visible-to-session?
-  [session post]
-  (if (:public session)
-    (boolean (#{:published} (:status post)))
-    true))
 
 (defn transformed-link
   [link-node url transformed-url]
@@ -254,19 +249,6 @@
     :args args-spec
     :ret  post-spec/intern-post))
 
-(defn to-kebab-case
-  [s]
-  (let [pieces (some-> s
-                       string/lower-case
-                       string/trim
-                       (string/split #" +"))]
-    (when pieces 
-      (string/join "-" pieces))))
-
-(defn title->locator-string
-  [s]
-  (string/replace (to-kebab-case s) #"[?/=&,]" ""))
-
 (defn update-if
   "Updates only if pred is truthy."
   [m pred k f & xs]
@@ -281,42 +263,15 @@
     (apply assoc (concat [m k v] xs))
     m))
 
-(defn locator-matcher
-  [locator]
-  (let [locator (into {} (filter #(second %) locator))
-        canonicalize (fn [post] 
-                       (-> post
-                           (update-if :title :title title->locator-string)
-                           (update-if :id :id string/lower-case)))]
-    (fn [post] 
-      (= (select-keys (canonicalize post) (keys locator))
-         (canonicalize locator)))))
-
-(defn find-posts
-  "
-Finds a post matching a locator.
-
-A locator is a map of post values. If the locator matches all the values, then
-the post matches that locator.
-
-:title is treated especially: since URL slugs use kebab case, all title matching is 
-done on the basis of kebab casing.
-"
-  [locator]
-  (->> (posts)
-       (filter (locator-matcher locator))))
-
-(defn find-post [locator] (first (find-posts locator)))
-
 (defn update-posts-check
   "Works like update-posts, but only yields the posts modified."
   [locator & xs]
-  (map #(apply update (cons % xs)) (find-posts locator)))
+  (map #(apply update (cons % xs)) (site/find-posts locator)))
 
 (defn assoc-posts-check
   "Works like assoc-posts, but only yields the posts modified."
   [locator & xs]
-  (let [updated-posts (map #(apply assoc (cons % xs)) (find-posts locator))
+  (let [updated-posts (map #(apply assoc (cons % xs)) (site/find-posts locator))
         check-post (fn [post] (when-not (s/valid? post-spec/intern-post post)
                                 (println "Invalid post")
                                 (s/explain post-spec/intern-post post)))]
@@ -326,9 +281,9 @@ done on the basis of kebab casing.
 (defn assoc-posts
   "For posts matching locator, applies the function to the given key value."
   [locator k f & xs]
-  (let [matcher (locator-matcher locator)]
+  (let [matcher (site/locator-matcher locator)]
     (map #(apply assoc-if % (concat [matcher k f] xs)) 
-         (posts))))
+         (site/all-posts))))
 
 (defn assoc-posts!
   [& xs]
@@ -337,9 +292,9 @@ done on the basis of kebab casing.
 (defn update-posts
   "For posts matching locator, applies the function to the given key value."
   [locator k f & xs]
-  (let [matcher (locator-matcher locator)]
+  (let [matcher (site/locator-matcher locator)]
     (map #(apply update-if % (concat [matcher k f] xs)) 
-         (posts))))
+         (site/all-posts))))
 
 (defn update-posts!
   [& xs]
@@ -362,8 +317,8 @@ done on the basis of kebab casing.
 
 (defn remove-posts!
   [locator]
-  (let [matcher (locator-matcher locator)
-        posts (posts)
+  (let [matcher (site/locator-matcher locator)
+        posts (site/all-posts)
         posts-to-remove (filter matcher posts)
         remaining-posts (filter (complement matcher) posts)
         post-resources (fn [post]
@@ -381,7 +336,7 @@ done on the basis of kebab casing.
 (defn import-and-add-post!
   [remote-post]
   (let [interned-post (import-post! remote-post)]
-    (put-posts! (conj (posts) interned-post))))
+    (put-posts! (conj (site/all-posts) interned-post))))
 
 (defn publish-post
   [post]
@@ -391,11 +346,11 @@ done on the basis of kebab casing.
 
 (defn publish-posts!
   [locator]
-  (let [matcher (locator-matcher locator)
+  (let [matcher (site/locator-matcher locator)
         publish-if-matches #(if (matcher %)
                               (publish-post %)
                               %)]
-    (->> (posts)
+    (->> (site/all-posts)
          (map publish-post)
          put-posts!)))
 
@@ -409,14 +364,14 @@ done on the basis of kebab casing.
 
 (defn refresh-post!
   [locator]
-  (let [{src-path :src-path id :id :as old-post} (find-post locator)]
+  (let [{src-path :src-path id :id :as old-post} (site/find-post locator)]
     (when src-path
       (let [new-remote-post (remote/read-remote-post src-path)]
         (when new-remote-post
           (remove-posts! {:id id})
           (let [imported-new-post (import-post! new-remote-post)]
             (put-posts! 
-             (conj (posts) 
+             (conj (site/all-posts) 
                    (replace-post-contents old-post imported-new-post)))))))))
 
 (defn as-parsed
