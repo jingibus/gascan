@@ -18,7 +18,13 @@ Clone this repo.
 To serve content, try this:
 
 ```
-$ lein run run
+$ ./bin/gascan serve
+```
+
+You can also run the server directly through Leiningen:
+
+```
+$ lein run
 ```
 
 ## Running tests
@@ -31,38 +37,24 @@ $ lein test
 
 ## Importing new content
 
-To import new content, you will first need to create some in Scrivener. See below for strictures on Scrivener composition and export; Scrivener is finicky, and maybe I regret the decision to rely on it so heavily now.
-
-Having exported to, say, `/Users/bphillips/Documents/Focus Loops In Perspective.md`, content is managed at the REPL. First convert it to a remote post:
+To import and publish new content, export it from Scrivener and point Gascan at the generated Markdown file:
 
 ```
-user> (gascan.remote-posts/read-remote-post 
- "/Users/bphillips/Documents/Focus Loops In Perspective.md")
-{:markdown-abs-path
- "/Users/bphillips/Documents/Focus Loops In Perspective.md",
- :title "Focus Loops In Perspective",
- :timestamp 1586541922953,
- :extra-resources [],
- :dir-depth 0,
- :parsed-markdown
- #object[com.vladsch.flexmark.util.ast.Document 0x4e5efc6d "Document{}"],
- :src-path "/Users/bphillips/Documents/Focus Loops In Perspective.md"}
+$ ./bin/gascan publish "/Users/bphillips/Documents/Focus Loops In Perspective.md"
 ```
 
-Then intern it and add the post to the post store:
+That command reads the source Markdown, copies the rendered post and linked resources into `resources/`, appends the post to `resources/metadata.edn`, and prints a short summary with the post URL.
+
+You can do the same thing directly through Leiningen:
 
 ```
-user> (gascan.posts/import-and-add-post! 
- (gascan.remote-posts/read-remote-post 
-  "/Users/bphillips/Documents/Focus Loops In Perspective.md"))
-...etc...
+$ lein run publish "/Users/bphillips/Documents/Focus Loops In Perspective.md"
 ```
 
-You can verify that it is there by using `gascan.browser` to run the server and automate a Chrome session to observe the post: (`chromedriver` is required):
+The older REPL functions are still available for manual maintenance and refresh workflows:
 
 ```
-user> (gascan.browser/look-at 
- (post->title-path (posts/find-post {:title "Focus Loops In Perspective"})))
+user> (gascan.posts/refresh-post! {:title "focus-loops-in-perspective"})
 ```
 
 The `gascan.posts` module has more tools for updating posts. Usually you will want to update the filter keys to pick one or more sections the post will appear in.

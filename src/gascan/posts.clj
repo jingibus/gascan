@@ -336,7 +336,8 @@
 (defn import-and-add-post!
   [remote-post]
   (let [interned-post (import-post! remote-post)]
-    (put-posts! (conj (site/all-posts) interned-post))))
+    (put-posts! (conj (site/all-posts) interned-post))
+    interned-post))
 
 (defn publish-post
   [post]
