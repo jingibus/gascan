@@ -64,7 +64,7 @@
              :type "application/rss+xml"}]
            [:title "The Gas Can"]
            [:link self-link]
-           [:description "Bill Phillips' personal blog"]
+           [:description "Bridget Phillips' personal blog"]
            (map #(vec [:item
                        [:title (:title %)]
                        [:pubDate (->> % (:timestamp) (rfc-1123-format))]

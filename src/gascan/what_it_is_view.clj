@@ -10,7 +10,7 @@
   {:reactionary
    (hc/html
     [:p
-     "The Gas Can is a reactionary web site built by Bill Phillips as a place to publish things he makes."]
+     "The Gas Can is a reactionary web site built by Bridget Phillips as a place to publish things she makes."]
     [:p
      "\"Hoo boy,\" says reader. "
      "\"That's a lot to unpack there. "
@@ -36,21 +36,21 @@
     [:p
      "You can find more writing about what this is under \"meta\". That's what it's there for, anyway. "]
     [:p
-     "\"Okay,\" says reader. \"Now what about Bill Phillips?\" "]
+     "\"Okay,\" says reader. \"Now what about Bridget Phillips?\" "]
     [:h3
-     "Who is \"Bill Phillips\"? "]
+     "Who is \"Bridget Phillips\"? "]
     [:p
-     "Bill Phillips is your author. "
-     "He pays the bills by writing software; since 2010 that software has been mostly Android. "
-     "As you can see, he is not a web developer, and this is not his business card. "
-     "You can find him on Amazon in the books section if you scroll past a sufficient amount of beefcake."]
+     "Bridget Phillips is your author. "
+     "She pays the bills by writing software; since 2010 that software has been mostly Android. "
+     "As you can see, she is not a web developer, and this is not her business card. "
+     "You can find her on Amazon in the books section under her deadname if you scroll past a sufficient amount of beefcake. Although probably not anymore, since that was years ago."]
     [:p
-     "He came into the world in Garland, Texas, grew into adulthood in Jackson, Mississippi, got his higher education in Atlanta, Georgia, and stayed there by his own voliton for a long time. "]
+     "She came into the world in Garland, Texas, grew into adulthood in Jackson, Mississippi, got her higher education in Atlanta, Georgia, and stayed there by her own volition for a long time. "]
     [:p
-     "Having let go of that will for a spell he moved to San Francisco, a place that perhaps even in these dark days has some pull for pragmatic idealists. "
+     "Having let go of that will for a spell she moved to San Francisco, a place that perhaps even in these dark days has some pull for pragmatic idealists. "
      "It no longer seems guaranteed that the fog will outlast the burritos, but I continue to bet on the fog."]
     [:h3
-     "\"How do I best get in touch with Bill Phillips?\""]
+     "\"How do I best get in touch with Bridget Phillips?\""]
     [:p
      "I'm not sure. I do a lot of writing, and that seems to help."]
     [:p
@@ -61,8 +61,8 @@
    :art-project
    (hc/html
     [:p
-     "The Gas Can is an ongoing art project by programmer, musician, writer, doctor, nuclear physicist, and theoretical philosopher Bill Phillips. "
-     "By creating this place and working within it, he seeks to answer the questions that have long plagued him: "
+     "The Gas Can is an ongoing art project by programmer, musician, writer, doctor, nuclear physicist, and theoretical philosopher Bridget Phillips. "
+     "By creating this place and working within it, she seeks to answer the questions that have long plagued her "
      [:ul
       [:li "What purpose should each day serve? "]
       [:li "What is the proper relation between God and man?"]
@@ -74,8 +74,8 @@
       [:li "What kind of web site is required to solve the economic problem of connecting information producers with information consumers?"]
       ]]
     [:p
-     "Eager grant writers are invited to reach out to him on LinkedIn regarding paid residency opportunities. "
-     "Interpreters of his work are invited to contemplate it without any further explanation."])
+     "Eager grant writers are invited to reach out to her on LinkedIn regarding paid residency opportunities. "
+     "Interpreters of her work are invited to contemplate it without any further explanation."])
    
    :goals
    (hc/html
@@ -101,7 +101,7 @@
      "And if you don't listen to music on tapes anymore, well that's kind of the idea."]
     [:i
      [:p {:style "text-align: right"}
-      (interpose [:br] ["Bill Phillips"
+      (interpose [:br] ["Bridget Phillips"
                         "looking out over the Fillmore"
                         "nighttime"
                         "San Francisco"
@@ -111,7 +111,7 @@
    :technical
    (hc/html
     [:p
-     "The Gas Can is a Clojure publishing platform built and used by Bill Phillips. "
+     "The Gas Can is a Clojure publishing platform built and used by Bridget Phillips. "
      "It was originally designed around publishing content written in Scrivener and exported to MultiMarkdown."]
     [:p
      "You can find the source code to The Gas Can at " [:a {:href "https://github.com/jingibus/gascan"} "GitHub"] "."])

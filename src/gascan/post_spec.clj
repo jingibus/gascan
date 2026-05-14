@@ -5,11 +5,11 @@
 
 (def cst (java-time/zone-id "America/Chicago"))
 
-(def bills-birthday 
+(def bridgets-birthday
   (java-time/zoned-date-time (java-time/local-date-time 1981 10 7 1) cst))
 
-(def bills-oblivion-guarantee-day
-  (java-time/plus bills-birthday (java-time/years 200)))
+(def bridgets-oblivion-guarantee-day
+  (java-time/plus bridgets-birthday (java-time/years 200)))
 
 (defn can-be-converted-to-instant?
   [n]
@@ -18,11 +18,11 @@
     (catch clojure.lang.ExceptionInfo e
       nil)))
 
-(defn is-semi-plausibly-within-bills-lifespan?
+(defn is-semi-plausibly-within-bridgets-lifespan?
   [n]
   (apply java-time/before? 
          (map java-time/instant 
-              [bills-birthday n bills-oblivion-guarantee-day])))
+              [bridgets-birthday n bridgets-oblivion-guarantee-day])))
 
 (defn valid-resource-path?
   [s]
@@ -65,7 +65,7 @@
 (s/def ::timestamp 
   (s/and int? 
          can-be-converted-to-instant? 
-         is-semi-plausibly-within-bills-lifespan?))
+         is-semi-plausibly-within-bridgets-lifespan?))
 (s/def ::src-path string?)
 (s/def ::markdown-rel-path
   (s/and string? markdown-filename? valid-resource-path?))

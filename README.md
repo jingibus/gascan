@@ -40,7 +40,7 @@ $ lein test
 To import and publish new content, export it from Scrivener and point Gascan at the generated Markdown file:
 
 ```
-$ ./bin/gascan publish "/Users/bphillips/Documents/Focus Loops In Perspective.md"
+$ ./bin/gascan publish "/path/to/Focus Loops In Perspective.md"
 ```
 
 That command reads the source Markdown, copies the rendered post and linked resources into `resources/`, appends the post to `resources/metadata.edn`, and prints a short summary with the post URL.
@@ -48,7 +48,7 @@ That command reads the source Markdown, copies the rendered post and linked reso
 You can do the same thing directly through Leiningen:
 
 ```
-$ lein run publish "/Users/bphillips/Documents/Focus Loops In Perspective.md"
+$ lein run publish "/path/to/Focus Loops In Perspective.md"
 ```
 
 The older REPL functions are still available for manual maintenance and refresh workflows:
@@ -89,7 +89,7 @@ Also, I really don't like the markdown dependency I'm using.
 
 ## License
 
-Copyright © 2020 Bill Phillips
+Copyright © 2020 Bridget Phillips
 
 This program and the accompanying materials are made available under the
 terms of the Eclipse Public License 2.0 which is available at

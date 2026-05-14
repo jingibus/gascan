@@ -13,7 +13,7 @@ This plan assumes we want to preserve what is distinctive and valuable in the pr
 - the existing content corpus
 - the current site identity and HTML rendering style
 - the import and normalization knowledge already encoded in the markdown pipeline
-- the idea that the canonical source of truth belongs to Bill, not to a third-party platform
+- the idea that the canonical source of truth belongs to Bridget, not to a third-party platform
 
 ## Executive Summary
 
