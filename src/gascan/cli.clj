@@ -126,44 +126,13 @@
       :else
       (serve! (first arguments)))))
 
-(defn- legacy-port-command!
-  [args]
-  (let [{:keys [options arguments errors summary]} (parse-opts args help-options)
-        [port & extra-args] arguments]
-    (cond
-      (:help options)
-      (print-command-help summary)
-
-      (seq errors)
-      (print-parse-errors errors)
-
-      (nil? port)
-      (serve! nil)
-
-      (seq extra-args)
-      (do
-        (print-error "Too many arguments for serve." "" usage)
-        1)
-
-      (numeric-string? port)
-      (serve! port)
-
-      :else
-      (do
-        (print-error (str "Unknown command: " port) "" usage)
-        1))))
-
 (defn run!
   [args]
   (let [[command & command-args] (vec args)]
     (cond
-      (nil? command)
-      (legacy-port-command! args)
-
-      (numeric-string? command)
-      (legacy-port-command! args)
-
-      (#{"help" "--help" "-h"} command)
+      (or 
+        (nil? command) 
+        (#{"help" "--help" "-h"} command))
       (print-help)
 
       (#{"serve" "run"} command)
