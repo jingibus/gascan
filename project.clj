@@ -22,6 +22,7 @@
   :min-lein-version "2.9.2"
   :plugins [[environ/environ.lein "0.3.1"]]
   :hooks [environ.leiningen.hooks]
+  :resource-paths ["resources"]
   :uberjar-name "gascan.jar"
   :profiles {:uberjar {:aot :all}
              :dev {}
