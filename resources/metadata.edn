@@ -1,11 +1,40 @@
-({:title "Please Crash!",
-  :timestamp 1708307706041,
-  :markdown-rel-path "posts/2024/02/18/1755/Please Crash.md",
-  :extra-resources-rel (),
-  :id #uuid "fc566103-c1a8-4041-a8f5-92933ffad3dd",
+({:title "Git Is Not Fine",
+  :timestamp 1778795216341,
+  :markdown-rel-path
+  "posts/2026/05/14/1446/Git Is Not Fine.md/Git Is Not Fine.md",
+  :extra-resources-rel
+  ("posts/2026/05/14/1446/Git Is Not Fine.md/Reality1stacked.png"
+    "posts/2026/05/14/1446/Git Is Not Fine.md/Reality4stackedscrewup1.png"
+    "posts/2026/05/14/1446/Git Is Not Fine.md/Reality4stackedscrewup2.png"
+    "posts/2026/05/14/1446/Git Is Not Fine.md/Reality4stacked.png"
+    "posts/2026/05/14/1446/Git Is Not Fine.md/Reality0.png"
+    "posts/2026/05/14/1446/Git Is Not Fine.md/Reality1.png"
+    "posts/2026/05/14/1446/Git Is Not Fine.md/Reality2.png"
+    "posts/2026/05/14/1446/Git Is Not Fine.md/Reality01alpha.png"
+    "posts/2026/05/14/1446/Git Is Not Fine.md/Typicaldiagrams4.png"
+    "posts/2026/05/14/1446/Git Is Not Fine.md/Reality02.png"
+    "posts/2026/05/14/1446/Git Is Not Fine.md/RealityEx22.png"
+    "posts/2026/05/14/1446/Git Is Not Fine.md/RealityEx23.png"
+    "posts/2026/05/14/1446/Git Is Not Fine.md/Typicaldiagrams1.png"
+    "posts/2026/05/14/1446/Git Is Not Fine.md/Reality01.png"
+    "posts/2026/05/14/1446/Git Is Not Fine.md/RealityEx21.png"
+    "posts/2026/05/14/1446/Git Is Not Fine.md/RealityEx20.png"
+    "posts/2026/05/14/1446/Git Is Not Fine.md/Typicaldiagrams2.png"
+    "posts/2026/05/14/1446/Git Is Not Fine.md/Reality2stacked.png"
+    "posts/2026/05/14/1446/Git Is Not Fine.md/Typicaldiagrams1stacked.png"
+    "posts/2026/05/14/1446/Git Is Not Fine.md/Reality015.png"),
+  :id #uuid "f6497963-ac0e-497e-82e3-26e2064c1e53",
   :status :published,
   :filter #{:technical},
-  :src-path "/Users/wphillips/Documents/Please Crash.md"}
+  :src-path "/Users/wphillips/Documents/Git Is Not Fine.md"}
+  {:title "Please Crash!",
+   :timestamp 1708307706041,
+   :markdown-rel-path "posts/2024/02/18/1755/Please Crash.md",
+   :extra-resources-rel (),
+   :id #uuid "fc566103-c1a8-4041-a8f5-92933ffad3dd",
+   :status :published,
+   :filter #{:technical},
+   :src-path "/Users/wphillips/Documents/Please Crash.md"}
   {:title "Discipline Equals Speed",
    :timestamp 1702258849922,
    :markdown-rel-path "posts/2023/12/10/1740/Discipline Equals Speed.md",
@@ -419,5 +448,4 @@
    :id #uuid "23b87584-9f91-46e1-ad00-de0bd3d1457d",
    :status :published,
    :filter #{:music :spiritual},
-   :src-path "/Users/bphillips/Documents/Morning Prayer Settings.md"}
-  )
+   :src-path "/Users/bphillips/Documents/Morning Prayer Settings.md"})
