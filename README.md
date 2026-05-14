@@ -43,6 +43,18 @@ To import and publish new content, export it from Scrivener and point Gascan at 
 $ ./bin/gascan publish "/path/to/Focus Loops In Perspective.md"
 ```
 
+You can assign filter criteria during import:
+
+```
+$ ./bin/gascan publish --filter technical --filter music "/Users/bphillips/Documents/Focus Loops In Perspective.md"
+```
+
+You can also start the local server after import:
+
+```
+$ ./bin/gascan publish --serve 5000 "/Users/bphillips/Documents/Focus Loops In Perspective.md"
+```
+
 That command reads the source Markdown, copies the rendered post and linked resources into `resources/`, appends the post to `resources/metadata.edn`, and prints a short summary with the post URL.
 
 You can do the same thing directly through Leiningen:

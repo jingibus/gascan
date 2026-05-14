@@ -199,7 +199,7 @@
 
 (let [args-spec (s/or :no-filters (s/cat :remote-post post-spec/remote-post)
                       :with-filters (s/cat :remote-post post-spec/remote-post 
-                             :filters :post-spec/filters))]
+                                           :filters ::post-spec/filter))]
   (defn import-post!
     "Imports a remote-post into an intern-post. Note that this mutates the parsed Markdown in the remote-post."
     ([remote-post]
@@ -240,7 +240,7 @@
           :extra-resources-rel interned-resources
           :id (java.util.UUID/randomUUID)
           :status :published
-          :filter #{}
+          :filter filters
           :src-path src-path
           }
          ))))
@@ -334,10 +334,12 @@
     ))
 
 (defn import-and-add-post!
-  [remote-post]
-  (let [interned-post (import-post! remote-post)]
-    (put-posts! (conj (site/all-posts) interned-post))
-    interned-post))
+  ([remote-post]
+   (import-and-add-post! remote-post #{}))
+  ([remote-post filters]
+   (let [interned-post (import-post! remote-post filters)]
+     (put-posts! (conj (site/all-posts) interned-post))
+     interned-post)))
 
 (defn publish-post
   [post]

@@ -55,7 +55,10 @@
         (java.util.UUID/fromString v)
         (catch Exception e false))))
 
-(s/def ::filter (s/every #{:meta :technical :clojure :spiritual :music :audio :wphillips-weekly}))
+(def filter-criteria
+  #{:meta :technical :clojure :spiritual :music :audio :wphillips-weekly})
+
+(s/def ::filter (s/every filter-criteria))
 (s/def ::status #{
                   :published       ;; Published are totally visible.
                   :soft-published  ;; Soft published don't show up in indices.

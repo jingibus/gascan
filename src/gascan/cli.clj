@@ -4,6 +4,7 @@
             [clojure.tools.cli :refer [parse-opts]]
             [environ.core :as environ]
             [gascan.posts :as posts]
+            [gascan.post-spec :as post-spec]
             [gascan.remote-posts :as remote-posts]
             [gascan.routing :as routing]
             [gascan.server :as server]
@@ -24,6 +25,34 @@
 
 (def help-options
   [["-h" "--help" "Show help."]])
+
+(defn- parse-filter-criteria
+  [raw-filter]
+  (->> (string/split raw-filter #",")
+       (map string/trim)
+       (remove string/blank?)
+       (map #(string/replace % #"^:" ""))
+       (map keyword)
+       set))
+
+(defn- valid-filter-criteria?
+  [filters]
+  (and (seq filters)
+       (every? post-spec/filter-criteria filters)))
+
+(defn- collect-filters
+  [options option-name filters]
+  (update options option-name (fnil into #{}) filters))
+
+(def publish-options
+  (into help-options
+        [["-f" "--filter FILTER" "Add filter criteria. Repeat or comma-separate values."
+          :parse-fn parse-filter-criteria
+          :validate [valid-filter-criteria? "Filter must be one of the criteria defined in post_spec.clj."]
+          :assoc-fn collect-filters]
+         ["-s" "--serve PORT" "Start the server on PORT after publishing."
+          :parse-fn #(Integer/parseInt %)
+          :validate [pos? "PORT must be a positive integer."]]]))
 
 (defn- numeric-string?
   [s]
@@ -65,21 +94,27 @@
   (println "Status:" status)
   (println "Source:" src-path)
   (println "Markdown:" markdown-rel-path)
+  (when (seq (:filter post))
+    (println "Filters:" (string/join ", " (sort (map name (:filter post))))))
   (println "URL:" (routing/post->title-path post))
   (when (seq extra-resources-rel)
     (println "Resources:" (count extra-resources-rel))))
 
 (defn publish-source!
-  [source]
-  (let [post (-> source
-                 remote-posts/read-remote-post
-                 posts/import-and-add-post!)]
-    (print-publish-summary post)
-    post))
+  ([source]
+   (publish-source! source #{}))
+  ([source filters]
+   (let [post (-> source
+                  remote-posts/read-remote-post
+                  (posts/import-and-add-post! filters))]
+     (print-publish-summary post)
+     post)))
+
+(declare serve!)
 
 (defn- publish-command!
   [args]
-  (let [{:keys [options arguments errors summary]} (parse-opts args help-options)
+  (let [{:keys [options arguments errors summary]} (parse-opts args publish-options)
         [source & extra-args] arguments]
     (cond
       (:help options)
@@ -100,7 +135,9 @@
 
       :else
       (do
-        (publish-source! source)
+        (publish-source! source (:filter options #{}))
+        (when-let [port (:serve options)]
+          (serve! port))
         0))))
 
 (defn- serve!
