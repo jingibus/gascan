@@ -12,7 +12,7 @@
                                 stringify]]
             [gascan.multimarkdown :refer [parse-readable]]
             [clojure.tools.trace :refer [trace-ns untrace-ns trace-forms]])
-  (:use [gascan.debug] [gascan.test-tools] [gascan.browser])
+  (:use [gascan.debug] [gascan.browser])
   (:gen-class))
 
 
@@ -47,5 +47,4 @@
 
 (comment
   )
-
 
