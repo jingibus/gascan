@@ -13,6 +13,7 @@
                  [image-resizer "0.1.10"]
                  [org.bovinegenius/exploding-fish "0.3.6"]
                  [org.clojure/clojure "1.10.1"] 
+                 [org.clojure/tools.cli "1.4.256"]
                  [org.clojure/tools.trace "0.7.10"]
                  [ring/ring-core "1.6.3"]
                  [ring/ring-jetty-adapter "1.6.3"]]

@@ -1,6 +1,7 @@
 (ns gascan.cli
   (:refer-clojure :exclude [run!])
   (:require [clojure.string :as string]
+            [clojure.tools.cli :refer [parse-opts]]
             [environ.core :as environ]
             [gascan.posts :as posts]
             [gascan.remote-posts :as remote-posts]
@@ -21,6 +22,9 @@
     "  serve [PORT]     Start the Gascan web server."
     "  help             Show this help."]))
 
+(def help-options
+  [["-h" "--help" "Show help."]])
+
 (defn- numeric-string?
   [s]
   (boolean (re-matches #"\d+" (str s))))
@@ -39,6 +43,20 @@
   []
   (println usage)
   0)
+
+(defn- print-command-help
+  [summary]
+  (println usage)
+  (when-not (string/blank? summary)
+    (println)
+    (println "Options:")
+    (println summary))
+  0)
+
+(defn- print-parse-errors
+  [errors]
+  (apply print-error (concat errors ["" usage]))
+  1)
 
 (defn- print-publish-summary
   [{:keys [title id status src-path markdown-rel-path extra-resources-rel] :as post}]
@@ -60,47 +78,96 @@
     post))
 
 (defn- publish-command!
-  [[source & extra-args]]
-  (cond
-    (nil? source)
-    (do
-      (print-error "Missing SOURCE for publish." "" usage)
-      1)
+  [args]
+  (let [{:keys [options arguments errors summary]} (parse-opts args help-options)
+        [source & extra-args] arguments]
+    (cond
+      (:help options)
+      (print-command-help summary)
 
-    (seq extra-args)
-    (do
-      (print-error "Too many arguments for publish." "" usage)
-      1)
+      (seq errors)
+      (print-parse-errors errors)
 
-    :else
-    (do
-      (publish-source! source)
-      0)))
+      (nil? source)
+      (do
+        (print-error "Missing SOURCE for publish." "" usage)
+        1)
+
+      (seq extra-args)
+      (do
+        (print-error "Too many arguments for publish." "" usage)
+        1)
+
+      :else
+      (do
+        (publish-source! source)
+        0))))
 
 (defn- serve!
   [port]
   (server/run :port (port-number port) :sess session/public-session)
   0)
 
+(defn- serve-command!
+  [args]
+  (let [{:keys [options arguments errors summary]} (parse-opts args help-options)]
+    (cond
+      (:help options)
+      (print-command-help summary)
+
+      (seq errors)
+      (print-parse-errors errors)
+
+      (> (count arguments) 1)
+      (do
+        (print-error "Too many arguments for serve." "" usage)
+        1)
+
+      :else
+      (serve! (first arguments)))))
+
+(defn- legacy-port-command!
+  [args]
+  (let [{:keys [options arguments errors summary]} (parse-opts args help-options)
+        [port & extra-args] arguments]
+    (cond
+      (:help options)
+      (print-command-help summary)
+
+      (seq errors)
+      (print-parse-errors errors)
+
+      (nil? port)
+      (serve! nil)
+
+      (seq extra-args)
+      (do
+        (print-error "Too many arguments for serve." "" usage)
+        1)
+
+      (numeric-string? port)
+      (serve! port)
+
+      :else
+      (do
+        (print-error (str "Unknown command: " port) "" usage)
+        1))))
+
 (defn run!
   [args]
   (let [[command & command-args] (vec args)]
     (cond
       (nil? command)
-      (serve! nil)
+      (legacy-port-command! args)
 
       (numeric-string? command)
-      (serve! command)
+      (legacy-port-command! args)
 
       (#{"help" "--help" "-h"} command)
       (print-help)
 
       (#{"serve" "run"} command)
-      (if (> (count command-args) 1)
-        (do
-          (print-error "Too many arguments for serve." "" usage)
-          1)
-        (serve! (first command-args)))
+      (serve-command! command-args)
 
       (= "publish" command)
       (publish-command! command-args)
