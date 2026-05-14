@@ -119,3 +119,12 @@
       (is (= 0 (cli/run! ["serve" "6000"])))
       (is (= 6000 (:port @run-args)))
       (is (= session/public-session (:sess @run-args))))))
+
+(deftest numeric-argument-preserves-old-server-shortcut
+  (let [run-args (atom nil)]
+    (with-redefs [server/run
+                  (fn [& args]
+                    (reset! run-args (apply hash-map args))
+                    :server)]
+      (is (= 0 (cli/run! ["5001"])))
+      (is (= 5001 (:port @run-args))))))
