@@ -1,4 +1,4 @@
-This is a piece about git. But wrote it because of jj.
+This is a piece about git. But I wrote it because of [jj](https://github.com/jj-vcs/jj).
 
 The thing about jj is that I’m in love with it. I love it, and I’m convinced that you’ll love it too. I think that if jj doesn’t have any dealbreakers for you, you should give it a serious shot.
 
