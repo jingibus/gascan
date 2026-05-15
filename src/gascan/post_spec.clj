@@ -26,10 +26,7 @@
 
 (defn valid-resource-path?
   [s]
-  (some-> (clojure.java.io/resource s)
-          .toURI
-          (clojure.java.io/file)
-          .exists))
+  (clojure.java.io/resource s))
 
 (defn markdown-filename?
   [s]
