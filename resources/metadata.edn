@@ -1,13 +1,21 @@
-({:title "A Heartfelt Prayer For OO Data Modeling",
-  :timestamp 1788470868193,
-  :markdown-rel-path
-  "posts/2026/09/03/1427/A Heartfelt Prayer For OO Data Modeling.md",
+({:title "Checking the Classrooms",
+  :timestamp 1788911855725,
+  :markdown-rel-path "posts/2026/09/08/1657/Checking the Classrooms.md",
   :extra-resources-rel (),
-  :id #uuid "8e2f84fd-3541-4de2-a783-3be638e717a6",
+  :id #uuid "59082f79-774c-4641-8a3d-890fb733861f",
   :status :published,
   :filter #{:technical},
-  :src-path
-  "/Users/wphillips/Documents/A Heartfelt Prayer For OO Data Modeling.md"}
+  :src-path "/Users/wphillips/Documents/Checking the Classrooms.md"}
+  {:title "A Heartfelt Prayer For OO Data Modeling",
+   :timestamp 1788470868193,
+   :markdown-rel-path
+   "posts/2026/09/03/1427/A Heartfelt Prayer For OO Data Modeling.md",
+   :extra-resources-rel (),
+   :id #uuid "8e2f84fd-3541-4de2-a783-3be638e717a6",
+   :status :published,
+   :filter #{:technical},
+   :src-path
+   "/Users/wphillips/Documents/A Heartfelt Prayer For OO Data Modeling.md"}
   {:title "Git Is Not Fine",
    :timestamp 1778795216341,
    :markdown-rel-path
